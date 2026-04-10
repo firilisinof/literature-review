@@ -10,6 +10,8 @@ Usage:
     python screen.py --agent claude
     python screen.py --agent gemini --limit 10 --workers 5
     python screen.py --agent codex --input papers/papers.bib --output screening_results.csv
+    python screen.py --input papers/papers.bib --output screening_results.csv
+      # runs claude, gemini, and codex
 """
 
 import argparse
@@ -28,9 +30,9 @@ import bibtexparser
 # ---------------------------------------------------------------------------
 
 AGENT_COMMANDS: dict[str, list[str]] = {
-    "claude": ["claude", "-p"],   # prompt appended as next arg
-    "gemini": ["gemini", "-p"],
-    "codex":  ["codex", "exec"],
+    "claude": ["claude", "-p", "--model", "sonnet-4.6", "--effort", "medium"],   # prompt appended as next arg
+    "gemini": ["gemini", "-p", "--model", "gemini-3"],
+    "codex":  ["codex", "exec", "--model", "gpt-5.4"],
 }
 
 PROMPT_TEMPLATE = """\
@@ -65,7 +67,7 @@ CSV_COLUMNS = [
     "gemini_decision", "gemini_reason",
 ]
 
-TIMEOUT = 60  # seconds per agent call
+TIMEOUT = 120  # seconds per agent call
 
 # ---------------------------------------------------------------------------
 # BibTeX helpers
@@ -153,8 +155,8 @@ def main() -> None:
         epilog=__doc__,
     )
     parser.add_argument(
-        "--agent", required=True, choices=list(AGENT_COMMANDS),
-        help="CLI agent to use for screening",
+        "--agent", required=False, choices=list(AGENT_COMMANDS),
+        help="CLI agent to use for screening (defaults to running all agents)",
     )
     parser.add_argument(
         "--input", default="papers/papers.bib",
@@ -176,9 +178,7 @@ def main() -> None:
 
     bib_path = Path(args.input)
     csv_path = Path(args.output)
-    agent    = args.agent
-    dec_col  = f"{agent}_decision"
-    rea_col  = f"{agent}_reason"
+    agents_to_run = [args.agent] if args.agent else list(AGENT_COMMANDS)
 
     # On first run, build the CSV from the BibTeX file.
     # On subsequent runs, load the CSV directly — no BibTeX parsing needed.
@@ -204,15 +204,28 @@ def main() -> None:
         entries = entries[: args.limit]
         print(f"  Limiting to first {args.limit} papers.", file=sys.stderr)
 
-    # Split into already-done and pending
-    to_screen = [
-        e for e in entries
-        if not results[e["key"]].get(dec_col) or results[e["key"]].get(dec_col) == "error"
-    ]
-    skipped = len(entries) - len(to_screen)
+    # Split into already-done and pending (across selected agents)
+    to_screen: list[tuple[dict, str]] = []
+    for entry in entries:
+        row = results[entry["key"]]
+        for agent in agents_to_run:
+            dec_col = f"{agent}_decision"
+            if not row.get(dec_col) or row.get(dec_col) == "error":
+                to_screen.append((entry, agent))
+
+    total_entries = len(entries)
+    screened_entries = sum(
+        1 for entry in entries
+        if all(
+            results[entry["key"]].get(f"{agent}_decision")
+            and results[entry["key"]].get(f"{agent}_decision") != "error"
+            for agent in agents_to_run
+        )
+    )
+    skipped = total_entries - screened_entries
 
     print(
-        f"  {skipped} already screened, {len(to_screen)} to process "
+        f"  {skipped} already screened, {len(to_screen)} tasks to process "
         f"({args.workers} worker{'s' if args.workers != 1 else ''}).",
         file=sys.stderr,
     )
@@ -222,27 +235,27 @@ def main() -> None:
     errors    = 0
     total     = len(to_screen)
 
-    def screen_one(entry: dict) -> tuple[dict, str, str]:
+    def screen_one(entry: dict, agent: str) -> tuple[dict, str, str, str]:
         prompt = PROMPT_TEMPLATE.format(
             title=entry["title"] or "(no title)",
             abstract=entry["abstract"],
         )
         decision, reason = call_agent(agent, prompt)
-        return entry, decision, reason
+        return entry, agent, decision, reason
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(screen_one, e): e for e in to_screen}
+        futures = {pool.submit(screen_one, entry, agent): (entry, agent) for entry, agent in to_screen}
         for fut in as_completed(futures):
             try:
-                entry, decision, reason = fut.result()
+                entry, agent, decision, reason = fut.result()
             except Exception as exc:
-                entry    = futures[fut]
+                entry, agent = futures[fut]
                 decision = "error"
                 reason   = str(exc)[:300]
 
             with csv_lock:
-                results[entry["key"]][dec_col] = decision
-                results[entry["key"]][rea_col] = reason
+                results[entry["key"]][f"{agent}_decision"] = decision
+                results[entry["key"]][f"{agent}_reason"] = reason
                 completed += 1
                 if decision == "error":
                     errors += 1

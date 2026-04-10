@@ -30,9 +30,9 @@ import bibtexparser
 # ---------------------------------------------------------------------------
 
 AGENT_COMMANDS: dict[str, list[str]] = {
-    "claude": ["claude", "-p", "--model", "sonnet-4.6", "--effort", "medium"],   # prompt appended as next arg
-    "gemini": ["gemini", "-p", "--model", "gemini-3"],
-    "codex":  ["codex", "exec", "--model", "gpt-5.4"],
+    "claude": ["claude", "--model", "claude-sonnet-4-6", "--effort", "high", "-p"],   # prompt appended as next arg
+    "gemini": ["gemini", "--model", "gemini-3.1-pro-preview", "-p"],
+    "codex":  ["codex", "exec", "--model", "gpt-5.4", "--config", 'model_reasoning_effort="high"'],
 }
 
 PROMPT_TEMPLATE = """\
@@ -132,6 +132,7 @@ def call_agent(agent: str, prompt: str) -> tuple[str, str]:
             timeout=TIMEOUT,
         )
         output = result.stdout.strip()
+        error_output = result.stderr.strip()
     except subprocess.TimeoutExpired:
         return "error", "timeout"
     except FileNotFoundError:
@@ -140,8 +141,13 @@ def call_agent(agent: str, prompt: str) -> tuple[str, str]:
     dec_match = re.search(r"Decision:\s*(include|exclude)", output, re.IGNORECASE)
     rea_match = re.search(r"Reason:\s*(.+)", output, re.IGNORECASE)
 
+    if result.returncode != 0 and not dec_match:
+        reason = error_output or output or f"{agent} exited with status {result.returncode}"
+        return "error", reason[:300]
+
     decision = dec_match.group(1).lower() if dec_match else "error"
-    reason   = rea_match.group(1).strip() if rea_match else output[:300]
+    fallback_output = output or error_output
+    reason   = rea_match.group(1).strip() if rea_match else fallback_output[:300]
     return decision, reason
 
 # ---------------------------------------------------------------------------
@@ -168,7 +174,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--limit", type=int, default=None, metavar="N",
-        help="Process only the first N papers (useful for testing)",
+        help="Process the next N pending papers per selected agent (useful for batching)",
     )
     parser.add_argument(
         "--workers", type=int, default=1, metavar="N",
@@ -200,33 +206,46 @@ def main() -> None:
 
     entries = list(results.values())
 
-    if args.limit is not None:
-        entries = entries[: args.limit]
-        print(f"  Limiting to first {args.limit} papers.", file=sys.stderr)
-
-    # Split into already-done and pending (across selected agents)
+    already_screened_by_agent: dict[str, int] = {}
+    selected_entries_by_agent: dict[str, list[dict]] = {}
     to_screen: list[tuple[dict, str]] = []
-    for entry in entries:
-        row = results[entry["key"]]
-        for agent in agents_to_run:
-            dec_col = f"{agent}_decision"
-            if not row.get(dec_col) or row.get(dec_col) == "error":
-                to_screen.append((entry, agent))
 
-    total_entries = len(entries)
-    screened_entries = sum(
-        1 for entry in entries
-        if all(
-            results[entry["key"]].get(f"{agent}_decision")
-            and results[entry["key"]].get(f"{agent}_decision") != "error"
-            for agent in agents_to_run
+    for agent in agents_to_run:
+        pending_entries = [
+            entry for entry in entries
+            if not results[entry["key"]].get(f"{agent}_decision")
+            or results[entry["key"]].get(f"{agent}_decision") == "error"
+        ]
+        already_screened_by_agent[agent] = len(entries) - len(pending_entries)
+
+        selected_entries = pending_entries[: args.limit] if args.limit is not None else pending_entries
+        selected_entries_by_agent[agent] = selected_entries
+
+    max_rounds = max((len(entries) for entries in selected_entries_by_agent.values()), default=0)
+    for idx in range(max_rounds):
+        for agent in agents_to_run:
+            agent_entries = selected_entries_by_agent[agent]
+            if idx < len(agent_entries):
+                to_screen.append((agent_entries[idx], agent))
+
+    if args.limit is not None:
+        print(f"  Limiting to the next {args.limit} pending papers per selected agent.", file=sys.stderr)
+
+    selected_keys = {entry["key"] for entry, _ in to_screen}
+    total_entries = len(selected_keys) if args.limit is not None else len(entries)
+    skipped = sum(already_screened_by_agent.values())
+
+    for agent in agents_to_run:
+        selected_count = sum(1 for _, task_agent in to_screen if task_agent == agent)
+        print(
+            f"  {agent}: {already_screened_by_agent[agent]} already screened, "
+            f"{selected_count} task{'s' if selected_count != 1 else ''} queued.",
+            file=sys.stderr,
         )
-    )
-    skipped = total_entries - screened_entries
 
     print(
-        f"  {skipped} already screened, {len(to_screen)} tasks to process "
-        f"({args.workers} worker{'s' if args.workers != 1 else ''}).",
+        f"  {len(to_screen)} total task{'s' if len(to_screen) != 1 else ''} to process "
+        f"({args.workers} worker{'s' if args.workers != 1 else ''}, round-robin by agent).",
         file=sys.stderr,
     )
 
@@ -262,13 +281,13 @@ def main() -> None:
                 save_csv(csv_path, results)
 
             print(
-                f"[{completed}/{total}] {agent} → {decision}: {entry['title'][:70]}",
+                f"[{completed}/{total}] agent={agent} result={decision} title={entry['title'][:70]}",
                 file=sys.stderr,
             )
 
     print(
         f"\nDone.  Screened: {completed}  Errors: {errors}  "
-        f"Skipped (already done): {skipped}  Total: {len(entries)}",
+        f"Skipped (already done): {skipped}  Total: {total_entries}",
         file=sys.stderr,
     )
 

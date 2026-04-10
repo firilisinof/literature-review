@@ -31,7 +31,7 @@ python screen.py --agent codex
 # Omit --agent to run all three agents (claude, gemini, codex)
 python screen.py
 
-# Test with the first 10 papers before committing to the full run
+# Process the next 10 pending papers for this agent
 python screen.py --agent claude --limit 10
 
 # Override input/output paths
@@ -41,7 +41,8 @@ python screen.py --agent claude --input papers/papers.bib --output screening_res
 python screen.py --agent claude --workers 5
 ```
 
-Each command is independent and can be run on different machines or at different times. Re-running is safe: papers that already have a successful decision for the selected agents are skipped.
+Each command is independent and can be run on different machines or at different times. Re-running is safe: papers that already have a successful decision for the selected agents are skipped. When you use `--limit N`, the script takes the next `N` pending papers for each selected agent, so different agents can advance through different batches if they have different gaps or errors.
+When multiple agents are selected in a single run, their pending papers are queued in round-robin order by agent, so work starts across `claude`, `gemini`, and `codex` earlier instead of running one agent's queue first.
 
 ### Output
 
@@ -66,7 +67,7 @@ Results are written to `screening_results.csv` with the following columns:
 - **Missing abstracts**: Papers without an abstract field in the BibTeX are sent to the agent with the note `N/A`. The agent is asked to decide on title alone.
 - **Timeout**: Each agent call times out after 60 seconds. Timed-out papers are marked `error` and retried on the next run.
 - **Response parsing**: The script looks for `Decision: include|exclude` and `Reason: ...` in the agent's output. If the agent's response does not match this format, the decision is set to `error` and the first 300 characters of the raw output are stored as the reason.
-- **Parallel execution**: By default, papers are processed sequentially with one worker. You can increase parallelism with `--workers`; for example, with 5 workers, the script runs up to 5 agent calls in parallel. For ~3,788 papers at ~10 seconds per call, wall-clock time scales roughly with `1 / workers` in optimistic settings.
+- **Parallel execution**: By default, papers are processed sequentially with one worker. You can increase parallelism with `--workers`; for example, with 5 workers, the script runs up to 5 agent calls in parallel. In multi-agent runs, tasks are submitted round-robin by agent, so completion logs can interleave agents naturally. For ~3,788 papers at ~10 seconds per call, wall-clock time scales roughly with `1 / workers` in optimistic settings.
 - **Agent commands**: The CLI commands used for each agent are defined at the top of `screen.py` in `AGENT_COMMANDS`. Edit them if your installation uses different flags or paths.
 
 ## Data sources

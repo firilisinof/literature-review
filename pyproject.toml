@@ -11,4 +11,5 @@ dependencies = [
     "bibtexparser>=1.0,<2.0",
     "openai>=1.109.1",
     "pytest>=8.4.2",
+    "rich>=14.2.0",
 ]

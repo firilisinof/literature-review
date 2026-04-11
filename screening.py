@@ -7,9 +7,15 @@ import re
 import sys
 import tempfile
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 from openai import NotFoundError, OpenAI
+from rich.console import Console, Group
+from rich.live import Live
+from rich.panel import Panel
+from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn
+from rich.table import Table
 
 REQUIRED_COLUMNS = ("id", "title", "abstract")
 HYDROXYPROPYL_CELLULOSE_RE = re.compile(r"\bhydroxypropyl cellulose\b", re.IGNORECASE)
@@ -46,6 +52,10 @@ TERMINAL_STATUSES = {
 }
 
 
+def timestamp_now() -> str:
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
 def positive_int(value: str) -> int:
     parsed = int(value)
     if parsed <= 0:
@@ -54,12 +64,11 @@ def positive_int(value: str) -> int:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Batch paper screening via API.")
+    parser = argparse.ArgumentParser(description="Live batch paper screening via API.")
     parser.add_argument("--input", required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
     parser.add_argument("--papers-per-batch", required=True, type=positive_int)
-    parser.add_argument("--run-until-complete", action="store_true")
     parser.add_argument("--poll-interval-seconds", type=positive_int, default=30)
     return parser.parse_args(argv)
 
@@ -116,6 +125,7 @@ def build_state(
         if prefilter:
             papers[row["id"]] = prefilter
 
+    now = timestamp_now()
     return {
         "metadata": {
             "batch_id": batch_id,
@@ -129,6 +139,8 @@ def build_state(
             "papers_per_batch": papers_per_batch,
             "total_papers": len(rows),
             "current_batch_size": 0,
+            "started_at": now,
+            "updated_at": now,
         },
         "papers": papers,
     }
@@ -254,9 +266,12 @@ def load_or_create_state(
 ) -> dict[str, object]:
     if state_path.exists():
         state = json.loads(state_path.read_text(encoding="utf-8"))
-        state["metadata"]["papers_per_batch"] = papers_per_batch
-        state["metadata"]["total_papers"] = len(rows)
-        state["metadata"].setdefault("current_batch_size", 0)
+        metadata = state["metadata"]
+        metadata["papers_per_batch"] = papers_per_batch
+        metadata["total_papers"] = len(rows)
+        metadata.setdefault("current_batch_size", 0)
+        metadata.setdefault("started_at", timestamp_now())
+        metadata.setdefault("updated_at", timestamp_now())
         return state
 
     return build_state(
@@ -269,36 +284,45 @@ def load_or_create_state(
 
 
 def save_state(state_path: Path, state: dict[str, object]) -> None:
+    state["metadata"]["updated_at"] = timestamp_now()
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
 
 
-def format_state_summary(state: dict[str, object]) -> str:
+def derive_progress(state: dict[str, object]) -> dict[str, int]:
     metadata = state["metadata"]
     papers = state["papers"]
     total_decisions = len(papers)
     included = sum(1 for paper in papers.values() if paper["decision"] == "include")
     excluded = sum(1 for paper in papers.values() if paper["decision"] == "exclude")
+    prefiltered = metadata.get("prefiltered_count", 0)
     current_batch_size = metadata.get("current_batch_size", 0)
-    remaining = metadata.get("total_papers", total_decisions) - total_decisions - current_batch_size
+    total_papers = metadata.get("total_papers", total_decisions)
+    remaining = max(total_papers - total_decisions - current_batch_size, 0)
+    return {
+        "total_papers": total_papers,
+        "completed": total_decisions,
+        "included": included,
+        "excluded": excluded,
+        "prefiltered": prefiltered,
+        "current_batch_size": current_batch_size,
+        "remaining": remaining,
+        "submitted": metadata.get("submitted_count", 0),
+    }
 
-    parts = [
-        f"batch_id={metadata['batch_id']}",
-        f"status={metadata['status']}",
-        f"submitted={metadata.get('submitted_count', 0)}",
-        f"prefiltered={metadata.get('prefiltered_count', 0)}",
-        f"decisions={total_decisions}",
-        f"include={included}",
-        f"exclude={excluded}",
-        f"current_batch_size={current_batch_size}",
-        f"remaining={remaining}",
-    ]
-    remote_batch_id = metadata.get("remote_batch_id")
-    if remote_batch_id:
-        parts.append(f"remote_batch_id={remote_batch_id}")
-    failure_message = metadata.get("failure_message")
-    if failure_message:
-        parts.append(f"failure_message={json.dumps(failure_message)}")
-    return " ".join(parts)
+
+def pending_rows(rows: list[dict[str, str]], state: dict[str, object]) -> list[dict[str, str]]:
+    papers = state["papers"]
+    return [row for row in rows if row["id"] not in papers]
+
+
+def parse_output_text(output_text: str) -> dict[str, object]:
+    payload = json.loads(output_text)
+    if payload.get("decision") not in {"include", "exclude"}:
+        raise ValueError("Invalid decision")
+    reasons = payload.get("reason")
+    if not isinstance(reasons, list) or not reasons or any(reason not in ALLOWED_REASONS for reason in reasons):
+        raise ValueError("Invalid reason")
+    return {"decision": payload["decision"], "reason": reasons}
 
 
 def persist_batch_failure(
@@ -316,11 +340,6 @@ def persist_batch_failure(
     return state
 
 
-def pending_rows(rows: list[dict[str, str]], state: dict[str, object]) -> list[dict[str, str]]:
-    papers = state["papers"]
-    return [row for row in rows if row["id"] not in papers]
-
-
 def submit_next_batch(
     *,
     client: object,
@@ -335,6 +354,7 @@ def submit_next_batch(
         state["metadata"]["status"] = "done"
         state["metadata"]["current_batch_size"] = 0
         state["metadata"].pop("remote_batch_id", None)
+        state["metadata"].pop("current_batch_submitted_at", None)
         state["metadata"].pop("failure_message", None)
         save_state(state_path, state)
         return state
@@ -343,20 +363,11 @@ def submit_next_batch(
     state["metadata"]["remote_batch_id"] = batch["id"]
     state["metadata"]["submitted_count"] += len(requests)
     state["metadata"]["current_batch_size"] = len(requests)
+    state["metadata"]["current_batch_submitted_at"] = timestamp_now()
     state["metadata"]["status"] = "waiting batch"
     state["metadata"].pop("failure_message", None)
     save_state(state_path, state)
     return state
-
-
-def parse_output_text(output_text: str) -> dict[str, object]:
-    payload = json.loads(output_text)
-    if payload.get("decision") not in {"include", "exclude"}:
-        raise ValueError("Invalid decision")
-    reasons = payload.get("reason")
-    if not isinstance(reasons, list) or not reasons or any(reason not in ALLOWED_REASONS for reason in reasons):
-        raise ValueError("Invalid reason")
-    return {"decision": payload["decision"], "reason": reasons}
 
 
 def run_once(
@@ -417,6 +428,7 @@ def run_once(
             }
         state["metadata"]["current_batch_size"] = 0
         state["metadata"].pop("remote_batch_id", None)
+        state["metadata"].pop("current_batch_submitted_at", None)
         save_state(state_path, state)
         return submit_next_batch(
             client=client,
@@ -446,6 +458,101 @@ def run_once(
     return state
 
 
+def make_console(stdout: object | None = None) -> Console:
+    if isinstance(stdout, Console):
+        return stdout
+    return Console(file=stdout or sys.stdout, force_terminal=False, color_system=None)
+
+
+def build_progress_bar(completed: int, total: int) -> Progress:
+    progress = Progress(
+        TextColumn("[bold]Progress[/bold]"),
+        BarColumn(bar_width=None),
+        TaskProgressColumn(),
+        TextColumn("{task.completed}/{task.total} papers"),
+        expand=True,
+    )
+    progress.add_task("screening", total=max(total, 1), completed=completed)
+    return progress
+
+
+def render_dashboard(state: dict[str, object], action: str) -> Group:
+    metadata = state["metadata"]
+    progress = derive_progress(state)
+
+    header = Table.grid(expand=True)
+    header.add_column()
+    header.add_column(justify="right")
+    header.add_row(
+        f"[bold]Local batch[/bold] {metadata['batch_id']}",
+        f"[bold]Status[/bold] {metadata['status']}",
+    )
+    header.add_row(
+        f"[bold]Remote batch[/bold] {metadata.get('remote_batch_id', '-')}",
+        f"[bold]Model[/bold] {metadata['model']}",
+    )
+
+    overall = Table.grid(padding=(0, 2))
+    overall.add_column()
+    overall.add_column()
+    overall.add_row("Total papers", str(progress["total_papers"]))
+    overall.add_row("Completed decisions", str(progress["completed"]))
+    overall.add_row("Current batch", str(progress["current_batch_size"]))
+    overall.add_row("Remaining", str(progress["remaining"]))
+
+    decisions = Table.grid(padding=(0, 2))
+    decisions.add_column()
+    decisions.add_column()
+    decisions.add_row("Included", str(progress["included"]))
+    decisions.add_row("Excluded", str(progress["excluded"]))
+    decisions.add_row("Prefiltered", str(progress["prefiltered"]))
+    decisions.add_row("Submitted remotely", str(progress["submitted"]))
+
+    activity = Table.grid(expand=True)
+    activity.add_column()
+    activity.add_row(f"[bold]Current action[/bold] {action}")
+    activity.add_row(f"[bold]Started[/bold] {metadata.get('started_at', '-')}")
+    activity.add_row(f"[bold]Updated[/bold] {metadata.get('updated_at', '-')}")
+    activity.add_row(
+        f"[bold]Batch submitted[/bold] {metadata.get('current_batch_submitted_at', '-')}"
+    )
+    failure_message = metadata.get("failure_message")
+    if failure_message:
+        activity.add_row(f"[bold red]Failure[/bold red] {failure_message}")
+
+    return Group(
+        Panel(header, title="Batch", border_style="cyan"),
+        Panel(build_progress_bar(progress["completed"], progress["total_papers"]), title="Overall Progress", border_style="green"),
+        Panel.fit(overall, title="Work Queue", border_style="blue"),
+        Panel.fit(decisions, title="Decision Summary", border_style="magenta"),
+        Panel(activity, title="Activity", border_style="yellow"),
+    )
+
+
+def render_final_summary(state: dict[str, object]) -> Panel:
+    progress = derive_progress(state)
+    metadata = state["metadata"]
+    lines = [
+        f"Status: {metadata['status']}",
+        f"Completed decisions: {progress['completed']}/{progress['total_papers']}",
+        f"Included: {progress['included']}",
+        f"Excluded: {progress['excluded']}",
+        f"Prefiltered: {progress['prefiltered']}",
+        f"Submitted remotely: {progress['submitted']}",
+    ]
+    if metadata.get("remote_batch_id"):
+        lines.append(f"Remote batch: {metadata['remote_batch_id']}")
+    if metadata.get("failure_message"):
+        lines.append(f"Failure: {metadata['failure_message']}")
+    border_style = "green" if metadata["status"] == "done" else "red"
+    title = "Screening Complete" if metadata["status"] == "done" else "Screening Stopped"
+    return Panel("\n".join(lines), title=title, border_style=border_style)
+
+
+def emit_snapshot(console: Console, state: dict[str, object], action: str) -> None:
+    console.print(render_dashboard(state, action))
+
+
 def run_with_args(
     args: argparse.Namespace,
     *,
@@ -453,38 +560,50 @@ def run_with_args(
     workdir: Path | None = None,
     sleeper: object | None = None,
     stdout: object | None = None,
-    emit_progress: bool = False,
 ) -> dict[str, object]:
     sleeper = sleeper or time.sleep
-    stdout = stdout or sys.stdout
+    console = make_console(stdout)
+    state: dict[str, object] | None = None
+    action = "Initializing workflow"
 
-    state = run_once(args=args, client=client, workdir=workdir)
-    if emit_progress:
-        print(format_state_summary(state), file=stdout)
-    if not args.run_until_complete:
-        return state
+    def refresh(current_state: dict[str, object], current_action: str, *, live: Live | None = None) -> None:
+        if live is not None:
+            live.update(render_dashboard(current_state, current_action))
+        else:
+            emit_snapshot(console, current_state, current_action)
 
-    previous_remote_batch_id = state["metadata"].get("remote_batch_id")
-    while state["metadata"]["status"] not in TERMINAL_STATUSES:
-        current_remote_batch_id = state["metadata"].get("remote_batch_id")
-        skip_sleep = (
-            previous_remote_batch_id is not None
-            and current_remote_batch_id is not None
-            and current_remote_batch_id != previous_remote_batch_id
-        )
-        if (
-            not skip_sleep
-            and state["metadata"]["status"] == "waiting batch"
-            and current_remote_batch_id is not None
-        ):
+    def workflow(live: Live | None = None) -> dict[str, object]:
+        nonlocal state, action
+        action = "Loading local state"
+        state = run_once(args=args, client=client, workdir=workdir)
+        refresh(state, action, live=live)
+
+        while state["metadata"]["status"] not in TERMINAL_STATUSES:
+            remote_batch_id = state["metadata"].get("remote_batch_id")
+            if remote_batch_id is None:
+                action = "Submitting next batch"
+                state = run_once(args=args, client=client, workdir=workdir)
+                refresh(state, action, live=live)
+                continue
+
+            action = f"Waiting {args.poll_interval_seconds}s before polling remote batch"
+            refresh(state, action, live=live)
             sleeper(args.poll_interval_seconds)
 
-        previous_remote_batch_id = current_remote_batch_id
-        state = run_once(args=args, client=client, workdir=workdir)
-        if emit_progress:
-            print(format_state_summary(state), file=stdout)
+            action = "Polling remote batch and merging results if ready"
+            state = run_once(args=args, client=client, workdir=workdir)
+            refresh(state, action, live=live)
 
-    return state
+        return state
+
+    if console.is_terminal:
+        with Live(render_dashboard(build_state(batch_id=args.batch_id, input_path=Path(args.input), model=args.model, rows=[], papers_per_batch=args.papers_per_batch), action), console=console, refresh_per_second=4, transient=False) as live:
+            final_state = workflow(live=live)
+    else:
+        final_state = workflow(live=None)
+
+    console.print(render_final_summary(final_state))
+    return final_state
 
 
 def run(
@@ -502,15 +621,12 @@ def run(
         workdir=workdir,
         sleeper=sleeper,
         stdout=stdout,
-        emit_progress=args.run_until_complete,
     )
 
 
 def main() -> None:
     args = parse_args()
-    state = run_with_args(args, emit_progress=args.run_until_complete)
-    if not args.run_until_complete:
-        print(format_state_summary(state), file=sys.stdout)
+    run_with_args(args)
 
 
 if __name__ == "__main__":

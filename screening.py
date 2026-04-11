@@ -2,9 +2,11 @@
 
 import argparse
 import csv
+import re
 from pathlib import Path
 
 REQUIRED_COLUMNS = ("id", "title", "abstract")
+HYDROXYPROPYL_CELLULOSE_RE = re.compile(r"\bhydroxypropyl cellulose\b", re.IGNORECASE)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -24,6 +26,8 @@ def load_rows(path: Path) -> list[dict[str, str]]:
 
 
 def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
+    text = f"{row['title']} {row['abstract']}"
+
     if not row["title"].strip():
         return {
             "source": "prefilter",
@@ -35,6 +39,12 @@ def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
             "source": "prefilter",
             "decision": "exclude",
             "reason": ["missing_metadata"],
+        }
+    if HYDROXYPROPYL_CELLULOSE_RE.search(text):
+        return {
+            "source": "prefilter",
+            "decision": "exclude",
+            "reason": ["EC1"],
         }
     return None
 

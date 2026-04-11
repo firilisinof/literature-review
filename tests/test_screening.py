@@ -52,3 +52,19 @@ def test_prefilter_missing_title_marks_missing_metadata():
         "decision": "exclude",
         "reason": ["missing_metadata"],
     }
+
+
+def test_prefilter_hydroxypropyl_cellulose_papers_as_ec1():
+    row = {
+        "id": "1",
+        "title": "Optical properties of HPC films",
+        "abstract": "We evaluate hydroxypropyl cellulose films for sustainable materials.",
+    }
+
+    result = screening.prefilter_paper(row)
+
+    assert result == {
+        "source": "prefilter",
+        "decision": "exclude",
+        "reason": ["EC1"],
+    }

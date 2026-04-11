@@ -520,6 +520,7 @@ def build_progress_bar(completed: int, total: int) -> Progress:
 def render_dashboard(state: dict[str, object], action: str) -> Group:
     metadata = state["metadata"]
     progress = derive_progress(state)
+    display_dry_run = metadata.get("display_dry_run", metadata.get("dry_run", False))
 
     header = Table.grid(expand=True)
     header.add_column()
@@ -534,7 +535,7 @@ def render_dashboard(state: dict[str, object], action: str) -> Group:
     )
     header.add_row(
         f"[bold]Provider[/bold] {metadata.get('provider', '-')}",
-        f"[bold]Dry run[/bold] {'yes' if metadata.get('dry_run') else 'no'}",
+        f"[bold]Dry run[/bold] {'yes' if display_dry_run else 'no'}",
     )
 
     overall = Table.grid(padding=(0, 2))
@@ -577,9 +578,10 @@ def render_dashboard(state: dict[str, object], action: str) -> Group:
 def render_final_summary(state: dict[str, object]) -> Panel:
     progress = derive_progress(state)
     metadata = state["metadata"]
+    display_dry_run = metadata.get("display_dry_run", metadata.get("dry_run", False))
     lines = [
         f"Status: {metadata['status']}",
-        f"Dry run: {'yes' if metadata.get('dry_run') else 'no'}",
+        f"Dry run: {'yes' if display_dry_run else 'no'}",
         f"Completed decisions: {progress['completed']}/{progress['total_papers']}",
         f"Included: {progress['included']}",
         f"Excluded: {progress['excluded']}",
@@ -615,6 +617,7 @@ def run_with_args(
     action = "Initializing workflow"
 
     def refresh(current_state: dict[str, object], current_action: str, *, live: Live | None = None) -> None:
+        current_state["metadata"]["display_dry_run"] = args.dry_run
         if live is not None:
             live.update(render_dashboard(current_state, current_action))
         else:
@@ -649,7 +652,15 @@ def run_with_args(
         return state
 
     if console.is_terminal:
-        with Live(render_dashboard(build_state(batch_id=args.batch_id, input_path=Path(args.input), model=args.model, rows=[], papers_per_batch=args.papers_per_batch), action), console=console, refresh_per_second=4, transient=False) as live:
+        initial_state = build_state(
+            batch_id=args.batch_id,
+            input_path=Path(args.input),
+            model=args.model,
+            rows=[],
+            papers_per_batch=args.papers_per_batch,
+        )
+        initial_state["metadata"]["display_dry_run"] = args.dry_run
+        with Live(render_dashboard(initial_state, action), console=console, refresh_per_second=4, transient=False) as live:
             final_state = workflow(live=live)
     else:
         final_state = workflow(live=None)

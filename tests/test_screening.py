@@ -722,6 +722,63 @@ def test_run_dry_run_processes_all_chunks_without_api_calls(tmp_path):
     assert "Screening Complete" in output
 
 
+def test_run_displays_dry_run_for_existing_done_state(tmp_path):
+    class Client:
+        def __getattr__(self, name):
+            raise AssertionError(f"unexpected API access: {name}")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "testing.json"
+    state_path.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "batch_id": "testing",
+                    "status": "done",
+                    "provider": "openai",
+                    "dry_run": False,
+                    "model": "gpt-5-mini",
+                    "seed": screening.SEED,
+                    "input_file": str(csv_path),
+                    "submitted_count": 1,
+                    "prefiltered_count": 0,
+                    "papers_per_batch": 500,
+                    "total_papers": 1,
+                    "current_batch_size": 0,
+                    "started_at": "2026-04-12T10:00:00Z",
+                    "updated_at": "2026-04-12T10:00:00Z",
+                },
+                "papers": {"1": {"source": "openai_batch", "decision": "include", "reason": ["IC1"]}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    stdout = io.StringIO()
+
+    result = screening.run(
+        [
+            "--input",
+            str(csv_path),
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "testing",
+            "--papers-per-batch",
+            "500",
+            "--dry-run",
+        ],
+        client=Client(),
+        workdir=tmp_path,
+        stdout=stdout,
+    )
+
+    assert result["metadata"]["dry_run"] is False
+    output = stdout.getvalue()
+    assert "Dry run yes" in output
+    assert "Dry run: yes" in output
+
+
 def test_run_stops_after_failed_chunk_and_renders_failure(tmp_path):
     class Client:
         def __init__(self):

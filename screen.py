@@ -2,7 +2,7 @@
 """
 screen.py — AI-assisted title/abstract screening for systematic mapping studies.
 
-Calls a CLI agent (claude, gemini, or codex) for each paper in a BibTeX file
+Calls a CLI agent (claude, gemini, or codex) for each paper in a screening CSV
 and records include/exclude decisions in a CSV. Designed to be run once per
 agent; re-runs skip already-screened papers unless they errored.
 
@@ -11,8 +11,8 @@ Usage:
     python screen.py --agent claude --agent codex
     python screen.py --agent claude,gemini
     python screen.py --agent gemini --limit 10 --workers 5
-    python screen.py --agent codex --input papers/papers.bib --output screening_results.csv
-    python screen.py --input papers/papers.bib --output screening_results.csv
+    python screen.py --agent codex
+    python screen.py
       # runs claude, gemini, and codex
 """
 
@@ -24,8 +24,6 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-
-import bibtexparser
 
 # ---------------------------------------------------------------------------
 # Configuration — edit command lists here if needed
@@ -105,38 +103,11 @@ def parse_agents(agent_args: list[str] | None) -> list[str]:
     return agents
 
 # ---------------------------------------------------------------------------
-# BibTeX helpers
-# ---------------------------------------------------------------------------
-
-def _clean(text: str) -> str:
-    """Strip BibTeX braces and normalise whitespace."""
-    text = text.replace("{", "").replace("}", "")
-    return " ".join(text.split())
-
-
-def load_bib(path: Path) -> list[dict]:
-    """Parse a BibTeX file and return a list of {key, title, abstract} dicts."""
-    with open(path, encoding="utf-8", errors="replace") as f:
-        db = bibtexparser.load(f)
-    entries = []
-    for e in db.entries:
-        title    = _clean(e.get("title", ""))
-        abstract = _clean(e.get("abstract", "")) or "N/A"
-        entries.append({
-            "key":      e.get("ID", ""),
-            "title":    title,
-            "abstract": abstract,
-        })
-    return entries
-
-# ---------------------------------------------------------------------------
 # CSV helpers
 # ---------------------------------------------------------------------------
 
 def load_csv(path: Path) -> dict[str, dict]:
     """Load an existing results CSV into a dict keyed by citation key."""
-    if not path.exists():
-        return {}
     with open(path, newline="", encoding="utf-8") as f:
         return {row["key"]: row for row in csv.DictReader(f)}
 
@@ -191,7 +162,7 @@ def call_agent(agent: str, prompt: str) -> tuple[str, str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Screen BibTeX papers with a CLI AI agent.",
+        description="Screen papers from a CSV with a CLI AI agent.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -202,14 +173,6 @@ def main() -> None:
             "list (for example: --agent claude --agent codex or --agent claude,codex). "
             "Defaults to all agents."
         ),
-    )
-    parser.add_argument(
-        "--input", default="papers/papers.bib",
-        help="Path to BibTeX file (default: papers/papers.bib)",
-    )
-    parser.add_argument(
-        "--output", default="screening_results.csv",
-        help="Path to output CSV (default: screening_results.csv)",
     )
     parser.add_argument(
         "--limit", type=int, default=None, metavar="N",
@@ -225,26 +188,14 @@ def main() -> None:
     except argparse.ArgumentTypeError as exc:
         parser.error(str(exc))
 
-    bib_path = Path(args.input)
-    csv_path = Path(args.output)
+    csv_path = Path("screening.csv")
 
-    # On first run, build the CSV from the BibTeX file.
-    # On subsequent runs, load the CSV directly — no BibTeX parsing needed.
-    if csv_path.exists():
-        print(f"Loading {csv_path} ...", file=sys.stderr)
-        results = load_csv(csv_path)
-        print(f"  {len(results)} papers loaded from CSV.", file=sys.stderr)
-    else:
-        print(f"No CSV found. Parsing {bib_path} to initialise {csv_path} ...", file=sys.stderr)
-        results = {}
-        for e in load_bib(bib_path):
-            results[e["key"]] = {col: "" for col in CSV_COLUMNS} | {
-                "key":      e["key"],
-                "title":    e["title"],
-                "abstract": e["abstract"],
-            }
-        save_csv(csv_path, results)
-        print(f"  {len(results)} papers written to {csv_path}.", file=sys.stderr)
+    if not csv_path.exists():
+        sys.exit(f"Error: screening CSV not found: {csv_path}")
+
+    print(f"Loading {csv_path} ...", file=sys.stderr)
+    results = load_csv(csv_path)
+    print(f"  {len(results)} papers loaded from CSV.", file=sys.stderr)
 
     entries = list(results.values())
 

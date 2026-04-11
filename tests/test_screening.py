@@ -145,3 +145,39 @@ def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
     )
 
     assert state == existing_state
+
+
+def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
+    class Client:
+        def __getattr__(self, name):
+            raise AssertionError(f"unexpected API access: {name}")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "batch-123.json"
+    state_path.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "batch_id": "batch-123",
+                    "status": "done",
+                    "provider": "openai",
+                    "model": "gpt-5.4-mini",
+                    "seed": screening.SEED,
+                    "input_file": str(csv_path),
+                    "submitted_count": 1,
+                    "prefiltered_count": 0,
+                },
+                "papers": {"1": {"source": "openai_batch", "decision": "include", "reason": ["IC1"]}},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
+
+    assert result["metadata"]["status"] == "done"

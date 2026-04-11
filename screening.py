@@ -99,8 +99,27 @@ def load_or_create_state(
     return build_state(batch_id=batch_id, input_path=input_path, model=model, rows=rows)
 
 
+def run(
+    argv: list[str] | None = None,
+    *,
+    client: object | None = None,
+    workdir: Path | None = None,
+) -> dict[str, object]:
+    args = parse_args(argv)
+    state_path = (workdir or Path.cwd()) / f"{args.batch_id}.json"
+    rows = load_rows(Path(args.input))
+    state = load_or_create_state(
+        state_path=state_path,
+        batch_id=args.batch_id,
+        input_path=Path(args.input),
+        model=args.model,
+        rows=rows,
+    )
+    return state
+
+
 def main() -> None:
-    parse_args()
+    run()
 
 
 if __name__ == "__main__":

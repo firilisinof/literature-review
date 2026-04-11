@@ -37,6 +37,7 @@ All flags are mandatory:
 
 Optional flags:
 
+- `--dry-run`: Simulate the workflow without calling the API
 - `--poll-interval-seconds`: Poll interval between remote batch checks; defaults to `30`
 
 ### Behavior
@@ -49,6 +50,7 @@ Optional flags:
 - The script submits at most `--papers-per-batch` papers per remote batch and keeps only one remote batch active at a time.
 - Each invocation is live and foregrounded: it resumes any active remote batch, polls until that batch changes state, merges completed outputs, submits the next chunk automatically, and continues until all papers are processed or a terminal failure occurs.
 - The terminal UI shows the local batch id, remote batch id, current status, overall progress, current batch size, remaining papers, and a compact decision summary.
+- With `--dry-run`, the script avoids all API calls, simulates remote batches locally, and records each non-prefiltered paper as `{"decision": "include", "reason": ["doubt"]}` with source `dry_run`.
 - The expected model response is:
 
 ```json
@@ -77,6 +79,7 @@ The script writes `<batch_id>.json` with this structure:
     "batch_id": "april-run-01",
     "status": "waiting batch",
     "provider": "openai",
+    "dry_run": false,
     "model": "gpt-5-mini",
     "input_file": "papers_to_screen.csv",
     "submitted_count": 42,
@@ -102,6 +105,7 @@ The script writes `<batch_id>.json` with this structure:
 - `metadata.status = "waiting batch"` means the batch is still running or waiting to be checked again.
 - `metadata.status = "done"` means the final merged results have already been written and later runs will do nothing.
 - `metadata.status = "failed"`, `completed_with_failed_requests`, and `cancelled_with_partial_output` are terminal failure states that stop automatic progress until you inspect the batch.
+- `dry_run = true` means the workflow was simulated locally without API calls.
 - `current_batch_size` is the number of papers currently assigned to the active remote batch.
 - `remote_batch_id` stores the actual OpenAI batch ID returned by the API so subsequent runs can keep polling the same remote batch while you continue using your chosen local `--batch-id`.
 - `started_at` is when the local workflow state was first created.

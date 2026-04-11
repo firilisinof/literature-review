@@ -20,3 +20,11 @@ def test_load_rows_with_id_title_and_abstract(tmp_path):
     rows = screening.load_rows(csv_path)
 
     assert rows == [{"id": "1", "title": "Paper title", "abstract": "Paper abstract"}]
+
+
+def test_load_rows_requires_id_title_and_abstract_columns(tmp_path):
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title\n1,Paper title\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="id,title,abstract"):
+        screening.load_rows(csv_path)

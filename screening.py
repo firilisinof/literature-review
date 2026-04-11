@@ -4,6 +4,8 @@ import argparse
 import csv
 from pathlib import Path
 
+REQUIRED_COLUMNS = ("id", "title", "abstract")
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Batch paper screening via API.")
@@ -15,7 +17,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def load_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        if reader.fieldnames != list(REQUIRED_COLUMNS):
+            raise ValueError("CSV must contain id,title,abstract columns")
+        return list(reader)
 
 
 def main() -> None:

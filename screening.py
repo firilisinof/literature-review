@@ -6,6 +6,7 @@ import json
 import re
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 from openai import NotFoundError, OpenAI
@@ -35,6 +36,14 @@ RESPONSE_SCHEMA = {
     "additionalProperties": False,
 }
 ALLOWED_REASONS = {"IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"}
+TERMINAL_STATUSES = {
+    "done",
+    "failed",
+    "expired",
+    "cancelled",
+    "completed_with_failed_requests",
+    "cancelled_with_partial_output",
+}
 
 
 def positive_int(value: str) -> int:
@@ -50,6 +59,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
     parser.add_argument("--papers-per-batch", required=True, type=positive_int)
+    parser.add_argument("--run-until-complete", action="store_true")
+    parser.add_argument("--poll-interval-seconds", type=positive_int, default=30)
     return parser.parse_args(argv)
 
 
@@ -348,13 +359,12 @@ def parse_output_text(output_text: str) -> dict[str, object]:
     return {"decision": payload["decision"], "reason": reasons}
 
 
-def run(
-    argv: list[str] | None = None,
+def run_once(
     *,
+    args: argparse.Namespace,
     client: object | None = None,
     workdir: Path | None = None,
 ) -> dict[str, object]:
-    args = parse_args(argv)
     state_path = (workdir or Path.cwd()) / f"{args.batch_id}.json"
     state_exists = state_path.exists()
     rows = load_rows(Path(args.input))
@@ -366,14 +376,7 @@ def run(
         rows=rows,
         papers_per_batch=args.papers_per_batch,
     )
-    if state["metadata"]["status"] in {
-        "done",
-        "failed",
-        "expired",
-        "cancelled",
-        "completed_with_failed_requests",
-        "cancelled_with_partial_output",
-    }:
+    if state["metadata"]["status"] in TERMINAL_STATUSES:
         return state
 
     if client is None:
@@ -443,9 +446,71 @@ def run(
     return state
 
 
+def run_with_args(
+    args: argparse.Namespace,
+    *,
+    client: object | None = None,
+    workdir: Path | None = None,
+    sleeper: object | None = None,
+    stdout: object | None = None,
+    emit_progress: bool = False,
+) -> dict[str, object]:
+    sleeper = sleeper or time.sleep
+    stdout = stdout or sys.stdout
+
+    state = run_once(args=args, client=client, workdir=workdir)
+    if emit_progress:
+        print(format_state_summary(state), file=stdout)
+    if not args.run_until_complete:
+        return state
+
+    previous_remote_batch_id = state["metadata"].get("remote_batch_id")
+    while state["metadata"]["status"] not in TERMINAL_STATUSES:
+        current_remote_batch_id = state["metadata"].get("remote_batch_id")
+        skip_sleep = (
+            previous_remote_batch_id is not None
+            and current_remote_batch_id is not None
+            and current_remote_batch_id != previous_remote_batch_id
+        )
+        if (
+            not skip_sleep
+            and state["metadata"]["status"] == "waiting batch"
+            and current_remote_batch_id is not None
+        ):
+            sleeper(args.poll_interval_seconds)
+
+        previous_remote_batch_id = current_remote_batch_id
+        state = run_once(args=args, client=client, workdir=workdir)
+        if emit_progress:
+            print(format_state_summary(state), file=stdout)
+
+    return state
+
+
+def run(
+    argv: list[str] | None = None,
+    *,
+    client: object | None = None,
+    workdir: Path | None = None,
+    sleeper: object | None = None,
+    stdout: object | None = None,
+) -> dict[str, object]:
+    args = parse_args(argv)
+    return run_with_args(
+        args,
+        client=client,
+        workdir=workdir,
+        sleeper=sleeper,
+        stdout=stdout,
+        emit_progress=args.run_until_complete,
+    )
+
+
 def main() -> None:
-    state = run()
-    print(format_state_summary(state), file=sys.stdout)
+    args = parse_args()
+    state = run_with_args(args, emit_progress=args.run_until_complete)
+    if not args.run_until_complete:
+        print(format_state_summary(state), file=sys.stdout)
 
 
 if __name__ == "__main__":

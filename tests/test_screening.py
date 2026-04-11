@@ -1,3 +1,4 @@
+import io
 import json
 from pathlib import Path
 import sys
@@ -23,6 +24,24 @@ def test_cli_rejects_non_positive_papers_per_batch():
     with pytest.raises(SystemExit):
         screening.parse_args(
             ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "0"]
+        )
+
+
+def test_cli_rejects_non_positive_poll_interval():
+    with pytest.raises(SystemExit):
+        screening.parse_args(
+            [
+                "--input",
+                "papers.csv",
+                "--model",
+                "gpt-5-mini",
+                "--batch-id",
+                "batch-123",
+                "--papers-per-batch",
+                "10",
+                "--poll-interval-seconds",
+                "0",
+            ]
         )
 
 
@@ -604,6 +623,153 @@ def test_run_submits_next_chunk_after_completed_batch(tmp_path):
         "reason": ["IC1"],
     }
     assert [request["custom_id"] for request in client.submitted["requests"]] == ["3"]
+
+
+def test_run_until_complete_processes_all_chunks_and_prints_progress(tmp_path):
+    class Client:
+        def __init__(self):
+            self.submissions = []
+            self.downloads = []
+
+        def get_batch(self, batch_id):
+            if batch_id == "batch-1":
+                return {"id": batch_id, "status": "completed"}
+            if batch_id == "batch-2":
+                return {"id": batch_id, "status": "completed"}
+            raise AssertionError(f"unexpected batch lookup: {batch_id}")
+
+        def submit_batch(self, *, batch_id, requests):
+            self.submissions.append({"batch_id": batch_id, "requests": requests})
+            if len(self.submissions) == 1:
+                return {"id": "batch-1", "status": "in_progress"}
+            if len(self.submissions) == 2:
+                return {"id": "batch-2", "status": "in_progress"}
+            raise AssertionError("submit_batch called too many times")
+
+        def download_output(self, batch_id):
+            self.downloads.append(batch_id)
+            if batch_id == "batch-1":
+                return [
+                    {
+                        "custom_id": "1",
+                        "output_text": json.dumps({"decision": "include", "reason": ["IC1"]}),
+                    }
+                ]
+            if batch_id == "batch-2":
+                return [
+                    {
+                        "custom_id": "2",
+                        "output_text": json.dumps({"decision": "exclude", "reason": ["EC2"]}),
+                    }
+                ]
+            raise AssertionError(f"unexpected download: {batch_id}")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
+        "2,HPC energy only,Energy efficiency in HPC scheduling.\n",
+        encoding="utf-8",
+    )
+    sleeps = []
+    stdout = io.StringIO()
+    client = Client()
+
+    result = screening.run(
+        [
+            "--input",
+            str(csv_path),
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "batch-123",
+            "--papers-per-batch",
+            "1",
+            "--run-until-complete",
+        ],
+        client=client,
+        workdir=tmp_path,
+        sleeper=sleeps.append,
+        stdout=stdout,
+    )
+
+    assert result["metadata"]["status"] == "done"
+    assert result["metadata"]["submitted_count"] == 2
+    assert result["metadata"]["current_batch_size"] == 0
+    assert result["papers"]["1"] == {
+        "source": "openai_batch",
+        "decision": "include",
+        "reason": ["IC1"],
+    }
+    assert result["papers"]["2"] == {
+        "source": "openai_batch",
+        "decision": "exclude",
+        "reason": ["EC2"],
+    }
+    assert sleeps == [30]
+    assert [request["custom_id"] for request in client.submissions[0]["requests"]] == ["1"]
+    assert [request["custom_id"] for request in client.submissions[1]["requests"]] == ["2"]
+    assert client.downloads == ["batch-1", "batch-2"]
+    output_lines = [line for line in stdout.getvalue().splitlines() if line.strip()]
+    assert len(output_lines) == 3
+    assert "status=waiting batch" in output_lines[0]
+    assert "status=waiting batch" in output_lines[1]
+    assert "status=done" in output_lines[2]
+
+
+def test_run_until_complete_stops_after_failed_chunk(tmp_path):
+    class Client:
+        def __init__(self):
+            self.submissions = []
+
+        def get_batch(self, batch_id):
+            if batch_id == "batch-1":
+                return {"id": batch_id, "status": "failed"}
+            raise AssertionError(f"unexpected batch lookup: {batch_id}")
+
+        def submit_batch(self, *, batch_id, requests):
+            self.submissions.append({"batch_id": batch_id, "requests": requests})
+            return {"id": "batch-1", "status": "in_progress"}
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
+        "2,HPC water footprint,Water use in supercomputing facilities.\n",
+        encoding="utf-8",
+    )
+    sleeps = []
+    stdout = io.StringIO()
+    client = Client()
+
+    result = screening.run(
+        [
+            "--input",
+            str(csv_path),
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "batch-123",
+            "--papers-per-batch",
+            "1",
+            "--run-until-complete",
+            "--poll-interval-seconds",
+            "7",
+        ],
+        client=client,
+        workdir=tmp_path,
+        sleeper=sleeps.append,
+        stdout=stdout,
+    )
+
+    assert result["metadata"]["status"] == "failed"
+    assert result["metadata"]["failure_message"] == "Batch batch-1 ended with status failed"
+    assert result["metadata"]["submitted_count"] == 1
+    assert sleeps == [7]
+    output_lines = [line for line in stdout.getvalue().splitlines() if line.strip()]
+    assert len(output_lines) == 2
+    assert "status=waiting batch" in output_lines[0]
+    assert "status=failed" in output_lines[1]
 
 
 def test_run_marks_failed_remote_batch_in_state(tmp_path):

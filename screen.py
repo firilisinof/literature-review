@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: screen.py — legacy CLI-agent title/abstract screening.
+
+Use `screening.py` for the current API-based batch workflow.
+
 screen.py — AI-assisted title/abstract screening for systematic mapping studies.
 
 Calls a CLI agent (claude, gemini, or codex) for each paper in a screening CSV
-and records include/exclude decisions in a CSV. Designed to be run once per
-agent; re-runs skip already-screened papers unless they errored.
+and records include/exclude decisions in a CSV. This script is kept for legacy
+workflows only. Designed to be run once per agent; re-runs skip already-screened
+papers unless they errored.
 
 Usage:
     python screen.py --agent claude

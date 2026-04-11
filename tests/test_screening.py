@@ -14,6 +14,18 @@ def test_cli_requires_input_model_and_batch_id():
         screening.parse_args([])
 
 
+def test_cli_requires_papers_per_batch():
+    with pytest.raises(SystemExit):
+        screening.parse_args(["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123"])
+
+
+def test_cli_rejects_non_positive_papers_per_batch():
+    with pytest.raises(SystemExit):
+        screening.parse_args(
+            ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "0"]
+        )
+
+
 def test_load_rows_with_id_title_and_abstract(tmp_path):
     csv_path = tmp_path / "papers.csv"
     csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
@@ -96,6 +108,7 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
         input_path=csv_path,
         model="gpt-5-mini",
         rows=rows,
+        papers_per_batch=25,
     )
 
     assert state == {
@@ -108,6 +121,9 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
             "input_file": str(csv_path),
             "submitted_count": 0,
             "prefiltered_count": 1,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 0,
         },
         "papers": {
             "1": {
@@ -121,6 +137,10 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
 
 def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
     state_path = tmp_path / "batch-123.json"
+    rows = [
+        {"id": "1", "title": "Paper title", "abstract": "Paper abstract"},
+        {"id": "2", "title": "Another paper", "abstract": "Another abstract"},
+    ]
     existing_state = {
         "metadata": {
             "batch_id": "batch-123",
@@ -131,6 +151,9 @@ def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
             "input_file": "papers.csv",
             "submitted_count": 1,
             "prefiltered_count": 1,
+            "papers_per_batch": 25,
+            "total_papers": 2,
+            "current_batch_size": 0,
         },
         "papers": {"1": {"source": "prefilter", "decision": "exclude", "reason": ["EC1"]}},
     }
@@ -141,7 +164,8 @@ def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
         batch_id="batch-123",
         input_path=tmp_path / "papers.csv",
         model="gpt-5-mini",
-        rows=[],
+        rows=rows,
+        papers_per_batch=25,
     )
 
     assert state == existing_state
@@ -167,6 +191,9 @@ def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
                     "input_file": str(csv_path),
                     "submitted_count": 1,
                     "prefiltered_count": 0,
+                    "papers_per_batch": 25,
+                    "total_papers": 1,
+                    "current_batch_size": 0,
                 },
                 "papers": {"1": {"source": "openai_batch", "decision": "include", "reason": ["IC1"]}},
             }
@@ -175,7 +202,7 @@ def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -193,6 +220,7 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
         input_path=tmp_path / "papers.csv",
         model="gpt-5-mini",
         rows=rows,
+        papers_per_batch=25,
     )
 
     requests = screening.build_batch_requests(rows=rows, state=state, model="gpt-5-mini")
@@ -229,6 +257,8 @@ def test_format_state_summary_reports_counts():
             "status": "waiting batch",
             "submitted_count": 2,
             "prefiltered_count": 1,
+            "current_batch_size": 2,
+            "total_papers": 10,
             "remote_batch_id": "batch_remote_123",
         },
         "papers": {
@@ -241,7 +271,8 @@ def test_format_state_summary_reports_counts():
 
     assert summary == (
         "batch_id=testing status=waiting batch submitted=2 prefiltered=1 "
-        "decisions=2 include=1 exclude=1 remote_batch_id=batch_remote_123"
+        "decisions=2 include=1 exclude=1 current_batch_size=2 remaining=6 "
+        "remote_batch_id=batch_remote_123"
     )
 
 
@@ -252,6 +283,8 @@ def test_format_state_summary_includes_failure_message():
             "status": "failed",
             "submitted_count": 2,
             "prefiltered_count": 1,
+            "current_batch_size": 2,
+            "total_papers": 10,
             "remote_batch_id": "batch_remote_123",
             "failure_message": "Batch batch_remote_123 ended with status failed",
         },
@@ -281,13 +314,23 @@ def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     csv_path.write_text(
         "id,title,abstract\n"
         "1,,Paper abstract\n"
-        "2,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n",
+        "2,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
+        "3,HPC water footprint,Water use in supercomputing facilities.\n",
         encoding="utf-8",
     )
     client = Client()
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        [
+            "--input",
+            str(csv_path),
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "batch-123",
+            "--papers-per-batch",
+            "1",
+        ],
         client=client,
         workdir=tmp_path,
     )
@@ -297,6 +340,7 @@ def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     assert [request["custom_id"] for request in client.submitted["requests"]] == ["2"]
     assert result["metadata"]["status"] == "waiting batch"
     assert result["metadata"]["submitted_count"] == 1
+    assert result["metadata"]["current_batch_size"] == 1
     assert (tmp_path / "batch-123.json").exists()
 
 
@@ -323,7 +367,7 @@ def test_run_submits_new_batch_without_retrieving_local_batch_label(tmp_path):
     client = Client()
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-nano", "--batch-id", "testing"],
+        ["--input", str(csv_path), "--model", "gpt-5-nano", "--batch-id", "testing", "--papers-per-batch", "1"],
         client=client,
         workdir=tmp_path,
     )
@@ -338,6 +382,7 @@ def test_run_submits_new_batch_without_retrieving_local_batch_label(tmp_path):
         ),
     }
     assert result["metadata"]["remote_batch_id"] == "batch_remote_123"
+    assert result["metadata"]["current_batch_size"] == 1
 
 
 def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
@@ -364,6 +409,9 @@ def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
                         "input_file": str(csv_path),
                         "submitted_count": 1,
                         "prefiltered_count": 0,
+                        "papers_per_batch": 25,
+                        "total_papers": 1,
+                        "current_batch_size": 1,
                         "remote_batch_id": "batch-123",
                     },
                     "papers": {},
@@ -373,12 +421,13 @@ def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )
 
     assert result["metadata"]["status"] == "waiting batch"
+    assert result["metadata"]["current_batch_size"] == 1
 
 
 def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
@@ -419,6 +468,9 @@ def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
                         "input_file": str(csv_path),
                         "submitted_count": 1,
                         "prefiltered_count": 1,
+                        "papers_per_batch": 25,
+                        "total_papers": 2,
+                        "current_batch_size": 1,
                         "remote_batch_id": "batch-123",
                     },
                     "papers": {
@@ -434,12 +486,13 @@ def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )
 
     assert result["metadata"]["status"] == "done"
+    assert result["metadata"]["current_batch_size"] == 0
     assert result["papers"]["1"]["source"] == "prefilter"
     assert result["papers"]["2"] == {
         "source": "openai_batch",
@@ -475,6 +528,85 @@ def test_build_prompt_includes_selection_criteria():
     assert "EC2: The paper focuses solely on energy consumption" in prompt
 
 
+def test_run_submits_next_chunk_after_completed_batch(tmp_path):
+    class Client:
+        def __init__(self):
+            self.submitted = None
+
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {"id": batch_id, "status": "completed"}
+
+        def download_output(self, batch_id):
+            assert batch_id == "batch-123"
+            return [
+                {
+                    "custom_id": "2",
+                    "output_text": json.dumps({"decision": "include", "reason": ["IC1"]}),
+                }
+            ]
+
+        def submit_batch(self, *, batch_id, requests):
+            self.submitted = {"batch_id": batch_id, "requests": requests}
+            return {"id": "batch-456", "status": "in_progress"}
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,,Paper abstract\n"
+        "2,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
+        "3,HPC water footprint,Water use in supercomputing facilities.\n",
+        encoding="utf-8",
+    )
+    state_path = tmp_path / "batch-123.json"
+    state_path.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "batch_id": "batch-123",
+                    "status": "waiting batch",
+                    "provider": "openai",
+                    "model": "gpt-5-mini",
+                    "seed": screening.SEED,
+                    "input_file": str(csv_path),
+                    "submitted_count": 1,
+                    "prefiltered_count": 1,
+                    "papers_per_batch": 1,
+                    "total_papers": 3,
+                    "current_batch_size": 1,
+                    "remote_batch_id": "batch-123",
+                },
+                "papers": {
+                    "1": {
+                        "source": "prefilter",
+                        "decision": "exclude",
+                        "reason": ["missing_metadata"],
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    client = Client()
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "1"],
+        client=client,
+        workdir=tmp_path,
+    )
+
+    assert result["metadata"]["status"] == "waiting batch"
+    assert result["metadata"]["remote_batch_id"] == "batch-456"
+    assert result["metadata"]["submitted_count"] == 2
+    assert result["metadata"]["current_batch_size"] == 1
+    assert result["papers"]["2"] == {
+        "source": "openai_batch",
+        "decision": "include",
+        "reason": ["IC1"],
+    }
+    assert [request["custom_id"] for request in client.submitted["requests"]] == ["3"]
+
+
 def test_run_marks_failed_remote_batch_in_state(tmp_path):
     class Client:
         def get_batch(self, batch_id):
@@ -497,6 +629,9 @@ def test_run_marks_failed_remote_batch_in_state(tmp_path):
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 1,
             "remote_batch_id": "batch-123",
         },
         "papers": {},
@@ -504,7 +639,7 @@ def test_run_marks_failed_remote_batch_in_state(tmp_path):
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -542,6 +677,9 @@ def test_run_marks_completed_batch_with_failed_requests_in_state(tmp_path):
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 1,
             "remote_batch_id": "batch-123",
         },
         "papers": {},
@@ -549,7 +687,7 @@ def test_run_marks_completed_batch_with_failed_requests_in_state(tmp_path):
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -586,6 +724,9 @@ def test_run_marks_cancelled_batch_with_partial_output_in_state(tmp_path):
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 1,
             "remote_batch_id": "batch-123",
         },
         "papers": {},
@@ -593,7 +734,7 @@ def test_run_marks_cancelled_batch_with_partial_output_in_state(tmp_path):
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "25"],
         client=Client(),
         workdir=tmp_path,
     )

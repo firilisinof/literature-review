@@ -25,7 +25,7 @@ The input must be a CSV with exactly these columns:
 ### Usage
 
 ```bash
-python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01
+python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
 ```
 
 All flags are mandatory:
@@ -33,6 +33,7 @@ All flags are mandatory:
 - `--input`: CSV file with `id,title,abstract`
 - `--model`: OpenAI model name passed through to the Responses API
 - `--batch-id`: Local batch label used for the state file name `<batch_id>.json`
+- `--papers-per-batch`: Maximum number of non-prefiltered papers submitted in each remote batch
 
 ### Behavior
 
@@ -41,6 +42,8 @@ All flags are mandatory:
   - `hydroxypropyl cellulose` false positives -> `EC1`
   - concrete/materials false positives -> `EC1`
 - Remaining papers are sent through the OpenAI Batch API with a fixed seed, `temperature=0`, strict JSON-schema output, and low output-token limits.
+- The script submits at most `--papers-per-batch` papers per remote batch and keeps only one remote batch active at a time.
+- When a batch completes, the script merges those results and immediately submits the next chunk on the next run until all pending papers are processed.
 - The expected model response is:
 
 ```json
@@ -74,6 +77,9 @@ The script writes `<batch_id>.json` with this structure:
     "input_file": "papers_to_screen.csv",
     "submitted_count": 42,
     "prefiltered_count": 3,
+    "papers_per_batch": 250,
+    "total_papers": 1000,
+    "current_batch_size": 250,
     "remote_batch_id": "batch_..."
   },
   "papers": {
@@ -88,6 +94,7 @@ The script writes `<batch_id>.json` with this structure:
 
 - `metadata.status = "waiting batch"` means the batch is still running or waiting to be checked again.
 - `metadata.status = "done"` means the final merged results have already been written and later runs will do nothing.
+- `current_batch_size` is the number of papers currently assigned to the active remote batch.
 - `remote_batch_id` stores the actual OpenAI batch ID returned by the API so subsequent runs can keep polling the same remote batch while you continue using your chosen local `--batch-id`.
 
 ### Expected cost

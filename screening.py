@@ -37,11 +37,19 @@ RESPONSE_SCHEMA = {
 ALLOWED_REASONS = {"IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"}
 
 
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Batch paper screening via API.")
     parser.add_argument("--input", required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
+    parser.add_argument("--papers-per-batch", required=True, type=positive_int)
     return parser.parse_args(argv)
 
 
@@ -84,7 +92,12 @@ def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
 
 
 def build_state(
-    *, batch_id: str, input_path: Path, model: str, rows: list[dict[str, str]]
+    *,
+    batch_id: str,
+    input_path: Path,
+    model: str,
+    rows: list[dict[str, str]],
+    papers_per_batch: int,
 ) -> dict[str, object]:
     papers = {}
     for row in rows:
@@ -102,6 +115,9 @@ def build_state(
             "input_file": str(input_path),
             "submitted_count": 0,
             "prefiltered_count": len(papers),
+            "papers_per_batch": papers_per_batch,
+            "total_papers": len(rows),
+            "current_batch_size": 0,
         },
         "papers": papers,
     }
@@ -224,11 +240,22 @@ def load_or_create_state(
     input_path: Path,
     model: str,
     rows: list[dict[str, str]],
+    papers_per_batch: int,
 ) -> dict[str, object]:
     if state_path.exists():
-        return json.loads(state_path.read_text(encoding="utf-8"))
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        state["metadata"]["papers_per_batch"] = papers_per_batch
+        state["metadata"]["total_papers"] = len(rows)
+        state["metadata"].setdefault("current_batch_size", 0)
+        return state
 
-    return build_state(batch_id=batch_id, input_path=input_path, model=model, rows=rows)
+    return build_state(
+        batch_id=batch_id,
+        input_path=input_path,
+        model=model,
+        rows=rows,
+        papers_per_batch=papers_per_batch,
+    )
 
 
 def save_state(state_path: Path, state: dict[str, object]) -> None:
@@ -241,6 +268,8 @@ def format_state_summary(state: dict[str, object]) -> str:
     total_decisions = len(papers)
     included = sum(1 for paper in papers.values() if paper["decision"] == "include")
     excluded = sum(1 for paper in papers.values() if paper["decision"] == "exclude")
+    current_batch_size = metadata.get("current_batch_size", 0)
+    remaining = metadata.get("total_papers", total_decisions) - total_decisions - current_batch_size
 
     parts = [
         f"batch_id={metadata['batch_id']}",
@@ -250,6 +279,8 @@ def format_state_summary(state: dict[str, object]) -> str:
         f"decisions={total_decisions}",
         f"include={included}",
         f"exclude={excluded}",
+        f"current_batch_size={current_batch_size}",
+        f"remaining={remaining}",
     ]
     remote_batch_id = metadata.get("remote_batch_id")
     if remote_batch_id:
@@ -271,6 +302,39 @@ def persist_batch_failure(
     state["metadata"]["status"] = status
     state["metadata"]["remote_batch_id"] = batch["id"]
     state["metadata"]["failure_message"] = failure_message
+    save_state(state_path, state)
+    return state
+
+
+def pending_rows(rows: list[dict[str, str]], state: dict[str, object]) -> list[dict[str, str]]:
+    papers = state["papers"]
+    return [row for row in rows if row["id"] not in papers]
+
+
+def submit_next_batch(
+    *,
+    client: object,
+    args: argparse.Namespace,
+    state_path: Path,
+    state: dict[str, object],
+    rows: list[dict[str, str]],
+) -> dict[str, object]:
+    batch_rows = pending_rows(rows, state)[: args.papers_per_batch]
+    requests = build_batch_requests(rows=batch_rows, state=state, model=args.model)
+    if not requests:
+        state["metadata"]["status"] = "done"
+        state["metadata"]["current_batch_size"] = 0
+        state["metadata"].pop("remote_batch_id", None)
+        state["metadata"].pop("failure_message", None)
+        save_state(state_path, state)
+        return state
+
+    batch = client.submit_batch(batch_id=args.batch_id, requests=requests)
+    state["metadata"]["remote_batch_id"] = batch["id"]
+    state["metadata"]["submitted_count"] += len(requests)
+    state["metadata"]["current_batch_size"] = len(requests)
+    state["metadata"]["status"] = "waiting batch"
+    state["metadata"].pop("failure_message", None)
     save_state(state_path, state)
     return state
 
@@ -301,6 +365,7 @@ def run(
         input_path=Path(args.input),
         model=args.model,
         rows=rows,
+        papers_per_batch=args.papers_per_batch,
     )
     if state["metadata"]["status"] in {
         "done",
@@ -318,12 +383,13 @@ def run(
     remote_batch_id = state["metadata"].get("remote_batch_id")
     batch = client.get_batch(remote_batch_id) if remote_batch_id else None
     if batch is None:
-        requests = build_batch_requests(rows=rows, state=state, model=args.model)
-        batch = client.submit_batch(batch_id=args.batch_id, requests=requests)
-        state["metadata"]["remote_batch_id"] = batch["id"]
-        state["metadata"]["submitted_count"] = len(requests)
-        save_state(state_path, state)
-        return state
+        return submit_next_batch(
+            client=client,
+            args=args,
+            state_path=state_path,
+            state=state,
+            rows=rows,
+        )
     if not state_exists:
         state["metadata"]["remote_batch_id"] = batch["id"]
         save_state(state_path, state)
@@ -347,9 +413,16 @@ def run(
                 "decision": parsed["decision"],
                 "reason": parsed["reason"],
             }
-        state["metadata"]["status"] = "done"
+        state["metadata"]["current_batch_size"] = 0
+        state["metadata"].pop("remote_batch_id", None)
         save_state(state_path, state)
-        return state
+        return submit_next_batch(
+            client=client,
+            args=args,
+            state_path=state_path,
+            state=state,
+            rows=rows,
+        )
 
     if batch["status"] == "cancelled" and batch.get("output_file_id"):
         return persist_batch_failure(

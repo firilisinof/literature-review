@@ -110,6 +110,13 @@ def build_prompt(row: dict[str, str]) -> str:
     return (
         "You are screening studies for a systematic mapping study on the environmental "
         "impacts of high-performance computing (HPC).\n\n"
+        "Include if ANY of the following apply:\n"
+        "- IC1: The paper addresses at least one environmental impact in the HPC context\n"
+        "- IC2: The paper presents methodologies for predicting or measuring the environmental impacts of HPC systems\n\n"
+        "Exclude if ANY of the following apply:\n"
+        "- EC1: The paper is not related to the environmental impacts of HPC\n"
+        "- EC2: The paper focuses solely on energy consumption without connecting to broader environmental impacts\n"
+        "- EC3: The paper is not in English, is unavailable, or is inaccessible\n\n"
         "Return JSON only with keys decision and reason.\n"
         "Allowed decisions: include, exclude.\n"
         "Allowed reason values: IC1, IC2, EC1, EC2, EC3, doubt.\n"

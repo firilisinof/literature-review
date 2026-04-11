@@ -374,6 +374,22 @@ def test_parse_output_text_accepts_doubt_for_includes():
     assert result == {"decision": "include", "reason": ["doubt"]}
 
 
+def test_build_prompt_includes_selection_criteria():
+    prompt = screening.build_prompt(
+        {
+            "id": "1",
+            "title": "HPC sustainability",
+            "abstract": "Lifecycle carbon assessment of HPC systems.",
+        }
+    )
+
+    assert "Include if ANY of the following apply:" in prompt
+    assert "IC1: The paper addresses at least one environmental impact in the HPC context" in prompt
+    assert "IC2: The paper presents methodologies for predicting or measuring the environmental impacts of HPC systems" in prompt
+    assert "Exclude if ANY of the following apply:" in prompt
+    assert "EC2: The paper focuses solely on energy consumption" in prompt
+
+
 def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
     class Client:
         def get_batch(self, batch_id):

@@ -30,6 +30,7 @@ RESPONSE_SCHEMA = {
     "required": ["decision", "reason"],
     "additionalProperties": False,
 }
+ALLOWED_REASONS = {"IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"}
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -167,6 +168,16 @@ def save_state(state_path: Path, state: dict[str, object]) -> None:
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def parse_output_text(output_text: str) -> dict[str, object]:
+    payload = json.loads(output_text)
+    if payload.get("decision") not in {"include", "exclude"}:
+        raise ValueError("Invalid decision")
+    reasons = payload.get("reason")
+    if not isinstance(reasons, list) or not reasons or any(reason not in ALLOWED_REASONS for reason in reasons):
+        raise ValueError("Invalid reason")
+    return {"decision": payload["decision"], "reason": reasons}
+
+
 def run(
     argv: list[str] | None = None,
     *,
@@ -194,6 +205,18 @@ def run(
         requests = build_batch_requests(rows=rows, state=state, model=args.model)
         client.submit_batch(batch_id=args.batch_id, requests=requests)
         state["metadata"]["submitted_count"] = len(requests)
+        save_state(state_path, state)
+        return state
+
+    if batch["status"] == "completed":
+        for item in client.download_output(args.batch_id):
+            parsed = parse_output_text(item["output_text"])
+            state["papers"][item["custom_id"]] = {
+                "source": "openai_batch",
+                "decision": parsed["decision"],
+                "reason": parsed["reason"],
+            }
+        state["metadata"]["status"] = "done"
         save_state(state_path, state)
     return state
 

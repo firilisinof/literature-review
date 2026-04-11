@@ -295,3 +295,69 @@ def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
     )
 
     assert result["metadata"]["status"] == "waiting batch"
+
+
+def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
+    class Client:
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {"id": batch_id, "status": "completed"}
+
+        def submit_batch(self, *, batch_id, requests):
+            raise AssertionError("submit_batch should not be called")
+
+        def download_output(self, batch_id):
+            assert batch_id == "batch-123"
+            return [
+                {
+                    "custom_id": "2",
+                    "output_text": json.dumps({"decision": "include", "reason": ["IC1"]}),
+                }
+            ]
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,,Paper abstract\n"
+        "2,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n",
+        encoding="utf-8",
+    )
+    state_path = tmp_path / "batch-123.json"
+    state_path.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "batch_id": "batch-123",
+                    "status": "waiting batch",
+                    "provider": "openai",
+                    "model": "gpt-5.4-mini",
+                    "seed": screening.SEED,
+                    "input_file": str(csv_path),
+                    "submitted_count": 1,
+                    "prefiltered_count": 1,
+                },
+                "papers": {
+                    "1": {
+                        "source": "prefilter",
+                        "decision": "exclude",
+                        "reason": ["missing_metadata"],
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
+
+    assert result["metadata"]["status"] == "done"
+    assert result["papers"]["1"]["source"] == "prefilter"
+    assert result["papers"]["2"] == {
+        "source": "openai_batch",
+        "decision": "include",
+        "reason": ["IC1"],
+    }

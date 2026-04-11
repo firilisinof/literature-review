@@ -158,7 +158,6 @@ def build_batch_requests(
                 "url": "/v1/responses",
                 "body": {
                     "model": model,
-                    "seed": SEED,
                     "temperature": 0,
                     "max_output_tokens": MAX_OUTPUT_TOKENS,
                     "text": {

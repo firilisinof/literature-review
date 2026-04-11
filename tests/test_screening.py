@@ -232,7 +232,6 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
             "url": "/v1/responses",
             "body": {
                 "model": "gpt-5-mini",
-                "seed": screening.SEED,
                 "temperature": 0,
                 "max_output_tokens": screening.MAX_OUTPUT_TOKENS,
                 "text": {

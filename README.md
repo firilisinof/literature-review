@@ -109,47 +109,41 @@ The script writes `<batch_id>.json` with this structure:
 - `current_batch_size` is the number of papers currently assigned to the active remote batch.
 - `remote_batch_id` stores the actual OpenAI batch ID returned by the API so subsequent runs can keep polling the same remote batch while you continue using your chosen local `--batch-id`.
 
-### Expected cost
+### Estimated cost
 
-With the current dataset, `screening.py` locally filters some obvious false positives before submitting anything to OpenAI. Based on the current corpus:
+The figures below now use the observed usage from one complete screening run of the current workflow:
 
-- total papers: about `3,795`
-- locally prefiltered: about `326`
-- submitted to OpenAI: about `3,469`
+- submitted requests: `3,465`
+- input tokens: `1,839,672`
+- output tokens: `73,623`
 
-Using the same workload estimate throughout:
-
-- submitted prompts: about `3,469`
-- estimated input tokens total: about `1.61M`
-- conservative output upper bound: about `277,520` tokens (`80` per paper)
-
-the expected total screening cost is roughly:
+Using those actual token totals, the estimated total screening cost is roughly:
 
 OpenAI Batch API:
 
 | Model | Conservative upper bound |
 |---|---:|
-| `gpt-5` | about `$4.10` |
-| `gpt-5-mini` | about `$1.23` |
-| `gpt-5-nano` | about `$0.34` |
+| `gpt-5` | about `$3.04` |
+| `gpt-5-mini` | about `$0.61` |
+| `gpt-5-nano` | about `$0.12` |
 
 Anthropic Message Batches:
 
 | Model | Conservative upper bound |
 |---|---:|
-| `claude-opus-4.6` | about `$7.51` |
-| `claude-sonnet-4.6` | about `$4.50` |
-| `claude-haiku-4.5` | about `$1.50` |
+| `claude-opus-4.6` | about `$5.52` |
+| `claude-sonnet-4.6` | about `$3.31` |
+| `claude-haiku-4.5` | about `$0.88` |
 
 Gemini Batch API:
 
 | Model | Conservative upper bound |
 |---|---:|
-| `gemini-2.5-pro` | about `$2.40` |
-| `gemini-2.5-flash` | about `$0.59` |
-| `gemini-2.5-flash-lite` | about `$0.14` |
+| `gemini-2.5-pro` | about `$1.52` |
+| `gemini-2.5-flash` | about `$0.37` |
+| `gemini-2.5-flash-lite` | about `$0.11` |
 
-These are estimates rather than exact bills. Actual cost should usually be a bit lower because the expected JSON response is very small:
+These are estimates rather than exact bills, but they should now be much closer to the real spend because they are based on observed token usage rather than a conservative upper bound:
 
 ```json
 {
@@ -158,7 +152,7 @@ These are estimates rather than exact bills. Actual cost should usually be a bit
 }
 ```
 
-The Anthropic and Gemini figures use the current batch pricing pages as of 2026-04-11 and the same token assumptions as the OpenAI estimates above. The Anthropic table uses current non-deprecated Claude text models from [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing). The Gemini table uses current stable Gemini text models from [Gemini batch pricing](https://ai.google.dev/gemini-api/docs/pricing#batch). For Gemini, this assumes each screening prompt stays in the `<= 200k` input-token tier, which it should by a large margin for title/abstract screening.
+The OpenAI figures use the current API pricing page as of 2026-04-12 and Batch pricing rates from [OpenAI API pricing](https://platform.openai.com/docs/pricing/). The Anthropic figures use 50%-discounted batch pricing derived from the current model pricing page and recent model announcements: [Anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/pricing), [Introducing Claude Opus 4.6](https://www.anthropic.com/news/introducing-claude-opus-4-6), and [Introducing Claude Sonnet 4.6](https://www.anthropic.com/news/introducing-claude-sonnet-4-6). The Gemini figures use current Batch pricing from [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing#batch). For Gemini, this assumes each screening prompt stays in the `<= 200k` input-token tier, which it should by a large margin for title/abstract screening.
 
 ## Data sources
 

@@ -69,6 +69,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
     parser.add_argument("--papers-per-batch", required=True, type=positive_int)
+    parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--poll-interval-seconds", type=positive_int, default=30)
     return parser.parse_args(argv)
 
@@ -131,6 +132,7 @@ def build_state(
             "batch_id": batch_id,
             "status": "waiting batch",
             "provider": "openai",
+            "dry_run": False,
             "model": model,
             "seed": SEED,
             "input_file": str(input_path),
@@ -255,6 +257,42 @@ class OpenAIBatchClient:
         return outputs
 
 
+class DryRunBatchClient:
+    def __init__(self) -> None:
+        self.outputs_by_batch: dict[str, list[dict[str, str]]] = {}
+        self.batch_counter = 0
+
+    def get_batch(self, batch_id: str) -> dict[str, object] | None:
+        if batch_id not in self.outputs_by_batch:
+            return None
+        return {
+            "id": batch_id,
+            "status": "completed",
+            "output_file_id": f"{batch_id}_output",
+            "error_file_id": None,
+            "request_counts": {
+                "total": len(self.outputs_by_batch[batch_id]),
+                "completed": len(self.outputs_by_batch[batch_id]),
+                "failed": 0,
+            },
+        }
+
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> dict[str, object]:
+        self.batch_counter += 1
+        remote_batch_id = f"dry_run_{batch_id}_{self.batch_counter}"
+        self.outputs_by_batch[remote_batch_id] = [
+            {
+                "custom_id": request["custom_id"],
+                "output_text": json.dumps({"decision": "include", "reason": ["doubt"]}),
+            }
+            for request in requests
+        ]
+        return {"id": remote_batch_id, "status": "in_progress", "output_file_id": f"{remote_batch_id}_output"}
+
+    def download_output(self, batch_id: str) -> list[dict[str, str]]:
+        return list(self.outputs_by_batch.get(batch_id, []))
+
+
 def load_or_create_state(
     *,
     state_path: Path,
@@ -270,6 +308,7 @@ def load_or_create_state(
         metadata["papers_per_batch"] = papers_per_batch
         metadata["total_papers"] = len(rows)
         metadata.setdefault("current_batch_size", 0)
+        metadata.setdefault("dry_run", False)
         metadata.setdefault("started_at", timestamp_now())
         metadata.setdefault("updated_at", timestamp_now())
         return state
@@ -391,7 +430,9 @@ def run_once(
         return state
 
     if client is None:
-        client = OpenAIBatchClient()
+        client = DryRunBatchClient() if args.dry_run else OpenAIBatchClient()
+
+    state["metadata"]["dry_run"] = args.dry_run
 
     remote_batch_id = state["metadata"].get("remote_batch_id")
     batch = client.get_batch(remote_batch_id) if remote_batch_id else None
@@ -422,7 +463,7 @@ def run_once(
         for item in client.download_output(batch["id"]):
             parsed = parse_output_text(item["output_text"])
             state["papers"][item["custom_id"]] = {
-                "source": "openai_batch",
+                "source": "dry_run" if args.dry_run else "openai_batch",
                 "decision": parsed["decision"],
                 "reason": parsed["reason"],
             }
@@ -491,6 +532,10 @@ def render_dashboard(state: dict[str, object], action: str) -> Group:
         f"[bold]Remote batch[/bold] {metadata.get('remote_batch_id', '-')}",
         f"[bold]Model[/bold] {metadata['model']}",
     )
+    header.add_row(
+        f"[bold]Provider[/bold] {metadata.get('provider', '-')}",
+        f"[bold]Dry run[/bold] {'yes' if metadata.get('dry_run') else 'no'}",
+    )
 
     overall = Table.grid(padding=(0, 2))
     overall.add_column()
@@ -534,6 +579,7 @@ def render_final_summary(state: dict[str, object]) -> Panel:
     metadata = state["metadata"]
     lines = [
         f"Status: {metadata['status']}",
+        f"Dry run: {'yes' if metadata.get('dry_run') else 'no'}",
         f"Completed decisions: {progress['completed']}/{progress['total_papers']}",
         f"Included: {progress['included']}",
         f"Excluded: {progress['excluded']}",
@@ -563,6 +609,8 @@ def run_with_args(
 ) -> dict[str, object]:
     sleeper = sleeper or time.sleep
     console = make_console(stdout)
+    if args.dry_run:
+        client = client if isinstance(client, DryRunBatchClient) else DryRunBatchClient()
     state: dict[str, object] | None = None
     action = "Initializing workflow"
 
@@ -586,9 +634,13 @@ def run_with_args(
                 refresh(state, action, live=live)
                 continue
 
-            action = f"Waiting {args.poll_interval_seconds}s before polling remote batch"
-            refresh(state, action, live=live)
-            sleeper(args.poll_interval_seconds)
+            if args.dry_run:
+                action = "Dry run: completing simulated batch"
+                refresh(state, action, live=live)
+            else:
+                action = f"Waiting {args.poll_interval_seconds}s before polling remote batch"
+                refresh(state, action, live=live)
+                sleeper(args.poll_interval_seconds)
 
             action = "Polling remote batch and merging results if ready"
             state = run_once(args=args, client=client, workdir=workdir)

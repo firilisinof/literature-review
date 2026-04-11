@@ -73,6 +73,14 @@ def test_cli_rejects_non_positive_poll_interval():
         )
 
 
+def test_cli_accepts_dry_run_flag():
+    args = screening.parse_args(
+        ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "10", "--dry-run"]
+    )
+
+    assert args.dry_run is True
+
+
 def test_load_rows_with_id_title_and_abstract(tmp_path):
     csv_path = tmp_path / "papers.csv"
     csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
@@ -307,6 +315,32 @@ def test_render_dashboard_includes_operational_details():
     assert "batch_remote_123" in output
     assert "Remaining" in output
     assert "Polling remote batch" in output
+
+
+def test_render_dashboard_includes_dry_run_status():
+    state = {
+        "metadata": {
+            "batch_id": "testing",
+            "status": "waiting batch",
+            "provider": "openai",
+            "dry_run": True,
+            "model": "gpt-5-mini",
+            "submitted_count": 0,
+            "prefiltered_count": 0,
+            "current_batch_size": 0,
+            "total_papers": 1,
+            "started_at": "2026-04-12T10:00:00Z",
+            "updated_at": "2026-04-12T10:05:00Z",
+        },
+        "papers": {},
+    }
+    console = screening.make_console(io.StringIO())
+
+    console.print(screening.render_dashboard(state, "Dry run: completing simulated batch"))
+    output = console.file.getvalue()
+
+    assert "Dry run" in output
+    assert "yes" in output
 
 
 def test_parse_output_text_rejects_invalid_reason_codes():
@@ -632,6 +666,59 @@ def test_run_processes_all_chunks_and_renders_rich_output(tmp_path):
     output = stdout.getvalue()
     assert "Current action" in output
     assert "Waiting 30s before polling remote batch" in output
+    assert "Screening Complete" in output
+
+
+def test_run_dry_run_processes_all_chunks_without_api_calls(tmp_path):
+    class Client:
+        def __getattr__(self, name):
+            raise AssertionError(f"unexpected API access during dry run: {name}")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
+        "2,HPC water footprint,Water use in supercomputing facilities.\n",
+        encoding="utf-8",
+    )
+    sleeps = []
+    stdout = io.StringIO()
+
+    result = screening.run(
+        [
+            "--input",
+            str(csv_path),
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "dry-run-batch",
+            "--papers-per-batch",
+            "1",
+            "--dry-run",
+        ],
+        client=Client(),
+        workdir=tmp_path,
+        sleeper=sleeps.append,
+        stdout=stdout,
+    )
+
+    assert result["metadata"]["status"] == "done"
+    assert result["metadata"]["dry_run"] is True
+    assert result["metadata"]["submitted_count"] == 2
+    assert result["metadata"]["current_batch_size"] == 0
+    assert sleeps == []
+    assert result["papers"]["1"] == {
+        "source": "dry_run",
+        "decision": "include",
+        "reason": ["doubt"],
+    }
+    assert result["papers"]["2"] == {
+        "source": "dry_run",
+        "decision": "include",
+        "reason": ["doubt"],
+    }
+    output = stdout.getvalue()
+    assert "Dry run: completing simulated batch" in output
     assert "Screening Complete" in output
 
 

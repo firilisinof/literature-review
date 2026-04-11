@@ -220,3 +220,38 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
             },
         }
     ]
+
+
+def test_run_submits_batch_and_writes_waiting_state(tmp_path):
+    class Client:
+        def __init__(self):
+            self.submitted = None
+
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return None
+
+        def submit_batch(self, *, batch_id, requests):
+            self.submitted = {"batch_id": batch_id, "requests": requests}
+            return {"id": batch_id, "status": "in_progress"}
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,,Paper abstract\n"
+        "2,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n",
+        encoding="utf-8",
+    )
+    client = Client()
+
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        client=client,
+        workdir=tmp_path,
+    )
+
+    assert client.submitted["batch_id"] == "batch-123"
+    assert [request["custom_id"] for request in client.submitted["requests"]] == ["2"]
+    assert result["metadata"]["status"] == "waiting batch"
+    assert result["metadata"]["submitted_count"] == 1
+    assert (tmp_path / "batch-123.json").exists()

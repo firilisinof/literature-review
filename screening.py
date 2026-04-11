@@ -163,6 +163,10 @@ def load_or_create_state(
     return build_state(batch_id=batch_id, input_path=input_path, model=model, rows=rows)
 
 
+def save_state(state_path: Path, state: dict[str, object]) -> None:
+    state_path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+
+
 def run(
     argv: list[str] | None = None,
     *,
@@ -179,6 +183,18 @@ def run(
         model=args.model,
         rows=rows,
     )
+    if state["metadata"]["status"] == "done":
+        return state
+
+    if client is None:
+        raise ValueError("client is required")
+
+    batch = client.get_batch(args.batch_id)
+    if batch is None:
+        requests = build_batch_requests(rows=rows, state=state, model=args.model)
+        client.submit_batch(batch_id=args.batch_id, requests=requests)
+        state["metadata"]["submitted_count"] = len(requests)
+        save_state(state_path, state)
     return state
 
 

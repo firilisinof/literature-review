@@ -13,6 +13,23 @@ CONCRETE_MATERIALS_RE = re.compile(
     re.IGNORECASE,
 )
 SEED = 12345
+MAX_OUTPUT_TOKENS = 80
+RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "decision": {"type": "string", "enum": ["include", "exclude"]},
+        "reason": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": ["IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"],
+            },
+            "minItems": 1,
+        },
+    },
+    "required": ["decision", "reason"],
+    "additionalProperties": False,
+}
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -83,6 +100,53 @@ def build_state(
         },
         "papers": papers,
     }
+
+
+def build_prompt(row: dict[str, str]) -> str:
+    return (
+        "You are screening studies for a systematic mapping study on the environmental "
+        "impacts of high-performance computing (HPC).\n\n"
+        "Return JSON only with keys decision and reason.\n"
+        "Allowed decisions: include, exclude.\n"
+        "Allowed reason values: IC1, IC2, EC1, EC2, EC3, doubt.\n"
+        "If title and abstract are insufficient, return decision include with reason [\"doubt\"].\n\n"
+        f"Title: {row['title']}\n"
+        f"Abstract: {row['abstract']}\n"
+    )
+
+
+def build_batch_requests(
+    *, rows: list[dict[str, str]], state: dict[str, object], model: str
+) -> list[dict[str, object]]:
+    requests = []
+    papers = state["papers"]
+    for row in rows:
+        if row["id"] in papers:
+            continue
+        requests.append(
+            {
+                "custom_id": row["id"],
+                "method": "POST",
+                "url": "/v1/responses",
+                "body": {
+                    "model": model,
+                    "seed": SEED,
+                    "temperature": 0,
+                    "max_output_tokens": MAX_OUTPUT_TOKENS,
+                    "text": {
+                        "format": {
+                            "type": "json_schema",
+                            "name": "screening_decision",
+                            "schema": RESPONSE_SCHEMA,
+                            "strict": True,
+                        }
+                    },
+                    "input": build_prompt(row),
+                    "reasoning": {"effort": "minimal"},
+                },
+            }
+        )
+    return requests
 
 
 def load_or_create_state(

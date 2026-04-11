@@ -181,3 +181,42 @@ def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
     )
 
     assert result["metadata"]["status"] == "done"
+
+
+def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
+    rows = [
+        {"id": "1", "title": "", "abstract": "Paper abstract"},
+        {"id": "2", "title": "HPC sustainability", "abstract": "Lifecycle carbon assessment of HPC systems."},
+    ]
+    state = screening.build_state(
+        batch_id="batch-123",
+        input_path=tmp_path / "papers.csv",
+        model="gpt-5.4-mini",
+        rows=rows,
+    )
+
+    requests = screening.build_batch_requests(rows=rows, state=state, model="gpt-5.4-mini")
+
+    assert requests == [
+        {
+            "custom_id": "2",
+            "method": "POST",
+            "url": "/v1/responses",
+            "body": {
+                "model": "gpt-5.4-mini",
+                "seed": screening.SEED,
+                "temperature": 0,
+                "max_output_tokens": screening.MAX_OUTPUT_TOKENS,
+                "text": {
+                    "format": {
+                        "type": "json_schema",
+                        "name": "screening_decision",
+                        "schema": screening.RESPONSE_SCHEMA,
+                        "strict": True,
+                    }
+                },
+                "input": screening.build_prompt(rows[1]),
+                "reasoning": {"effort": "minimal"},
+            },
+        }
+    ]

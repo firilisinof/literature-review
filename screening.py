@@ -56,6 +56,26 @@ def timestamp_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def format_timestamp(timestamp: str | None, *, now: datetime | None = None) -> str:
+    if not timestamp:
+        return "-"
+
+    parsed = datetime.fromisoformat(timestamp.replace("Z", "+00:00")).astimezone(UTC)
+    now = now or datetime.now(UTC)
+    delta_seconds = max(int((now - parsed).total_seconds()), 0)
+
+    if delta_seconds < 60:
+        relative = f"{delta_seconds}s ago"
+    elif delta_seconds < 3600:
+        relative = f"{delta_seconds // 60}m ago"
+    elif delta_seconds < 86400:
+        relative = f"{delta_seconds // 3600}h ago"
+    else:
+        relative = f"{delta_seconds // 86400}d ago"
+
+    return f"{parsed.strftime('%Y-%m-%d %H:%M')} UTC ({relative})"
+
+
 def positive_int(value: str) -> int:
     parsed = int(value)
     if parsed <= 0:
@@ -517,7 +537,7 @@ def build_progress_bar(completed: int, total: int) -> Progress:
     return progress
 
 
-def render_dashboard(state: dict[str, object], action: str) -> Group:
+def render_dashboard(state: dict[str, object], action: str, *, now: datetime | None = None) -> Group:
     metadata = state["metadata"]
     progress = derive_progress(state)
     display_dry_run = metadata.get("display_dry_run", metadata.get("dry_run", False))
@@ -557,10 +577,10 @@ def render_dashboard(state: dict[str, object], action: str) -> Group:
     activity = Table.grid(expand=True)
     activity.add_column()
     activity.add_row(f"[bold]Current action[/bold] {action}")
-    activity.add_row(f"[bold]Started[/bold] {metadata.get('started_at', '-')}")
-    activity.add_row(f"[bold]Updated[/bold] {metadata.get('updated_at', '-')}")
+    activity.add_row(f"[bold]Started[/bold] {format_timestamp(metadata.get('started_at'), now=now)}")
+    activity.add_row(f"[bold]Updated[/bold] {format_timestamp(metadata.get('updated_at'), now=now)}")
     activity.add_row(
-        f"[bold]Batch submitted[/bold] {metadata.get('current_batch_submitted_at', '-')}"
+        f"[bold]Batch submitted[/bold] {format_timestamp(metadata.get('current_batch_submitted_at'), now=now)}"
     )
     failure_message = metadata.get("failure_message")
     if failure_message:

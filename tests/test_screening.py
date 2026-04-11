@@ -1,5 +1,6 @@
 import io
 import json
+from datetime import datetime
 from pathlib import Path
 import sys
 
@@ -285,6 +286,19 @@ def test_derive_progress_reports_operational_counts():
     }
 
 
+def test_format_timestamp_humanizes_recent_times():
+    formatted = screening.format_timestamp(
+        "2026-04-12T10:03:00Z",
+        now=datetime.fromisoformat("2026-04-12T10:05:30+00:00"),
+    )
+
+    assert formatted == "2026-04-12 10:03 UTC (2m ago)"
+
+
+def test_format_timestamp_humanizes_missing_values():
+    assert screening.format_timestamp(None) == "-"
+
+
 def test_render_dashboard_includes_operational_details():
     state = {
         "metadata": {
@@ -307,7 +321,13 @@ def test_render_dashboard_includes_operational_details():
     }
     console = screening.make_console(io.StringIO())
 
-    console.print(screening.render_dashboard(state, "Polling remote batch"))
+    console.print(
+        screening.render_dashboard(
+            state,
+            "Polling remote batch",
+            now=datetime.fromisoformat("2026-04-12T10:05:30+00:00"),
+        )
+    )
     output = console.file.getvalue()
 
     assert "Local batch" in output
@@ -315,6 +335,8 @@ def test_render_dashboard_includes_operational_details():
     assert "batch_remote_123" in output
     assert "Remaining" in output
     assert "Polling remote batch" in output
+    assert "2026-04-12 10:00 UTC" in output
+    assert "(5m ago)" in output
 
 
 def test_render_dashboard_includes_dry_run_status():

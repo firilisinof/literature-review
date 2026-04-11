@@ -245,6 +245,24 @@ def test_format_state_summary_reports_counts():
     )
 
 
+def test_format_state_summary_includes_failure_message():
+    state = {
+        "metadata": {
+            "batch_id": "testing",
+            "status": "failed",
+            "submitted_count": 2,
+            "prefiltered_count": 1,
+            "remote_batch_id": "batch_remote_123",
+            "failure_message": "Batch batch_remote_123 ended with status failed",
+        },
+        "papers": {},
+    }
+
+    summary = screening.format_state_summary(state)
+
+    assert 'failure_message="Batch batch_remote_123 ended with status failed"' in summary
+
+
 def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     class Client:
         def __init__(self):
@@ -457,7 +475,7 @@ def test_build_prompt_includes_selection_criteria():
     assert "EC2: The paper focuses solely on energy consumption" in prompt
 
 
-def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
+def test_run_marks_failed_remote_batch_in_state(tmp_path):
     class Client:
         def get_batch(self, batch_id):
             assert batch_id == "batch-123"
@@ -485,17 +503,18 @@ def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
     }
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
-    with pytest.raises(RuntimeError, match="failed"):
-        screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
-            client=Client(),
-            workdir=tmp_path,
-        )
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
 
-    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state
+    assert result["metadata"]["status"] == "failed"
+    assert result["metadata"]["failure_message"] == "Batch batch-123 ended with status failed"
+    assert json.loads(state_path.read_text(encoding="utf-8")) == result
 
 
-def test_run_raises_for_completed_batch_with_failed_requests(tmp_path):
+def test_run_marks_completed_batch_with_failed_requests_in_state(tmp_path):
     class Client:
         def get_batch(self, batch_id):
             assert batch_id == "batch-123"
@@ -529,17 +548,20 @@ def test_run_raises_for_completed_batch_with_failed_requests(tmp_path):
     }
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
-    with pytest.raises(RuntimeError, match="failed requests"):
-        screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
-            client=Client(),
-            workdir=tmp_path,
-        )
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
 
-    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state
+    assert result["metadata"]["status"] == "completed_with_failed_requests"
+    assert result["metadata"]["failure_message"] == (
+        "Batch batch-123 completed with failed requests: 1"
+    )
+    assert json.loads(state_path.read_text(encoding="utf-8")) == result
 
 
-def test_run_raises_for_cancelled_batch_with_partial_output(tmp_path):
+def test_run_marks_cancelled_batch_with_partial_output_in_state(tmp_path):
     class Client:
         def get_batch(self, batch_id):
             assert batch_id == "batch-123"
@@ -570,11 +592,14 @@ def test_run_raises_for_cancelled_batch_with_partial_output(tmp_path):
     }
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
-    with pytest.raises(RuntimeError, match="partial results"):
-        screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
-            client=Client(),
-            workdir=tmp_path,
-        )
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
 
-    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state
+    assert result["metadata"]["status"] == "cancelled_with_partial_output"
+    assert result["metadata"]["failure_message"] == (
+        "Batch batch-123 was cancelled and has partial results available"
+    )
+    assert json.loads(state_path.read_text(encoding="utf-8")) == result

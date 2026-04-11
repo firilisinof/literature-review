@@ -254,7 +254,25 @@ def format_state_summary(state: dict[str, object]) -> str:
     remote_batch_id = metadata.get("remote_batch_id")
     if remote_batch_id:
         parts.append(f"remote_batch_id={remote_batch_id}")
+    failure_message = metadata.get("failure_message")
+    if failure_message:
+        parts.append(f"failure_message={json.dumps(failure_message)}")
     return " ".join(parts)
+
+
+def persist_batch_failure(
+    *,
+    state_path: Path,
+    state: dict[str, object],
+    batch: dict[str, object],
+    status: str,
+    failure_message: str,
+) -> dict[str, object]:
+    state["metadata"]["status"] = status
+    state["metadata"]["remote_batch_id"] = batch["id"]
+    state["metadata"]["failure_message"] = failure_message
+    save_state(state_path, state)
+    return state
 
 
 def parse_output_text(output_text: str) -> dict[str, object]:
@@ -284,7 +302,14 @@ def run(
         model=args.model,
         rows=rows,
     )
-    if state["metadata"]["status"] == "done":
+    if state["metadata"]["status"] in {
+        "done",
+        "failed",
+        "expired",
+        "cancelled",
+        "completed_with_failed_requests",
+        "cancelled_with_partial_output",
+    }:
         return state
 
     if client is None:
@@ -306,8 +331,12 @@ def run(
     request_counts = batch.get("request_counts") or {}
     failed_requests = request_counts.get("failed", 0)
     if batch["status"] == "completed" and failed_requests:
-        raise RuntimeError(
-            f"Batch {batch['id']} completed with failed requests: {failed_requests}"
+        return persist_batch_failure(
+            state_path=state_path,
+            state=state,
+            batch=batch,
+            status="completed_with_failed_requests",
+            failure_message=f"Batch {batch['id']} completed with failed requests: {failed_requests}",
         )
 
     if batch["status"] == "completed":
@@ -323,10 +352,22 @@ def run(
         return state
 
     if batch["status"] == "cancelled" and batch.get("output_file_id"):
-        raise RuntimeError(f"Batch {batch['id']} was cancelled and has partial results available")
+        return persist_batch_failure(
+            state_path=state_path,
+            state=state,
+            batch=batch,
+            status="cancelled_with_partial_output",
+            failure_message=f"Batch {batch['id']} was cancelled and has partial results available",
+        )
 
     if batch["status"] in {"failed", "expired", "cancelled"}:
-        raise RuntimeError(f"Batch {batch['id']} ended with status {batch['status']}")
+        return persist_batch_failure(
+            state_path=state_path,
+            state=state,
+            batch=batch,
+            status=batch["status"],
+            failure_message=f"Batch {batch['id']} ended with status {batch['status']}",
+        )
     return state
 
 

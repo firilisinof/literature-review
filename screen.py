@@ -8,6 +8,8 @@ agent; re-runs skip already-screened papers unless they errored.
 
 Usage:
     python screen.py --agent claude
+    python screen.py --agent claude --agent codex
+    python screen.py --agent claude,gemini
     python screen.py --agent gemini --limit 10 --workers 5
     python screen.py --agent codex --input papers/papers.bib --output screening_results.csv
     python screen.py --input papers/papers.bib --output screening_results.csv
@@ -68,6 +70,39 @@ CSV_COLUMNS = [
 ]
 
 TIMEOUT = 120  # seconds per agent call
+
+
+def parse_agents(agent_args: list[str] | None) -> list[str]:
+    """Parse repeated/comma-separated --agent values into a validated unique list."""
+    if not agent_args:
+        return list(AGENT_COMMANDS)
+
+    agents: list[str] = []
+    seen: set[str] = set()
+    invalid: list[str] = []
+
+    for raw_value in agent_args:
+        for agent in (part.strip() for part in raw_value.split(",")):
+            if not agent:
+                continue
+            if agent not in AGENT_COMMANDS:
+                invalid.append(agent)
+                continue
+            if agent not in seen:
+                seen.add(agent)
+                agents.append(agent)
+
+    if invalid:
+        valid_agents = ", ".join(AGENT_COMMANDS)
+        invalid_agents = ", ".join(invalid)
+        raise argparse.ArgumentTypeError(
+            f"invalid agent(s): {invalid_agents}. Choose from: {valid_agents}"
+        )
+
+    if not agents:
+        raise argparse.ArgumentTypeError("at least one non-empty agent must be provided")
+
+    return agents
 
 # ---------------------------------------------------------------------------
 # BibTeX helpers
@@ -161,8 +196,12 @@ def main() -> None:
         epilog=__doc__,
     )
     parser.add_argument(
-        "--agent", required=False, choices=list(AGENT_COMMANDS),
-        help="CLI agent to use for screening (defaults to running all agents)",
+        "--agent", dest="agents", action="append", metavar="AGENT",
+        help=(
+            "Agent(s) to use for screening. Repeat the flag or pass a comma-separated "
+            "list (for example: --agent claude --agent codex or --agent claude,codex). "
+            "Defaults to all agents."
+        ),
     )
     parser.add_argument(
         "--input", default="papers/papers.bib",
@@ -181,10 +220,13 @@ def main() -> None:
         help="Number of parallel agent calls (default: 1, recommended: 5–10)",
     )
     args = parser.parse_args()
+    try:
+        agents_to_run = parse_agents(args.agents)
+    except argparse.ArgumentTypeError as exc:
+        parser.error(str(exc))
 
     bib_path = Path(args.input)
     csv_path = Path(args.output)
-    agents_to_run = [args.agent] if args.agent else list(AGENT_COMMANDS)
 
     # On first run, build the CSV from the BibTeX file.
     # On subsequent runs, load the CSV directly — no BibTeX parsing needed.

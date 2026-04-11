@@ -28,10 +28,14 @@ python screen.py --agent claude
 python screen.py --agent gemini
 python screen.py --agent codex
 
+# Screen with multiple specific agents
+python screen.py --agent claude --agent codex
+python screen.py --agent claude,gemini
+
 # Omit --agent to run all three agents (claude, gemini, codex)
 python screen.py
 
-# Process the next 10 pending papers for this agent
+# Process the next 10 pending papers for these agents
 python screen.py --agent claude --limit 10
 
 # Override input/output paths

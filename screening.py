@@ -146,7 +146,7 @@ def build_batch_requests(
                         }
                     },
                     "input": build_prompt(row),
-                    "reasoning": {"effort": "minimal"},
+                    "reasoning": {"effort": "none"},
                 },
             }
         )
@@ -162,7 +162,13 @@ class OpenAIBatchClient:
             batch = self.client.batches.retrieve(batch_id)
         except NotFoundError:
             return None
-        return {"id": batch.id, "status": batch.status, "output_file_id": batch.output_file_id}
+        return {
+            "id": batch.id,
+            "status": batch.status,
+            "output_file_id": batch.output_file_id,
+            "error_file_id": batch.error_file_id,
+            "request_counts": batch.request_counts.model_dump() if batch.request_counts else None,
+        }
 
     def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> dict[str, object]:
         with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".jsonl", delete=False) as handle:
@@ -267,6 +273,13 @@ def run(
         state["metadata"]["remote_batch_id"] = batch["id"]
         save_state(state_path, state)
 
+    request_counts = batch.get("request_counts") or {}
+    failed_requests = request_counts.get("failed", 0)
+    if batch["status"] == "completed" and failed_requests:
+        raise RuntimeError(
+            f"Batch {batch['id']} completed with failed requests: {failed_requests}"
+        )
+
     if batch["status"] == "completed":
         for item in client.download_output(batch["id"]):
             parsed = parse_output_text(item["output_text"])
@@ -278,6 +291,9 @@ def run(
         state["metadata"]["status"] = "done"
         save_state(state_path, state)
         return state
+
+    if batch["status"] == "cancelled" and batch.get("output_file_id"):
+        raise RuntimeError(f"Batch {batch['id']} was cancelled and has partial results available")
 
     if batch["status"] in {"failed", "expired", "cancelled"}:
         raise RuntimeError(f"Batch {batch['id']} ended with status {batch['status']}")

@@ -216,7 +216,7 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
                     }
                 },
                 "input": screening.build_prompt(rows[1]),
-                "reasoning": {"effort": "minimal"},
+                "reasoning": {"effort": "none"},
             },
         }
     ]
@@ -402,6 +402,89 @@ def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
     state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
 
     with pytest.raises(RuntimeError, match="failed"):
+        screening.run(
+            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            client=Client(),
+            workdir=tmp_path,
+        )
+
+    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state
+
+
+def test_run_raises_for_completed_batch_with_failed_requests(tmp_path):
+    class Client:
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {
+                "id": batch_id,
+                "status": "completed",
+                "output_file_id": "file-out",
+                "error_file_id": "file-err",
+                "request_counts": {"total": 2, "completed": 1, "failed": 1},
+            }
+
+        def download_output(self, batch_id):
+            raise AssertionError("download_output should not be called")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "batch-123.json"
+    waiting_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "seed": screening.SEED,
+            "input_file": str(csv_path),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="failed requests"):
+        screening.run(
+            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            client=Client(),
+            workdir=tmp_path,
+        )
+
+    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state
+
+
+def test_run_raises_for_cancelled_batch_with_partial_output(tmp_path):
+    class Client:
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {
+                "id": batch_id,
+                "status": "cancelled",
+                "output_file_id": "file-out",
+                "error_file_id": None,
+                "request_counts": {"total": 2, "completed": 1, "failed": 0},
+            }
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "batch-123.json"
+    waiting_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "seed": screening.SEED,
+            "input_file": str(csv_path),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="partial results"):
         screening.run(
             ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
             client=Client(),

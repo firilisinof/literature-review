@@ -84,3 +84,35 @@ def test_prefilter_concrete_materials_papers_as_ec1():
         "decision": "exclude",
         "reason": ["EC1"],
     }
+
+
+def test_build_state_includes_prefiltered_papers(tmp_path):
+    csv_path = tmp_path / "papers.csv"
+    rows = [{"id": "1", "title": "", "abstract": "Paper abstract"}]
+
+    state = screening.build_state(
+        batch_id="batch-123",
+        input_path=csv_path,
+        model="gpt-5.4-mini",
+        rows=rows,
+    )
+
+    assert state == {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "seed": screening.SEED,
+            "input_file": str(csv_path),
+            "submitted_count": 0,
+            "prefiltered_count": 1,
+        },
+        "papers": {
+            "1": {
+                "source": "prefilter",
+                "decision": "exclude",
+                "reason": ["missing_metadata"],
+            }
+        },
+    }

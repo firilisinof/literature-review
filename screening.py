@@ -11,6 +11,7 @@ CONCRETE_MATERIALS_RE = re.compile(
     r"\b(high-performance concrete|materials? study|waste fibers?)\b",
     re.IGNORECASE,
 )
+SEED = 12345
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -57,6 +58,30 @@ def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
             "reason": ["EC1"],
         }
     return None
+
+
+def build_state(
+    *, batch_id: str, input_path: Path, model: str, rows: list[dict[str, str]]
+) -> dict[str, object]:
+    papers = {}
+    for row in rows:
+        prefilter = prefilter_paper(row)
+        if prefilter:
+            papers[row["id"]] = prefilter
+
+    return {
+        "metadata": {
+            "batch_id": batch_id,
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": model,
+            "seed": SEED,
+            "input_file": str(input_path),
+            "submitted_count": 0,
+            "prefiltered_count": len(papers),
+        },
+        "papers": papers,
+    }
 
 
 def main() -> None:

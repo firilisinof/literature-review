@@ -74,6 +74,88 @@ Results are written to `screening_results.csv` with the following columns:
 - **Parallel execution**: By default, papers are processed sequentially with one worker. You can increase parallelism with `--workers`; for example, with 5 workers, the script runs up to 5 agent calls in parallel. In multi-agent runs, tasks are submitted round-robin by agent, so completion logs can interleave agents naturally. For ~3,788 papers at ~10 seconds per call, wall-clock time scales roughly with `1 / workers` in optimistic settings.
 - **Agent commands**: The CLI commands used for each agent are defined at the top of `screen.py` in `AGENT_COMMANDS`. Edit them if your installation uses different flags or paths.
 
+## Batch screening (`screening.py`)
+
+`screening.py` submits title/abstract screening requests to the OpenAI Batch API and persists the workflow state in `<batch_id>.json`.
+
+### Input
+
+The input must be a CSV with exactly these columns:
+
+| Column | Description |
+|---|---|
+| `id` | Stable paper identifier used as the JSON key and batch `custom_id` |
+| `title` | Paper title |
+| `abstract` | Paper abstract |
+
+### Usage
+
+```bash
+python screening.py --input papers_to_screen.csv --model gpt-5.4-mini --batch-id april-run-01
+```
+
+All flags are mandatory:
+
+- `--input`: CSV file with `id,title,abstract`
+- `--model`: OpenAI model name passed through to the Responses API
+- `--batch-id`: Local batch label used for the state file name `<batch_id>.json`
+
+### Behavior
+
+- The script excludes some papers locally before any API call:
+  - missing title or abstract -> `missing_metadata`
+  - `hydroxypropyl cellulose` false positives -> `EC1`
+  - concrete/materials false positives -> `EC1`
+- Remaining papers are sent through the OpenAI Batch API with a fixed seed, `temperature=0`, strict JSON-schema output, and low output-token limits.
+- The expected model response is:
+
+```json
+{
+  "decision": "include",
+  "reason": ["IC1"]
+}
+```
+
+- If the title and abstract are insufficient, the model is instructed to return:
+
+```json
+{
+  "decision": "include",
+  "reason": ["doubt"]
+}
+```
+
+### State file
+
+The script writes `<batch_id>.json` with this structure:
+
+```json
+{
+  "metadata": {
+    "batch_id": "april-run-01",
+    "status": "waiting batch",
+    "provider": "openai",
+    "model": "gpt-5.4-mini",
+    "seed": 12345,
+    "input_file": "papers_to_screen.csv",
+    "submitted_count": 42,
+    "prefiltered_count": 3,
+    "remote_batch_id": "batch_..."
+  },
+  "papers": {
+    "1": {
+      "source": "prefilter",
+      "decision": "exclude",
+      "reason": ["EC1"]
+    }
+  }
+}
+```
+
+- `metadata.status = "waiting batch"` means the batch is still running or waiting to be checked again.
+- `metadata.status = "done"` means the final merged results have already been written and later runs will do nothing.
+- `remote_batch_id` stores the actual OpenAI batch ID returned by the API so subsequent runs can keep polling the same remote batch while you continue using your chosen local `--batch-id`.
+
 ## Data sources
 
 Papers were collected from three databases using a keyword search string targeting environmental impacts of HPC systems. See `main.md` for the full search string, database details, and preprocessing steps.

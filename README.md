@@ -41,7 +41,7 @@ All flags are mandatory:
   - missing title or abstract -> `missing_metadata`
   - `hydroxypropyl cellulose` false positives -> `EC1`
   - concrete/materials false positives -> `EC1`
-- Remaining papers are sent through the OpenAI Batch API with a fixed seed, `temperature=0`, strict JSON-schema output, and low output-token limits.
+- Remaining papers are sent through the OpenAI Batch API with `temperature=0`, strict JSON-schema output, and low output-token limits.
 - The script submits at most `--papers-per-batch` papers per remote batch and keeps only one remote batch active at a time.
 - When a batch completes, the script merges those results and immediately submits the next chunk on the next run until all pending papers are processed.
 - The expected model response is:
@@ -73,7 +73,6 @@ The script writes `<batch_id>.json` with this structure:
     "status": "waiting batch",
     "provider": "openai",
     "model": "gpt-5-mini",
-    "seed": 12345,
     "input_file": "papers_to_screen.csv",
     "submitted_count": 42,
     "prefiltered_count": 3,

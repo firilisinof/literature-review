@@ -24,6 +24,12 @@ def load_rows(path: Path) -> list[dict[str, str]]:
 
 
 def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
+    if not row["title"].strip():
+        return {
+            "source": "prefilter",
+            "decision": "exclude",
+            "reason": ["missing_metadata"],
+        }
     if not row["abstract"].strip():
         return {
             "source": "prefilter",

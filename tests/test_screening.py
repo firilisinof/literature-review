@@ -40,3 +40,15 @@ def test_prefilter_missing_abstract_marks_missing_metadata():
         "decision": "exclude",
         "reason": ["missing_metadata"],
     }
+
+
+def test_prefilter_missing_title_marks_missing_metadata():
+    row = {"id": "1", "title": "", "abstract": "Paper abstract"}
+
+    result = screening.prefilter_paper(row)
+
+    assert result == {
+        "source": "prefilter",
+        "decision": "exclude",
+        "reason": ["missing_metadata"],
+    }

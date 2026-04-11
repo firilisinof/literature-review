@@ -366,3 +366,9 @@ def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
 def test_parse_output_text_rejects_invalid_reason_codes():
     with pytest.raises(ValueError, match="Invalid reason"):
         screening.parse_output_text(json.dumps({"decision": "include", "reason": ["IC9"]}))
+
+
+def test_parse_output_text_accepts_doubt_for_includes():
+    result = screening.parse_output_text(json.dumps({"decision": "include", "reason": ["doubt"]}))
+
+    assert result == {"decision": "include", "reason": ["doubt"]}

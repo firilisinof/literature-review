@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import re
+import sys
 import tempfile
 from pathlib import Path
 
@@ -234,6 +235,28 @@ def save_state(state_path: Path, state: dict[str, object]) -> None:
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def format_state_summary(state: dict[str, object]) -> str:
+    metadata = state["metadata"]
+    papers = state["papers"]
+    total_decisions = len(papers)
+    included = sum(1 for paper in papers.values() if paper["decision"] == "include")
+    excluded = sum(1 for paper in papers.values() if paper["decision"] == "exclude")
+
+    parts = [
+        f"batch_id={metadata['batch_id']}",
+        f"status={metadata['status']}",
+        f"submitted={metadata.get('submitted_count', 0)}",
+        f"prefiltered={metadata.get('prefiltered_count', 0)}",
+        f"decisions={total_decisions}",
+        f"include={included}",
+        f"exclude={excluded}",
+    ]
+    remote_batch_id = metadata.get("remote_batch_id")
+    if remote_batch_id:
+        parts.append(f"remote_batch_id={remote_batch_id}")
+    return " ".join(parts)
+
+
 def parse_output_text(output_text: str) -> dict[str, object]:
     payload = json.loads(output_text)
     if payload.get("decision") not in {"include", "exclude"}:
@@ -267,8 +290,8 @@ def run(
     if client is None:
         client = OpenAIBatchClient()
 
-    remote_batch_id = state["metadata"].get("remote_batch_id", args.batch_id)
-    batch = client.get_batch(remote_batch_id)
+    remote_batch_id = state["metadata"].get("remote_batch_id")
+    batch = client.get_batch(remote_batch_id) if remote_batch_id else None
     if batch is None:
         requests = build_batch_requests(rows=rows, state=state, model=args.model)
         batch = client.submit_batch(batch_id=args.batch_id, requests=requests)
@@ -308,7 +331,8 @@ def run(
 
 
 def main() -> None:
-    run()
+    state = run()
+    print(format_state_summary(state), file=sys.stdout)
 
 
 if __name__ == "__main__":

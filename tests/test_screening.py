@@ -94,7 +94,7 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
     state = screening.build_state(
         batch_id="batch-123",
         input_path=csv_path,
-        model="gpt-5.4-mini",
+        model="gpt-5-mini",
         rows=rows,
     )
 
@@ -103,7 +103,7 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
             "batch_id": "batch-123",
             "status": "waiting batch",
             "provider": "openai",
-            "model": "gpt-5.4-mini",
+            "model": "gpt-5-mini",
             "seed": screening.SEED,
             "input_file": str(csv_path),
             "submitted_count": 0,
@@ -126,7 +126,7 @@ def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
             "batch_id": "batch-123",
             "status": "waiting batch",
             "provider": "openai",
-            "model": "gpt-5.4-mini",
+            "model": "gpt-5-mini",
             "seed": screening.SEED,
             "input_file": "papers.csv",
             "submitted_count": 1,
@@ -140,7 +140,7 @@ def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
         state_path=state_path,
         batch_id="batch-123",
         input_path=tmp_path / "papers.csv",
-        model="gpt-5.4-mini",
+        model="gpt-5-mini",
         rows=[],
     )
 
@@ -162,7 +162,7 @@ def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
                     "batch_id": "batch-123",
                     "status": "done",
                     "provider": "openai",
-                    "model": "gpt-5.4-mini",
+                    "model": "gpt-5-mini",
                     "seed": screening.SEED,
                     "input_file": str(csv_path),
                     "submitted_count": 1,
@@ -175,7 +175,7 @@ def test_run_exits_without_api_calls_when_state_is_done(tmp_path):
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -191,11 +191,11 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
     state = screening.build_state(
         batch_id="batch-123",
         input_path=tmp_path / "papers.csv",
-        model="gpt-5.4-mini",
+        model="gpt-5-mini",
         rows=rows,
     )
 
-    requests = screening.build_batch_requests(rows=rows, state=state, model="gpt-5.4-mini")
+    requests = screening.build_batch_requests(rows=rows, state=state, model="gpt-5-mini")
 
     assert requests == [
         {
@@ -203,7 +203,7 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
             "method": "POST",
             "url": "/v1/responses",
             "body": {
-                "model": "gpt-5.4-mini",
+                "model": "gpt-5-mini",
                 "seed": screening.SEED,
                 "temperature": 0,
                 "max_output_tokens": screening.MAX_OUTPUT_TOKENS,
@@ -222,13 +222,37 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
     ]
 
 
+def test_format_state_summary_reports_counts():
+    state = {
+        "metadata": {
+            "batch_id": "testing",
+            "status": "waiting batch",
+            "submitted_count": 2,
+            "prefiltered_count": 1,
+            "remote_batch_id": "batch_remote_123",
+        },
+        "papers": {
+            "1": {"source": "prefilter", "decision": "exclude", "reason": ["EC1"]},
+            "2": {"source": "openai_batch", "decision": "include", "reason": ["IC1"]},
+        },
+    }
+
+    summary = screening.format_state_summary(state)
+
+    assert summary == (
+        "batch_id=testing status=waiting batch submitted=2 prefiltered=1 "
+        "decisions=2 include=1 exclude=1 remote_batch_id=batch_remote_123"
+    )
+
+
 def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     class Client:
         def __init__(self):
             self.submitted = None
+            self.get_batch_calls = []
 
         def get_batch(self, batch_id):
-            assert batch_id == "batch-123"
+            self.get_batch_calls.append(batch_id)
             return None
 
         def submit_batch(self, *, batch_id, requests):
@@ -245,16 +269,57 @@ def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     client = Client()
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
         client=client,
         workdir=tmp_path,
     )
 
+    assert client.get_batch_calls == []
     assert client.submitted["batch_id"] == "batch-123"
     assert [request["custom_id"] for request in client.submitted["requests"]] == ["2"]
     assert result["metadata"]["status"] == "waiting batch"
     assert result["metadata"]["submitted_count"] == 1
     assert (tmp_path / "batch-123.json").exists()
+
+
+def test_run_submits_new_batch_without_retrieving_local_batch_label(tmp_path):
+    class Client:
+        def __init__(self):
+            self.get_batch_calls = []
+            self.submitted = None
+
+        def get_batch(self, batch_id):
+            self.get_batch_calls.append(batch_id)
+            return None
+
+        def submit_batch(self, *, batch_id, requests):
+            self.submitted = {"batch_id": batch_id, "requests": requests}
+            return {"id": "batch_remote_123", "status": "in_progress"}
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text(
+        "id,title,abstract\n"
+        "1,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n",
+        encoding="utf-8",
+    )
+    client = Client()
+
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5-nano", "--batch-id", "testing"],
+        client=client,
+        workdir=tmp_path,
+    )
+
+    assert client.get_batch_calls == []
+    assert client.submitted == {
+        "batch_id": "testing",
+        "requests": screening.build_batch_requests(
+            rows=[{"id": "1", "title": "HPC sustainability", "abstract": "Lifecycle carbon assessment of HPC systems."}],
+            state=result,
+            model="gpt-5-nano",
+        ),
+    }
+    assert result["metadata"]["remote_batch_id"] == "batch_remote_123"
 
 
 def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
@@ -271,25 +336,26 @@ def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
     state_path = tmp_path / "batch-123.json"
     state_path.write_text(
         json.dumps(
-            {
-                "metadata": {
-                    "batch_id": "batch-123",
-                    "status": "waiting batch",
-                    "provider": "openai",
-                    "model": "gpt-5.4-mini",
-                    "seed": screening.SEED,
-                    "input_file": str(csv_path),
-                    "submitted_count": 1,
-                    "prefiltered_count": 0,
-                },
-                "papers": {},
-            }
-        ),
+                {
+                    "metadata": {
+                        "batch_id": "batch-123",
+                        "status": "waiting batch",
+                        "provider": "openai",
+                        "model": "gpt-5-mini",
+                        "seed": screening.SEED,
+                        "input_file": str(csv_path),
+                        "submitted_count": 1,
+                        "prefiltered_count": 0,
+                        "remote_batch_id": "batch-123",
+                    },
+                    "papers": {},
+                }
+            ),
         encoding="utf-8",
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -325,20 +391,21 @@ def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
     state_path = tmp_path / "batch-123.json"
     state_path.write_text(
         json.dumps(
-            {
-                "metadata": {
-                    "batch_id": "batch-123",
-                    "status": "waiting batch",
-                    "provider": "openai",
-                    "model": "gpt-5.4-mini",
-                    "seed": screening.SEED,
-                    "input_file": str(csv_path),
-                    "submitted_count": 1,
-                    "prefiltered_count": 1,
-                },
-                "papers": {
-                    "1": {
-                        "source": "prefilter",
+                {
+                    "metadata": {
+                        "batch_id": "batch-123",
+                        "status": "waiting batch",
+                        "provider": "openai",
+                        "model": "gpt-5-mini",
+                        "seed": screening.SEED,
+                        "input_file": str(csv_path),
+                        "submitted_count": 1,
+                        "prefiltered_count": 1,
+                        "remote_batch_id": "batch-123",
+                    },
+                    "papers": {
+                        "1": {
+                            "source": "prefilter",
                         "decision": "exclude",
                         "reason": ["missing_metadata"],
                     }
@@ -349,7 +416,7 @@ def test_run_merges_completed_batch_outputs_and_marks_done(tmp_path):
     )
 
     result = screening.run(
-        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
         client=Client(),
         workdir=tmp_path,
     )
@@ -407,11 +474,12 @@ def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
             "batch_id": "batch-123",
             "status": "waiting batch",
             "provider": "openai",
-            "model": "gpt-5.4-mini",
+            "model": "gpt-5-mini",
             "seed": screening.SEED,
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "remote_batch_id": "batch-123",
         },
         "papers": {},
     }
@@ -419,7 +487,7 @@ def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
 
     with pytest.raises(RuntimeError, match="failed"):
         screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
             client=Client(),
             workdir=tmp_path,
         )
@@ -450,11 +518,12 @@ def test_run_raises_for_completed_batch_with_failed_requests(tmp_path):
             "batch_id": "batch-123",
             "status": "waiting batch",
             "provider": "openai",
-            "model": "gpt-5.4-mini",
+            "model": "gpt-5-mini",
             "seed": screening.SEED,
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "remote_batch_id": "batch-123",
         },
         "papers": {},
     }
@@ -462,7 +531,7 @@ def test_run_raises_for_completed_batch_with_failed_requests(tmp_path):
 
     with pytest.raises(RuntimeError, match="failed requests"):
         screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
             client=Client(),
             workdir=tmp_path,
         )
@@ -490,11 +559,12 @@ def test_run_raises_for_cancelled_batch_with_partial_output(tmp_path):
             "batch_id": "batch-123",
             "status": "waiting batch",
             "provider": "openai",
-            "model": "gpt-5.4-mini",
+            "model": "gpt-5-mini",
             "seed": screening.SEED,
             "input_file": str(csv_path),
             "submitted_count": 1,
             "prefiltered_count": 0,
+            "remote_batch_id": "batch-123",
         },
         "papers": {},
     }
@@ -502,7 +572,7 @@ def test_run_raises_for_cancelled_batch_with_partial_output(tmp_path):
 
     with pytest.raises(RuntimeError, match="partial results"):
         screening.run(
-            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            ["--input", str(csv_path), "--model", "gpt-5-mini", "--batch-id", "batch-123"],
             client=Client(),
             workdir=tmp_path,
         )

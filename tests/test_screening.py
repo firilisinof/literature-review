@@ -68,3 +68,19 @@ def test_prefilter_hydroxypropyl_cellulose_papers_as_ec1():
         "decision": "exclude",
         "reason": ["EC1"],
     }
+
+
+def test_prefilter_concrete_materials_papers_as_ec1():
+    row = {
+        "id": "1",
+        "title": "Durability assessment of high-performance concrete",
+        "abstract": "This materials study evaluates sustainable concrete reinforced with waste fibers.",
+    }
+
+    result = screening.prefilter_paper(row)
+
+    assert result == {
+        "source": "prefilter",
+        "decision": "exclude",
+        "reason": ["EC1"],
+    }

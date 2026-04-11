@@ -7,6 +7,10 @@ from pathlib import Path
 
 REQUIRED_COLUMNS = ("id", "title", "abstract")
 HYDROXYPROPYL_CELLULOSE_RE = re.compile(r"\bhydroxypropyl cellulose\b", re.IGNORECASE)
+CONCRETE_MATERIALS_RE = re.compile(
+    r"\b(high-performance concrete|materials? study|waste fibers?)\b",
+    re.IGNORECASE,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -41,6 +45,12 @@ def prefilter_paper(row: dict[str, str]) -> dict[str, object] | None:
             "reason": ["missing_metadata"],
         }
     if HYDROXYPROPYL_CELLULOSE_RE.search(text):
+        return {
+            "source": "prefilter",
+            "decision": "exclude",
+            "reason": ["EC1"],
+        }
+    if CONCRETE_MATERIALS_RE.search(text):
         return {
             "source": "prefilter",
             "decision": "exclude",

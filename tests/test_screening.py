@@ -255,3 +255,43 @@ def test_run_submits_batch_and_writes_waiting_state(tmp_path):
     assert result["metadata"]["status"] == "waiting batch"
     assert result["metadata"]["submitted_count"] == 1
     assert (tmp_path / "batch-123.json").exists()
+
+
+def test_run_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
+    class Client:
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {"id": batch_id, "status": "in_progress"}
+
+        def submit_batch(self, *, batch_id, requests):
+            raise AssertionError("submit_batch should not be called")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "batch-123.json"
+    state_path.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "batch_id": "batch-123",
+                    "status": "waiting batch",
+                    "provider": "openai",
+                    "model": "gpt-5.4-mini",
+                    "seed": screening.SEED,
+                    "input_file": str(csv_path),
+                    "submitted_count": 1,
+                    "prefiltered_count": 0,
+                },
+                "papers": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = screening.run(
+        ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+        client=Client(),
+        workdir=tmp_path,
+    )
+
+    assert result["metadata"]["status"] == "waiting batch"

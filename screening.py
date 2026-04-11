@@ -4,7 +4,10 @@ import argparse
 import csv
 import json
 import re
+import tempfile
 from pathlib import Path
+
+from openai import NotFoundError, OpenAI
 
 REQUIRED_COLUMNS = ("id", "title", "abstract")
 HYDROXYPROPYL_CELLULOSE_RE = re.compile(r"\bhydroxypropyl cellulose\b", re.IGNORECASE)
@@ -150,6 +153,56 @@ def build_batch_requests(
     return requests
 
 
+class OpenAIBatchClient:
+    def __init__(self, client: OpenAI | None = None) -> None:
+        self.client = client or OpenAI()
+
+    def get_batch(self, batch_id: str) -> dict[str, object] | None:
+        try:
+            batch = self.client.batches.retrieve(batch_id)
+        except NotFoundError:
+            return None
+        return {"id": batch.id, "status": batch.status, "output_file_id": batch.output_file_id}
+
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> dict[str, object]:
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".jsonl", delete=False) as handle:
+            temp_path = Path(handle.name)
+            for request in requests:
+                handle.write(json.dumps(request) + "\n")
+
+        try:
+            with temp_path.open("rb") as request_file:
+                uploaded_file = self.client.files.create(file=request_file, purpose="batch")
+            batch = self.client.batches.create(
+                completion_window="24h",
+                endpoint="/v1/responses",
+                input_file_id=uploaded_file.id,
+                metadata={"local_batch_id": batch_id},
+            )
+        finally:
+            temp_path.unlink(missing_ok=True)
+
+        return {"id": batch.id, "status": batch.status, "output_file_id": batch.output_file_id}
+
+    def download_output(self, batch_id: str) -> list[dict[str, str]]:
+        batch = self.client.batches.retrieve(batch_id)
+        if not batch.output_file_id:
+            return []
+        response = self.client.files.content(batch.output_file_id)
+        lines = response.text.strip().splitlines()
+        outputs = []
+        for line in lines:
+            payload = json.loads(line)
+            body = payload.get("response", {}).get("body", {})
+            outputs.append(
+                {
+                    "custom_id": payload["custom_id"],
+                    "output_text": body["output"][0]["content"][0]["text"],
+                }
+            )
+        return outputs
+
+
 def load_or_create_state(
     *,
     state_path: Path,
@@ -186,6 +239,7 @@ def run(
 ) -> dict[str, object]:
     args = parse_args(argv)
     state_path = (workdir or Path.cwd()) / f"{args.batch_id}.json"
+    state_exists = state_path.exists()
     rows = load_rows(Path(args.input))
     state = load_or_create_state(
         state_path=state_path,
@@ -198,18 +252,23 @@ def run(
         return state
 
     if client is None:
-        raise ValueError("client is required")
+        client = OpenAIBatchClient()
 
-    batch = client.get_batch(args.batch_id)
+    remote_batch_id = state["metadata"].get("remote_batch_id", args.batch_id)
+    batch = client.get_batch(remote_batch_id)
     if batch is None:
         requests = build_batch_requests(rows=rows, state=state, model=args.model)
-        client.submit_batch(batch_id=args.batch_id, requests=requests)
+        batch = client.submit_batch(batch_id=args.batch_id, requests=requests)
+        state["metadata"]["remote_batch_id"] = batch["id"]
         state["metadata"]["submitted_count"] = len(requests)
         save_state(state_path, state)
         return state
+    if not state_exists:
+        state["metadata"]["remote_batch_id"] = batch["id"]
+        save_state(state_path, state)
 
     if batch["status"] == "completed":
-        for item in client.download_output(args.batch_id):
+        for item in client.download_output(batch["id"]):
             parsed = parse_output_text(item["output_text"])
             state["papers"][item["custom_id"]] = {
                 "source": "openai_batch",
@@ -221,7 +280,7 @@ def run(
         return state
 
     if batch["status"] in {"failed", "expired", "cancelled"}:
-        raise RuntimeError(f"Batch {args.batch_id} ended with status {batch['status']}")
+        raise RuntimeError(f"Batch {batch['id']} ended with status {batch['status']}")
     return state
 
 

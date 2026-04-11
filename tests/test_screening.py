@@ -28,3 +28,15 @@ def test_load_rows_requires_id_title_and_abstract_columns(tmp_path):
 
     with pytest.raises(ValueError, match="id,title,abstract"):
         screening.load_rows(csv_path)
+
+
+def test_prefilter_missing_abstract_marks_missing_metadata():
+    row = {"id": "1", "title": "Paper title", "abstract": ""}
+
+    result = screening.prefilter_paper(row)
+
+    assert result == {
+        "source": "prefilter",
+        "decision": "exclude",
+        "reason": ["missing_metadata"],
+    }

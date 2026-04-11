@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+import json
 import re
 from pathlib import Path
 
@@ -82,6 +83,20 @@ def build_state(
         },
         "papers": papers,
     }
+
+
+def load_or_create_state(
+    *,
+    state_path: Path,
+    batch_id: str,
+    input_path: Path,
+    model: str,
+    rows: list[dict[str, str]],
+) -> dict[str, object]:
+    if state_path.exists():
+        return json.loads(state_path.read_text(encoding="utf-8"))
+
+    return build_state(batch_id=batch_id, input_path=input_path, model=model, rows=rows)
 
 
 def main() -> None:

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import sys
 
@@ -116,3 +117,31 @@ def test_build_state_includes_prefiltered_papers(tmp_path):
             }
         },
     }
+
+
+def test_load_or_create_state_reuses_waiting_batch_file(tmp_path):
+    state_path = tmp_path / "batch-123.json"
+    existing_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "seed": screening.SEED,
+            "input_file": "papers.csv",
+            "submitted_count": 1,
+            "prefiltered_count": 1,
+        },
+        "papers": {"1": {"source": "prefilter", "decision": "exclude", "reason": ["EC1"]}},
+    }
+    state_path.write_text(json.dumps(existing_state), encoding="utf-8")
+
+    state = screening.load_or_create_state(
+        state_path=state_path,
+        batch_id="batch-123",
+        input_path=tmp_path / "papers.csv",
+        model="gpt-5.4-mini",
+        rows=[],
+    )
+
+    assert state == existing_state

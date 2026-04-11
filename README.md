@@ -12,6 +12,8 @@ uv sync
 
 `screening.py` runs the batch screening workflow in the foreground with a Rich dashboard, submits title/abstract screening requests to the OpenAI Batch API, and persists the workflow state in `<batch_id>.json`.
 
+Today the implementation is OpenAI-only, even though the workflow is intentionally structured so another provider client could be added later.
+
 ### Input
 
 The input must be a CSV with exactly these columns:
@@ -25,12 +27,12 @@ The input must be a CSV with exactly these columns:
 ### Usage
 
 ```bash
-uv run python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
+uv run python screening.py --input papers/papers.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
 ```
 
 All flags are mandatory:
 
-- `--input`: CSV file with `id,title,abstract`
+- `--input`: CSV file with `id,title,abstract` such as `papers/papers.csv`
 - `--model`: OpenAI model name passed through to the Responses API
 - `--batch-id`: Local batch label used for the state file name `<batch_id>.json`
 - `--papers-per-batch`: Maximum number of non-prefiltered papers submitted in each remote batch
@@ -81,7 +83,7 @@ The script writes `<batch_id>.json` with this structure:
     "provider": "openai",
     "dry_run": false,
     "model": "gpt-5-mini",
-    "input_file": "papers_to_screen.csv",
+    "input_file": "papers/papers.csv",
     "submitted_count": 42,
     "prefiltered_count": 3,
     "papers_per_batch": 250,
@@ -114,7 +116,7 @@ The script writes `<batch_id>.json` with this structure:
 
 ### Estimated cost
 
-The figures below now use the observed usage from one complete screening run of the current workflow:
+The figures below use the observed usage from one complete screening run of the current OpenAI Batch workflow:
 
 - submitted requests: `3,465`
 - input tokens: `1,839,672`
@@ -130,22 +132,6 @@ OpenAI Batch API:
 | `gpt-5-mini` | about `$0.61` |
 | `gpt-5-nano` | about `$0.12` |
 
-Anthropic Message Batches:
-
-| Model | Conservative upper bound |
-|---|---:|
-| `claude-opus-4.6` | about `$5.52` |
-| `claude-sonnet-4.6` | about `$3.31` |
-| `claude-haiku-4.5` | about `$0.88` |
-
-Gemini Batch API:
-
-| Model | Conservative upper bound |
-|---|---:|
-| `gemini-2.5-pro` | about `$1.52` |
-| `gemini-2.5-flash` | about `$0.37` |
-| `gemini-2.5-flash-lite` | about `$0.11` |
-
 These are estimates rather than exact bills, but they should now be much closer to the real spend because they are based on observed token usage rather than a conservative upper bound:
 
 ```json
@@ -155,83 +141,19 @@ These are estimates rather than exact bills, but they should now be much closer 
 }
 ```
 
-The OpenAI figures use the current API pricing page as of 2026-04-12 and Batch pricing rates from [OpenAI API pricing](https://platform.openai.com/docs/pricing/). The Anthropic figures use 50%-discounted batch pricing derived from the current model pricing page and recent model announcements: [Anthropic pricing](https://docs.anthropic.com/en/docs/about-claude/pricing), [Introducing Claude Opus 4.6](https://www.anthropic.com/news/introducing-claude-opus-4-6), and [Introducing Claude Sonnet 4.6](https://www.anthropic.com/news/introducing-claude-sonnet-4-6). The Gemini figures use current Batch pricing from [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing#batch). For Gemini, this assumes each screening prompt stays in the `<= 200k` input-token tier, which it should by a large margin for title/abstract screening.
+The OpenAI figures use the current API pricing page as of 2026-04-12 and Batch pricing rates from [OpenAI API pricing](https://platform.openai.com/docs/pricing/).
 
 ## Data sources
 
-Papers were collected from three databases using a keyword search string targeting environmental impacts of HPC systems. See `main.md` for the full search string, database details, and preprocessing steps.
+Papers were collected from three databases using a keyword search string targeting environmental impacts of HPC systems. The full search strings and review protocol are documented in [AGENTS.md](/Users/lucas/ws/literature-review/AGENTS.md:1).
 
 Raw BibTeX files are in `papers/`:
 - `acm.bib` — ACM Digital Library results
 - `ieee.bib` — IEEE Xplore results
 - `scopus.bib` — Scopus results
 - `papers.bib` — Merged and deduplicated (~3,788 papers)
+- `papers.csv` — screening input with canonical `id,title,abstract` columns
 
-
-## Screening script (`screen.py`)
-
-`screen.py` reads a BibTeX file, calls one or more AI CLI agents for each paper, and records include/exclude decisions in a CSV. Three agents (claude, gemini, codex) are supported and their decisions are written to separate columns for later comparison.
-
-This script is deprecated. Prefer `screening.py` for the current API-based batch workflow.
-
-### Prerequisites
-
-- **Python ≥ 3.14** and [uv](https://docs.astral.sh/uv/)
-- At least one AI CLI agent installed and authenticated:
-  - `claude` — [Claude Code](https://claude.ai/code)
-  - `gemini` — [Gemini CLI](https://github.com/google-gemini/gemini-cli)
-  - `codex` — [OpenAI Codex CLI](https://github.com/openai/codex)
-
-### Usage
-
-```bash
-# Screen with a specific agent
-python screen.py --agent claude
-python screen.py --agent gemini
-python screen.py --agent codex
-
-# Screen with multiple specific agents
-python screen.py --agent claude --agent codex
-python screen.py --agent claude,gemini
-
-# Omit --agent to run all three agents (claude, gemini, codex)
-python screen.py
-
-# Process the next 10 pending papers for these agents
-python screen.py --agent claude --limit 10
-
-# Override input/output paths
-python screen.py --agent claude --input papers/papers.bib --output screening_results.csv
-
-# Increase parallel agent calls (workers)
-python screen.py --agent claude --workers 5
-```
-
-Each command is independent and can be run on different machines or at different times. Re-running is safe: papers that already have a successful decision for the selected agents are skipped. When you use `--limit N`, the script takes the next `N` pending papers for each selected agent, so different agents can advance through different batches if they have different gaps or errors.
-When multiple agents are selected in a single run, their pending papers are queued in round-robin order by agent, so work starts across `claude`, `gemini`, and `codex` earlier instead of running one agent's queue first.
-
-### Output
-
-Results are written to `screening_results.csv` with the following columns:
-
-| Column | Values | Description |
-|---|---|---|
-| `key` | string | BibTeX citation key (primary key) |
-| `title` | string | Paper title |
-| `abstract` | string | Abstract text, or `N/A` if missing |
-| `claude_decision` | `include` / `exclude` / `error` | Claude's screening decision |
-| `claude_reason` | string | One-sentence rationale |
-| `codex_decision` | `include` / `exclude` / `error` | Codex's screening decision |
-| `codex_reason` | string | One-sentence rationale |
-| `gemini_decision` | `include` / `exclude` / `error` | Gemini's screening decision |
-| `gemini_reason` | string | One-sentence rationale |
-
-### Observations and caveats
-
-- **Checkpoint/resume**: The CSV is written after every paper. If the run is interrupted, restart the same command — already-screened papers are skipped automatically.
-- **Error retry**: Papers where the agent returned an unparseable response (`error`) are always retried on the next run, unlike successful decisions.
-- **Missing abstracts**: Papers without an abstract field in the BibTeX are sent to the agent with the note `N/A`. The agent is asked to decide on title alone.
-- **Timeout**: Each agent call times out after 60 seconds. Timed-out papers are marked `error` and retried on the next run.
-- **Response parsing**: The script looks for `Decision: include|exclude` and `Reason: ...` in the agent's output. If the agent's response does not match this format, the decision is set to `error` and the first 300 characters of the raw output are stored as the reason.
-- **Parallel execution**: By default, papers are processed sequentially with one worker. You can increase parallelism with `--workers`; for example, with 5 workers, the script runs up to 5 agent calls in parallel. In multi-agent runs, tasks are submitted round-robin by agent, so completion logs can interleave agents naturally. For ~3,788 papers at ~10 seconds per call, wall-clock time scales roughly with `1 / workers` in optimistic settings.
-- **Agent commands**: The CLI commands used for each agent are defined at the top of `screen.py` in `AGENT_COMMANDS`. Edit them if your installation uses different flags or paths.
+Current generated artifacts:
+- `<batch_id>.json` — screening workflow state plus decisions keyed by paper `id`
+- `results/testing.json` — example captured batch-state artifact

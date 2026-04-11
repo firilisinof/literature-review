@@ -10,7 +10,7 @@ uv sync
 
 ## Batch screening (`screening.py`)
 
-`screening.py` submits title/abstract screening requests to the OpenAI Batch API and persists the workflow state in `<batch_id>.json`.
+`screening.py` runs the batch screening workflow in the foreground with a Rich dashboard, submits title/abstract screening requests to the OpenAI Batch API, and persists the workflow state in `<batch_id>.json`.
 
 ### Input
 
@@ -25,13 +25,7 @@ The input must be a CSV with exactly these columns:
 ### Usage
 
 ```bash
-python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
-```
-
-Run the whole workflow automatically in one foreground process:
-
-```bash
-python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250 --run-until-complete
+uv run python screening.py --input papers_to_screen.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
 ```
 
 All flags are mandatory:
@@ -43,19 +37,18 @@ All flags are mandatory:
 
 Optional flags:
 
-- `--run-until-complete`: Keep polling and submitting the next chunk automatically until all papers are processed or a chunk fails
-- `--poll-interval-seconds`: Poll interval for `--run-until-complete` mode; defaults to `30`
+- `--poll-interval-seconds`: Poll interval between remote batch checks; defaults to `30`
 
 ### Behavior
 
-- The script excludes some papers locally before any API call:
-  - missing title or abstract -> `missing_metadata`
-  - `hydroxypropyl cellulose` false positives -> `EC1`
-  - concrete/materials false positives -> `EC1`
+- The script excludes some papers locally before any API call.
+- missing title or abstract -> `missing_metadata`
+- `hydroxypropyl cellulose` false positives -> `EC1`
+- concrete/materials false positives -> `EC1`
 - Remaining papers are sent through the OpenAI Batch API with `temperature=0`, strict JSON-schema output, and low output-token limits.
 - The script submits at most `--papers-per-batch` papers per remote batch and keeps only one remote batch active at a time.
-- With `--run-until-complete`, the script polls the active batch in the foreground and submits the next chunk automatically until all pending papers are processed or a chunk fails.
-- Without `--run-until-complete`, each invocation performs a single submit/poll/merge step and exits.
+- Each invocation is live and foregrounded: it resumes any active remote batch, polls until that batch changes state, merges completed outputs, submits the next chunk automatically, and continues until all papers are processed or a terminal failure occurs.
+- The terminal UI shows the local batch id, remote batch id, current status, overall progress, current batch size, remaining papers, and a compact decision summary.
 - The expected model response is:
 
 ```json
@@ -91,7 +84,10 @@ The script writes `<batch_id>.json` with this structure:
     "papers_per_batch": 250,
     "total_papers": 1000,
     "current_batch_size": 250,
-    "remote_batch_id": "batch_..."
+    "remote_batch_id": "batch_...",
+    "started_at": "2026-04-12T10:00:00Z",
+    "updated_at": "2026-04-12T10:03:00Z",
+    "current_batch_submitted_at": "2026-04-12T10:02:00Z"
   },
   "papers": {
     "1": {
@@ -108,6 +104,9 @@ The script writes `<batch_id>.json` with this structure:
 - `metadata.status = "failed"`, `completed_with_failed_requests`, and `cancelled_with_partial_output` are terminal failure states that stop automatic progress until you inspect the batch.
 - `current_batch_size` is the number of papers currently assigned to the active remote batch.
 - `remote_batch_id` stores the actual OpenAI batch ID returned by the API so subsequent runs can keep polling the same remote batch while you continue using your chosen local `--batch-id`.
+- `started_at` is when the local workflow state was first created.
+- `updated_at` is refreshed every time the state file is rewritten.
+- `current_batch_submitted_at` records when the currently active remote batch was submitted.
 
 ### Estimated cost
 

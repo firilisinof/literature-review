@@ -372,3 +372,40 @@ def test_parse_output_text_accepts_doubt_for_includes():
     result = screening.parse_output_text(json.dumps({"decision": "include", "reason": ["doubt"]}))
 
     assert result == {"decision": "include", "reason": ["doubt"]}
+
+
+def test_run_raises_for_failed_remote_batch_and_keeps_waiting_state(tmp_path):
+    class Client:
+        def get_batch(self, batch_id):
+            assert batch_id == "batch-123"
+            return {"id": batch_id, "status": "failed"}
+
+        def submit_batch(self, *, batch_id, requests):
+            raise AssertionError("submit_batch should not be called")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    state_path = tmp_path / "batch-123.json"
+    waiting_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5.4-mini",
+            "seed": screening.SEED,
+            "input_file": str(csv_path),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(waiting_state), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="failed"):
+        screening.run(
+            ["--input", str(csv_path), "--model", "gpt-5.4-mini", "--batch-id", "batch-123"],
+            client=Client(),
+            workdir=tmp_path,
+        )
+
+    assert json.loads(state_path.read_text(encoding="utf-8")) == waiting_state

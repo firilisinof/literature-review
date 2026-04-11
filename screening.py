@@ -218,6 +218,10 @@ def run(
             }
         state["metadata"]["status"] = "done"
         save_state(state_path, state)
+        return state
+
+    if batch["status"] in {"failed", "expired", "cancelled"}:
+        raise RuntimeError(f"Batch {args.batch_id} ended with status {batch['status']}")
     return state
 
 

@@ -11,3 +11,12 @@ import screening
 def test_cli_requires_input_model_and_batch_id():
     with pytest.raises(SystemExit):
         screening.parse_args([])
+
+
+def test_load_rows_with_id_title_and_abstract(tmp_path):
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+
+    rows = screening.load_rows(csv_path)
+
+    assert rows == [{"id": "1", "title": "Paper title", "abstract": "Paper abstract"}]

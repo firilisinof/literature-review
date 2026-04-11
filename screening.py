@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import csv
+from pathlib import Path
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -9,6 +11,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
     return parser.parse_args(argv)
+
+
+def load_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
 
 
 def main() -> None:

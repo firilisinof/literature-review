@@ -6,6 +6,8 @@ dist/
 wheels/
 *.egg-info
 .ipynb_checkpoints
+.pytest_cache
+.uv-cache
 
 # Virtual environments
 .venv

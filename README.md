@@ -2,47 +2,7 @@
 
 Tools for collecting and screening papers in a systematic mapping study on the environmental impacts of high-performance computing (HPC).
 
-## Installation
-
-This project uses UV. Make sure to install it.
-
-```bash
-uv sync
-```
-
-## Usage
-
-```bash
-uv run python screening.py --input papers/papers.csv --model gpt-5-mini --batch-id april-run-01 --papers-per-batch 250
-```
-
-All flags are mandatory:
-
-- `--input`: CSV file with `id,title,abstract` such as `papers/papers.csv`
-- `--model`: OpenAI model name passed through to the Responses API
-- `--batch-id`: Local batch label used for the state file name `<batch_id>.json`
-- `--papers-per-batch`: Maximum number of non-prefiltered papers submitted in each remote batch
-
-Optional flags:
-
-- `--provider`: Batch provider to use: `openai`, `anthropic`, or `gemini`; defaults to `openai`
-- `--poll-interval-seconds`: Poll interval between remote batch checks; defaults to `30`
-
-## Batch screening (`screening.py`)
-
-`screening.py` runs the title-and-abstract screening workflow in the foreground, shows progress in the terminal, and stores resumable state in `results/<batch_id>.json`.
-
-In practice:
-
-- Input comes from `papers/papers.csv`, which must contain exactly `id,title,abstract`.
-- Some obvious false positives are excluded locally before any API call, including missing metadata and known out-of-scope matches.
-- Remaining papers are screened in remote batches, up to `--papers-per-batch` papers at a time.
-- Re-running the same `--batch-id` resumes from the existing state file instead of starting over.
-- The saved state locks `provider`, `model`, and `input_file` for safe resume behavior.
-
-The script supports OpenAI, Anthropic, and Gemini batch workflows behind the same chunked submission and polling loop. For implementation details, decision format, and state handling, see [screening.py](/Users/lucas/ws/literature-review/screening.py:1).
-
-### Data sources
+## Data sources
 
 Papers were collected from three databases using a keyword search string targeting environmental impacts of HPC systems. The full search strings and review protocol are documented in below.
 
@@ -51,17 +11,13 @@ Raw BibTeX files are in `papers/`:
 - `ieee.bib` — IEEE Xplore results
 - `scopus.bib` — Scopus results
 - `papers.bib` — Merged and deduplicated (~3,788 papers)
-- `papers.csv` — screening input with canonical `id,title,abstract` columns
-
-Current generated artifacts:
-- `results/<batch_id>.json` — screening workflow state plus decisions keyed by paper `id`
-- `results/testing.json` — example captured batch-state artifact
+- `papers.csv` — screening input: `id,title,abstract` columns
 
 ## About this literature review
 
 My goal was to explore how environmental impacts are quantified in high-performance computing (HPC). The literature on HPC energy consumption is extensive; however, this metric alone is insufficient for fully understanding the sustainability of these systems. Through preliminary searches, I was unable to identify papers that addressed environmental impacts comprehensively. I therefore decided to conduct a literature review on this topic.
 
-After receiving the journal reviews, I need to revise several parts of the study. I am currently reframing the paper as a systematic mapping study. I am also repeating the searches to identify additional papers. The new searches returned 3,788 papers. I am using an automated batch-screening process for screening that evaluates titles and abstracts and decides whether to include or exclude each paper.
+After receiving the journal reviews, I need to revise several parts of the study. I am currently reframing the paper as a systematic mapping study. I am also repeating the searches to identify additional papers. The new searches returned 3,788 papers. I am using an automated AI batch-screening process for screening that evaluates titles and abstracts and decides whether to include or exclude each paper.
 
 ### Research questions
 

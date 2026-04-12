@@ -629,8 +629,31 @@ def pending_rows(rows: list[dict[str, str]], state: dict[str, object]) -> list[d
     return [row for row in rows if row["id"] not in papers]
 
 
+def parse_json_object_from_text(output_text: str) -> dict[str, object]:
+    stripped_output = output_text.strip()
+    try:
+        payload = json.loads(stripped_output)
+    except json.JSONDecodeError:
+        decoder = json.JSONDecoder()
+        for index, character in enumerate(stripped_output):
+            if character != "{":
+                continue
+            try:
+                payload, _ = decoder.raw_decode(stripped_output[index:])
+            except json.JSONDecodeError:
+                continue
+            if isinstance(payload, dict):
+                return payload
+        preview = stripped_output[:120].replace("\n", "\\n")
+        raise ValueError(f"Could not parse JSON object from model output: {preview!r}")
+
+    if not isinstance(payload, dict):
+        raise ValueError("Expected model output to be a JSON object")
+    return payload
+
+
 def parse_output_text(output_text: str) -> dict[str, object]:
-    payload = json.loads(output_text)
+    payload = parse_json_object_from_text(output_text)
     if payload.get("decision") not in {"include", "exclude"}:
         raise ValueError("Invalid decision")
     reasons = payload.get("reason")

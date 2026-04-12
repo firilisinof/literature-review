@@ -876,6 +876,20 @@ def test_parse_output_text_accepts_doubt_for_includes():
     assert result == {"decision": "include", "reason": ["doubt"]}
 
 
+def test_parse_output_text_accepts_json_wrapped_in_markdown_fence():
+    result = screening.parse_output_text('```json\n{"decision":"exclude","reason":["EC1"]}\n```')
+
+    assert result == {"decision": "exclude", "reason": ["EC1"]}
+
+
+def test_parse_output_text_accepts_json_with_surrounding_text():
+    result = screening.parse_output_text(
+        'Here is the result:\n{"decision":"include","reason":["IC1"]}\nThank you.'
+    )
+
+    assert result == {"decision": "include", "reason": ["IC1"]}
+
+
 def test_build_prompt_includes_selection_criteria():
     prompt = screening.build_prompt(
         {

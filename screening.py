@@ -535,7 +535,7 @@ class GeminiBatchClient:
         if batch is None or batch["output_file_id"] is None:
             return []
 
-        payload = self.client.files.download(batch["output_file_id"])
+        payload = self.client.files.download(file=batch["output_file_id"])
         if isinstance(payload, bytes):
             content = payload.decode("utf-8")
         elif isinstance(payload, str):

@@ -660,8 +660,9 @@ def test_gemini_batch_client_download_output_parses_jsonl_and_raises_on_record_e
             return Batch()
 
     class Files:
-        def download(self, name):
-            assert name == "files/result.jsonl"
+        def download(self, *, file, config=None):
+            assert file == "files/result.jsonl"
+            assert config is None
             return "\n".join(
                 [
                     json.dumps(

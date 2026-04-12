@@ -826,6 +826,7 @@ def render_dashboard(state: dict[str, object], action: str, *, now: datetime | N
     overall.add_row("Total papers", str(progress["total_papers"]))
     overall.add_row("Completed decisions", str(progress["completed"]))
     overall.add_row("Current batch", str(progress["current_batch_size"]))
+    overall.add_row("Configured batch size", str(metadata.get("papers_per_batch", "-")))
     overall.add_row("Remaining", str(progress["remaining"]))
 
     decisions = Table.grid(padding=(0, 2))
@@ -867,6 +868,7 @@ def render_final_summary(state: dict[str, object]) -> Panel:
         f"Excluded: {progress['excluded']}",
         f"Prefiltered: {progress['prefiltered']}",
         f"Submitted remotely: {progress['submitted']}",
+        f"Configured batch size: {metadata.get('papers_per_batch', '-')}",
     ]
     if metadata.get("remote_batch_id"):
         lines.append(f"Remote batch: {metadata['remote_batch_id']}")

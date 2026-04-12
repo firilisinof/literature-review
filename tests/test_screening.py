@@ -800,6 +800,7 @@ def test_render_dashboard_includes_operational_details():
             "model": "gpt-5-mini",
             "submitted_count": 2,
             "prefiltered_count": 1,
+            "papers_per_batch": 25,
             "current_batch_size": 2,
             "total_papers": 10,
             "remote_batch_id": "batch_remote_123",
@@ -827,9 +828,41 @@ def test_render_dashboard_includes_operational_details():
     assert "testing" in output
     assert "batch_remote_123" in output
     assert "Remaining" in output
+    assert "Configured batch size" in output
+    assert "25" in output
     assert "Polling remote batch" in output
     assert "2026-04-12 10:00 UTC" in output
     assert "(5m ago)" in output
+
+
+def test_render_dashboard_shows_configured_batch_size_when_it_differs_from_current_batch():
+    state = {
+        "metadata": {
+            "batch_id": "testing",
+            "status": "waiting batch",
+            "provider": "gemini",
+            "model": "gemini-2.5-flash",
+            "submitted_count": 50,
+            "prefiltered_count": 326,
+            "papers_per_batch": 10,
+            "current_batch_size": 50,
+            "total_papers": 3795,
+            "remote_batch_id": "batches/123",
+            "started_at": "2026-04-12T10:00:00Z",
+            "updated_at": "2026-04-12T10:05:00Z",
+            "current_batch_submitted_at": "2026-04-12T10:03:00Z",
+        },
+        "papers": {str(index): {"source": "prefilter", "decision": "exclude", "reason": ["EC1"]} for index in range(326)},
+    }
+    console = screening.make_console(io.StringIO())
+
+    console.print(screening.render_dashboard(state, "Waiting 30s before polling remote batch"))
+    output = console.file.getvalue()
+
+    assert "Current batch" in output
+    assert "50" in output
+    assert "Configured batch size" in output
+    assert "10" in output
 
 
 def test_parse_output_text_rejects_invalid_reason_codes():

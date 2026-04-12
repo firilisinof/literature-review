@@ -466,7 +466,6 @@ class GeminiBatchClient:
         self.client = genai.Client()
 
     def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]:
-        schema = {k: v for k, v in RESPONSE_SCHEMA.items() if k != "additionalProperties"}
         return [
             {
                 "custom_id": row["id"],
@@ -476,7 +475,7 @@ class GeminiBatchClient:
                     "generation_config": {
                         "temperature": 0,
                         "response_mime_type": "application/json",
-                        "response_schema": schema,
+                        "response_json_schema": RESPONSE_SCHEMA,
                     },
                 },
             }

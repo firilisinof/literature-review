@@ -534,7 +534,7 @@ def test_gemini_batch_client_build_requests_creates_json_ready_records():
                 "generation_config": {
                     "temperature": 0,
                     "response_mime_type": "application/json",
-                    "response_schema": {k: v for k, v in screening.RESPONSE_SCHEMA.items() if k != "additionalProperties"},
+                    "response_json_schema": screening.RESPONSE_SCHEMA,
                 },
             },
         }
@@ -631,6 +631,7 @@ def test_gemini_batch_client_submit_batch_uploads_jsonl_and_creates_batch():
     uploaded_line = json.loads(files.upload_contents[0].strip())
     assert uploaded_line["key"] == "paper-1"
     assert uploaded_line["request"]["generation_config"]["response_mime_type"] == "application/json"
+    assert uploaded_line["request"]["generation_config"]["response_json_schema"] == screening.RESPONSE_SCHEMA
     assert batches.created == [
         {"model": "gemini-2.5-pro", "src": "files/input.jsonl", "config": {"display_name": "local-123"}}
     ]

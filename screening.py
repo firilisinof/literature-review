@@ -466,16 +466,17 @@ class GeminiBatchClient:
         self.client = genai.Client()
 
     def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]:
+        schema = {k: v for k, v in RESPONSE_SCHEMA.items() if k != "additionalProperties"}
         return [
             {
                 "custom_id": row["id"],
                 "model": model,
                 "request": {
-                    "contents": [{"role": "user", "parts": [{"text": build_prompt(row)}]}],
-                    "generationConfig": {
+                    "contents": [{"parts": [{"text": build_prompt(row)}]}],
+                    "generation_config": {
                         "temperature": 0,
-                        "responseMimeType": "application/json",
-                        "responseSchema": RESPONSE_SCHEMA,
+                        "response_mime_type": "application/json",
+                        "response_schema": schema,
                     },
                 },
             }

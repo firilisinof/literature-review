@@ -530,11 +530,11 @@ def test_gemini_batch_client_build_requests_creates_json_ready_records():
             "custom_id": "2",
             "model": "gemini-2.5-pro",
             "request": {
-                "contents": [{"role": "user", "parts": [{"text": screening.build_prompt(rows[0])}]}],
-                "generationConfig": {
+                "contents": [{"parts": [{"text": screening.build_prompt(rows[0])}]}],
+                "generation_config": {
                     "temperature": 0,
-                    "responseMimeType": "application/json",
-                    "responseSchema": screening.RESPONSE_SCHEMA,
+                    "response_mime_type": "application/json",
+                    "response_schema": {k: v for k, v in screening.RESPONSE_SCHEMA.items() if k != "additionalProperties"},
                 },
             },
         }
@@ -595,8 +595,10 @@ def test_gemini_batch_client_submit_batch_uploads_jsonl_and_creates_batch():
     class Files:
         def __init__(self):
             self.uploads = []
+            self.upload_contents = []
 
         def upload(self, *, file, config):
+            self.upload_contents.append(Path(file).read_text(encoding="utf-8"))
             self.uploads.append({"file": file, "config": config})
             return UploadedFile()
 
@@ -615,13 +617,20 @@ def test_gemini_batch_client_submit_batch_uploads_jsonl_and_creates_batch():
     files = Files()
     batches = Batches()
     client = screening.GeminiBatchClient(client=type("StubClient", (), {"files": files, "batches": batches})())
+    requests = client.build_requests(
+        rows=[{"id": "paper-1", "title": "Paper title", "abstract": "Paper abstract"}],
+        model="gemini-2.5-pro",
+    )
 
     batch = client.submit_batch(
         batch_id="local-123",
-        requests=[{"custom_id": "paper-1", "model": "gemini-2.5-pro", "request": {"contents": []}}],
+        requests=requests,
     )
 
     assert files.uploads[0]["config"]["mime_type"] == "jsonl"
+    uploaded_line = json.loads(files.upload_contents[0].strip())
+    assert uploaded_line["key"] == "paper-1"
+    assert uploaded_line["request"]["generation_config"]["response_mime_type"] == "application/json"
     assert batches.created == [
         {"model": "gemini-2.5-pro", "src": "files/input.jsonl", "config": {"display_name": "local-123"}}
     ]

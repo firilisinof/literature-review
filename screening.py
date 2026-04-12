@@ -788,7 +788,7 @@ def run_once(
 def make_console(stdout: object | None = None) -> Console:
     if isinstance(stdout, Console):
         return stdout
-    return Console(file=stdout or sys.stdout, force_terminal=False, color_system=None)
+    return Console(file=stdout or sys.stdout, color_system=None)
 
 
 def build_progress_bar(completed: int, total: int) -> Progress:

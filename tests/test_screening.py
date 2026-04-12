@@ -780,6 +780,18 @@ def test_format_timestamp_humanizes_missing_values():
     assert screening.format_timestamp(None) == "-"
 
 
+def test_make_console_detects_terminal_streams():
+    class TerminalStream(io.StringIO):
+        def isatty(self):
+            return True
+
+    terminal_console = screening.make_console(TerminalStream())
+    file_console = screening.make_console(io.StringIO())
+
+    assert terminal_console.is_terminal is True
+    assert file_console.is_terminal is False
+
+
 def test_render_dashboard_includes_operational_details():
     state = {
         "metadata": {

@@ -11,22 +11,6 @@ MAX_OUTPUT_TOKENS: int = 80
 BASE_DIR: Path = Path(__file__).resolve().parent
 INPUT_PATH: Path = BASE_DIR / "papers" / "papers.csv"
 OUTPUT_DIR: Path = BASE_DIR / "payloads"
-OPENAI_RESPONSE_SCHEMA: dict[str, object] = {
-    "type": "object",
-    "properties": {
-        "decision": {"type": "string", "enum": ["include", "exclude"]},
-        "reason": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "enum": ["IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"],
-            },
-            "minItems": 1,
-        },
-    },
-    "required": ["decision", "reason"],
-    "additionalProperties": False,
-}
 SYSTEM_INTRO: str = (
     "You are screening studies for a systematic mapping study on the environmental "
     "impacts of high-performance computing (HPC)."
@@ -59,7 +43,7 @@ class ProviderConfig(TypedDict):
 
 
 PROVIDER_CONFIGS: dict[ProviderName, ProviderConfig] = {
-    "openai": {"model": "gpt-5", "prefix": "openai"},
+    "openai": {"model": "gpt-5.4-2026-03-05", "prefix": "openai"},
     "anthropic": {"model": "claude-sonnet-4-5", "prefix": "anthropic"},
     "gemini": {"model": "gemini-2.5-pro", "prefix": "gemini"},
 }
@@ -107,17 +91,8 @@ def build_openai_payload_line(row: PaperRow, model: str) -> dict[str, object]:
         "url": "/v1/responses",
         "body": {
             "model": model,
-            "max_output_tokens": MAX_OUTPUT_TOKENS,
-            "text": {
-                "format": {
-                    "type": "json_schema",
-                    "name": "screening_decision",
-                    "schema": OPENAI_RESPONSE_SCHEMA,
-                    "strict": True,
-                }
-            },
             "input": build_screening_prompt(row),
-            "reasoning": {"effort": "minimal"},
+            "reasoning": {"effort": "none"},
         },
     }
 

@@ -483,7 +483,7 @@ class GeminiBatchClient:
         ]
 
     def get_batch(self, batch_id: str) -> BatchInfo | None:
-        batch = self.client.batches.get(batch_id)
+        batch = self.client.batches.get(name=batch_id)
         state = read_field(batch, "state")
         state_name = read_string_field(state, "name", "gemini.batch.state")
         normalized_status = {

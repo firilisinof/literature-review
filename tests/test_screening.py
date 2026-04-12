@@ -557,7 +557,7 @@ def test_gemini_batch_client_get_batch_normalizes_job_states():
             self.dest = Dest()
 
     class Batches:
-        def get(self, name):
+        def get(self, *, name):
             return Batch(name)
 
     client = screening.GeminiBatchClient(client=type("StubClient", (), {"batches": Batches()})())
@@ -610,7 +610,7 @@ def test_gemini_batch_client_submit_batch_uploads_jsonl_and_creates_batch():
             self.created.append({"model": model, "src": src, "config": config})
             return CreatedBatch()
 
-        def get(self, name):
+        def get(self, *, name):
             assert name == "operations/123"
             return Batch()
 
@@ -655,7 +655,7 @@ def test_gemini_batch_client_download_output_parses_jsonl_and_raises_on_record_e
             self.dest = Dest()
 
     class Batches:
-        def get(self, name):
+        def get(self, *, name):
             assert name == "operations/123"
             return Batch()
 

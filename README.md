@@ -25,7 +25,7 @@ All flags are mandatory:
 
 Optional flags:
 
-- `--dry-run`: Simulate the workflow without calling the API
+- `--provider`: Batch provider to use: `openai`, `anthropic`, or `gemini`; defaults to `openai`
 - `--poll-interval-seconds`: Poll interval between remote batch checks; defaults to `30`
 
 ## Batch screening (`screening.py`)
@@ -38,9 +38,9 @@ In practice:
 - Some obvious false positives are excluded locally before any API call, including missing metadata and known out-of-scope matches.
 - Remaining papers are screened in remote batches, up to `--papers-per-batch` papers at a time.
 - Re-running the same `--batch-id` resumes from the existing state file instead of starting over.
-- `--dry-run` skips API calls and simulates screening decisions locally.
+- The saved state locks `provider`, `model`, and `input_file` for safe resume behavior.
 
-The script is currently OpenAI-only, but the workflow is structured so another provider could be added later. For implementation details, decision format, and state handling, see [screening.py](/Users/lucas/ws/literature-review/screening.py:1).
+The script supports OpenAI, Anthropic, and Gemini batch workflows behind the same chunked submission and polling loop. For implementation details, decision format, and state handling, see [screening.py](/Users/lucas/ws/literature-review/screening.py:1).
 
 ### Data sources
 

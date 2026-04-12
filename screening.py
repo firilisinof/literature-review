@@ -9,6 +9,7 @@ import tempfile
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any, Protocol, TypedDict
 
 from openai import NotFoundError, OpenAI
 from rich.console import Console, Group
@@ -52,6 +53,41 @@ TERMINAL_STATUSES = {
 }
 
 
+class RequestCounts(TypedDict):
+    total: int
+    completed: int
+    failed: int
+
+
+class BatchInfo(TypedDict):
+    id: str
+    status: str
+    output_file_id: str | None
+    error_file_id: str | None
+    request_counts: RequestCounts | None
+
+
+class BatchOutput(TypedDict):
+    custom_id: str
+    output_text: str
+
+
+class BatchClient(Protocol):
+    source_name: str
+
+    def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]: ...
+
+    def get_batch(self, batch_id: str) -> BatchInfo | None: ...
+
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> BatchInfo: ...
+
+    def download_output(self, batch_id: str) -> list[BatchOutput]: ...
+
+
+class BatchOutputDownloadError(ValueError):
+    pass
+
+
 def timestamp_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
@@ -89,7 +125,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--model", required=True)
     parser.add_argument("--batch-id", required=True)
     parser.add_argument("--papers-per-batch", required=True, type=positive_int)
-    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--provider", choices=("openai", "anthropic", "gemini"), default="openai")
     parser.add_argument("--poll-interval-seconds", type=positive_int, default=30)
     return parser.parse_args(argv)
 
@@ -137,6 +173,7 @@ def build_state(
     batch_id: str,
     input_path: Path,
     model: str,
+    provider: str,
     rows: list[dict[str, str]],
     papers_per_batch: int,
 ) -> dict[str, object]:
@@ -151,8 +188,7 @@ def build_state(
         "metadata": {
             "batch_id": batch_id,
             "status": "waiting batch",
-            "provider": "openai",
-            "dry_run": False,
+            "provider": provider,
             "model": model,
             "seed": SEED,
             "input_file": str(input_path),
@@ -187,16 +223,79 @@ def build_prompt(row: dict[str, str]) -> str:
         f"Abstract: {row['abstract']}\n"
     )
 
+def read_field(value: object, field_name: str) -> object | None:
+    if isinstance(value, dict):
+        return value.get(field_name)
+    return getattr(value, field_name, None)
 
-def build_batch_requests(
-    *, rows: list[dict[str, str]], state: dict[str, object], model: str
-) -> list[dict[str, object]]:
-    requests = []
-    papers = state["papers"]
-    for row in rows:
-        if row["id"] in papers:
-            continue
-        requests.append(
+
+def read_string_field(value: object, field_name: str, context: str) -> str:
+    field_value = read_field(value, field_name)
+    if not isinstance(field_value, str):
+        raise ValueError(f"Expected {context}.{field_name} to be a string")
+    return field_value
+
+
+def read_optional_string_field(value: object, field_name: str) -> str | None:
+    field_value = read_field(value, field_name)
+    if field_value is None:
+        return None
+    if not isinstance(field_value, str):
+        raise ValueError(f"Expected {field_name} to be a string")
+    return field_value
+
+
+def normalize_request_counts(*, total: int, completed: int, failed: int) -> RequestCounts:
+    return {
+        "total": total,
+        "completed": completed,
+        "failed": failed,
+    }
+
+
+def validate_resume_metadata(
+    *,
+    metadata: dict[str, object],
+    input_path: Path,
+    model: str,
+    provider: str,
+) -> None:
+    if metadata.get("dry_run") is True:
+        raise ValueError(f"Cannot resume legacy dry-run state for batch {metadata.get('batch_id')}")
+
+    metadata.pop("dry_run", None)
+    saved_provider = metadata.setdefault("provider", "openai")
+    comparisons = (
+        ("provider", saved_provider, provider),
+        ("model", metadata.get("model"), model),
+        ("input_file", metadata.get("input_file"), str(input_path)),
+    )
+    for field_name, saved_value, requested_value in comparisons:
+        if saved_value != requested_value:
+            raise ValueError(
+                f"Cannot resume batch {metadata.get('batch_id')}: saved {field_name}={saved_value!r}, "
+                f"requested {field_name}={requested_value!r}"
+            )
+
+
+def build_batch_client(provider: str) -> BatchClient:
+    if provider == "openai":
+        return OpenAIBatchClient()
+    if provider == "anthropic":
+        return AnthropicBatchClient()
+    if provider == "gemini":
+        return GeminiBatchClient()
+    raise ValueError(f"Unsupported provider: {provider}")
+
+
+class OpenAIBatchClient:
+    source_name = "openai_batch"
+
+    def __init__(self, client: object | None = None) -> None:
+        self.client = client or OpenAI()
+
+    def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]:
+        return [
             {
                 "custom_id": row["id"],
                 "method": "POST",
@@ -217,28 +316,24 @@ def build_batch_requests(
                     "reasoning": {"effort": "none"},
                 },
             }
-        )
-    return requests
+            for row in rows
+        ]
 
-
-class OpenAIBatchClient:
-    def __init__(self, client: OpenAI | None = None) -> None:
-        self.client = client or OpenAI()
-
-    def get_batch(self, batch_id: str) -> dict[str, object] | None:
+    def get_batch(self, batch_id: str) -> BatchInfo | None:
         try:
             batch = self.client.batches.retrieve(batch_id)
         except NotFoundError:
             return None
+        request_counts = batch.request_counts.model_dump() if batch.request_counts else None
         return {
             "id": batch.id,
             "status": batch.status,
             "output_file_id": batch.output_file_id,
             "error_file_id": batch.error_file_id,
-            "request_counts": batch.request_counts.model_dump() if batch.request_counts else None,
+            "request_counts": request_counts,
         }
 
-    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> dict[str, object]:
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> BatchInfo:
         with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".jsonl", delete=False) as handle:
             temp_path = Path(handle.name)
             for request in requests:
@@ -256,15 +351,22 @@ class OpenAIBatchClient:
         finally:
             temp_path.unlink(missing_ok=True)
 
-        return {"id": batch.id, "status": batch.status, "output_file_id": batch.output_file_id}
+        return {
+            "id": batch.id,
+            "status": batch.status,
+            "output_file_id": batch.output_file_id,
+            "error_file_id": batch.error_file_id,
+            "request_counts": batch.request_counts.model_dump() if batch.request_counts else None,
+        }
 
-    def download_output(self, batch_id: str) -> list[dict[str, str]]:
+    def download_output(self, batch_id: str) -> list[BatchOutput]:
         batch = self.client.batches.retrieve(batch_id)
         if not batch.output_file_id:
             return []
+
         response = self.client.files.content(batch.output_file_id)
         lines = response.text.strip().splitlines()
-        outputs = []
+        outputs: list[BatchOutput] = []
         for line in lines:
             payload = json.loads(line)
             body = payload.get("response", {}).get("body", {})
@@ -277,40 +379,191 @@ class OpenAIBatchClient:
         return outputs
 
 
-class DryRunBatchClient:
-    def __init__(self) -> None:
-        self.outputs_by_batch: dict[str, list[dict[str, str]]] = {}
-        self.batch_counter = 0
+class AnthropicBatchClient:
+    source_name = "anthropic_batch"
 
-    def get_batch(self, batch_id: str) -> dict[str, object] | None:
-        if batch_id not in self.outputs_by_batch:
-            return None
+    def __init__(self, client: object | None = None) -> None:
+        if client is not None:
+            self.client = client
+            return
+
+        from anthropic import Anthropic
+
+        self.client = Anthropic()
+
+    def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]:
+        return [
+            {
+                "custom_id": row["id"],
+                "params": {
+                    "model": model,
+                    "max_tokens": MAX_OUTPUT_TOKENS,
+                    "messages": [{"role": "user", "content": build_prompt(row)}],
+                },
+            }
+            for row in rows
+        ]
+
+    def get_batch(self, batch_id: str) -> BatchInfo | None:
+        batch = self.client.messages.batches.retrieve(batch_id)
+        request_counts = batch.request_counts
+        completed = int(read_field(request_counts, "succeeded") or 0)
+        failed = int(read_field(request_counts, "errored") or 0) + int(read_field(request_counts, "expired") or 0) + int(
+            read_field(request_counts, "canceled") or 0
+        )
+        total = completed + failed + int(read_field(request_counts, "processing") or 0)
+        normalized_status = "completed" if batch.processing_status == "ended" else "in_progress"
         return {
-            "id": batch_id,
-            "status": "completed",
-            "output_file_id": f"{batch_id}_output",
+            "id": batch.id,
+            "status": normalized_status,
+            "output_file_id": read_optional_string_field(batch, "results_url"),
             "error_file_id": None,
-            "request_counts": {
-                "total": len(self.outputs_by_batch[batch_id]),
-                "completed": len(self.outputs_by_batch[batch_id]),
-                "failed": 0,
-            },
+            "request_counts": normalize_request_counts(total=total, completed=completed, failed=failed),
         }
 
-    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> dict[str, object]:
-        self.batch_counter += 1
-        remote_batch_id = f"dry_run_{batch_id}_{self.batch_counter}"
-        self.outputs_by_batch[remote_batch_id] = [
-            {
-                "custom_id": request["custom_id"],
-                "output_text": json.dumps({"decision": "include", "reason": ["doubt"]}),
-            }
-            for request in requests
-        ]
-        return {"id": remote_batch_id, "status": "in_progress", "output_file_id": f"{remote_batch_id}_output"}
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> BatchInfo:
+        batch = self.client.messages.batches.create(requests=requests)
+        return self.get_batch(batch.id)
 
-    def download_output(self, batch_id: str) -> list[dict[str, str]]:
-        return list(self.outputs_by_batch.get(batch_id, []))
+    def download_output(self, batch_id: str) -> list[BatchOutput]:
+        outputs: list[BatchOutput] = []
+        for result in self.client.messages.batches.results(batch_id):
+            result_payload = read_field(result, "result")
+            result_type = read_string_field(result_payload, "type", "anthropic.result")
+            if result_type != "succeeded":
+                custom_id = read_string_field(result, "custom_id", "anthropic.result")
+                raise BatchOutputDownloadError(f"Batch {batch_id} contains failed result for {custom_id}")
+
+            message = read_field(result_payload, "message")
+            content = read_field(message, "content")
+            if not isinstance(content, list):
+                raise ValueError("Expected anthropic result message content to be a list")
+
+            text_blocks = []
+            for block in content:
+                if read_field(block, "type") == "text":
+                    text_blocks.append(read_string_field(block, "text", "anthropic.text_block"))
+
+            outputs.append(
+                {
+                    "custom_id": read_string_field(result, "custom_id", "anthropic.result"),
+                    "output_text": "".join(text_blocks),
+                }
+            )
+        return outputs
+
+
+class GeminiBatchClient:
+    source_name = "gemini_batch"
+
+    def __init__(self, client: object | None = None) -> None:
+        if client is not None:
+            self.client = client
+            return
+
+        from google import genai
+
+        self.client = genai.Client()
+
+    def build_requests(self, *, rows: list[dict[str, str]], model: str) -> list[dict[str, object]]:
+        return [
+            {
+                "custom_id": row["id"],
+                "model": model,
+                "request": {
+                    "contents": [{"role": "user", "parts": [{"text": build_prompt(row)}]}],
+                    "generationConfig": {
+                        "temperature": 0,
+                        "responseMimeType": "application/json",
+                        "responseSchema": RESPONSE_SCHEMA,
+                    },
+                },
+            }
+            for row in rows
+        ]
+
+    def get_batch(self, batch_id: str) -> BatchInfo | None:
+        batch = self.client.batches.get(batch_id)
+        state = read_field(batch, "state")
+        state_name = read_string_field(state, "name", "gemini.batch.state")
+        normalized_status = {
+            "JOB_STATE_SUCCEEDED": "completed",
+            "JOB_STATE_FAILED": "failed",
+            "JOB_STATE_CANCELLED": "cancelled",
+            "JOB_STATE_EXPIRED": "expired",
+        }.get(state_name, "in_progress")
+        destination = read_field(batch, "dest")
+        return {
+            "id": read_string_field(batch, "name", "gemini.batch"),
+            "status": normalized_status,
+            "output_file_id": read_optional_string_field(destination, "file_name"),
+            "error_file_id": None,
+            "request_counts": None,
+        }
+
+    def submit_batch(self, *, batch_id: str, requests: list[dict[str, object]]) -> BatchInfo:
+        if not requests:
+            raise ValueError("Gemini batch submission requires at least one request")
+
+        model = requests[0].get("model")
+        if not isinstance(model, str):
+            raise ValueError("Gemini request is missing model")
+
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".jsonl", delete=False) as handle:
+            temp_path = Path(handle.name)
+            for request in requests:
+                handle.write(json.dumps({"key": request["custom_id"], "request": request["request"]}) + "\n")
+
+        try:
+            uploaded_file = self.client.files.upload(
+                file=str(temp_path),
+                config={"display_name": f"{batch_id}-requests", "mime_type": "jsonl"},
+            )
+            batch = self.client.batches.create(
+                model=model,
+                src=read_string_field(uploaded_file, "name", "gemini.uploaded_file"),
+                config={"display_name": batch_id},
+            )
+        finally:
+            temp_path.unlink(missing_ok=True)
+
+        return self.get_batch(read_string_field(batch, "name", "gemini.batch"))
+
+    def download_output(self, batch_id: str) -> list[BatchOutput]:
+        batch = self.get_batch(batch_id)
+        if batch is None or batch["output_file_id"] is None:
+            return []
+
+        payload = self.client.files.download(batch["output_file_id"])
+        if isinstance(payload, bytes):
+            content = payload.decode("utf-8")
+        elif isinstance(payload, str):
+            content = payload
+        else:
+            content = payload.decode("utf-8")
+
+        outputs: list[BatchOutput] = []
+        failed_keys: list[str] = []
+        for line in content.splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            if "error" in row:
+                failed_keys.append(str(row.get("key")))
+                continue
+            response = row.get("response", {})
+            outputs.append(
+                {
+                    "custom_id": str(row["key"]),
+                    "output_text": response["candidates"][0]["content"]["parts"][0]["text"],
+                }
+            )
+
+        if failed_keys:
+            raise BatchOutputDownloadError(
+                f"Batch {batch_id} completed with failed requests: {', '.join(failed_keys)}"
+            )
+        return outputs
 
 
 def load_or_create_state(
@@ -319,16 +572,17 @@ def load_or_create_state(
     batch_id: str,
     input_path: Path,
     model: str,
+    provider: str,
     rows: list[dict[str, str]],
     papers_per_batch: int,
 ) -> dict[str, object]:
     if state_path.exists():
         state = json.loads(state_path.read_text(encoding="utf-8"))
         metadata = state["metadata"]
+        validate_resume_metadata(metadata=metadata, input_path=input_path, model=model, provider=provider)
         metadata["papers_per_batch"] = papers_per_batch
         metadata["total_papers"] = len(rows)
         metadata.setdefault("current_batch_size", 0)
-        metadata.setdefault("dry_run", False)
         metadata.setdefault("started_at", timestamp_now())
         metadata.setdefault("updated_at", timestamp_now())
         return state
@@ -337,6 +591,7 @@ def load_or_create_state(
         batch_id=batch_id,
         input_path=input_path,
         model=model,
+        provider=provider,
         rows=rows,
         papers_per_batch=papers_per_batch,
     )
@@ -401,15 +656,14 @@ def persist_batch_failure(
 
 def submit_next_batch(
     *,
-    client: object,
+    client: BatchClient,
     args: argparse.Namespace,
     state_path: Path,
     state: dict[str, object],
     rows: list[dict[str, str]],
 ) -> dict[str, object]:
     batch_rows = pending_rows(rows, state)[: args.papers_per_batch]
-    requests = build_batch_requests(rows=batch_rows, state=state, model=args.model)
-    if not requests:
+    if not batch_rows:
         state["metadata"]["status"] = "done"
         state["metadata"]["current_batch_size"] = 0
         state["metadata"].pop("remote_batch_id", None)
@@ -417,6 +671,9 @@ def submit_next_batch(
         state["metadata"].pop("failure_message", None)
         save_state(state_path, state)
         return state
+    requests = client.build_requests(rows=batch_rows, model=args.model)
+    if not requests:
+        raise ValueError("Batch client returned no requests for pending rows")
 
     batch = client.submit_batch(batch_id=args.batch_id, requests=requests)
     state["metadata"]["remote_batch_id"] = batch["id"]
@@ -432,7 +689,7 @@ def submit_next_batch(
 def run_once(
     *,
     args: argparse.Namespace,
-    client: object | None = None,
+    client: BatchClient | None = None,
     workdir: Path | None = None,
 ) -> dict[str, object]:
     state_path = (workdir or Path.cwd()) / f"{args.batch_id}.json"
@@ -443,6 +700,7 @@ def run_once(
         batch_id=args.batch_id,
         input_path=Path(args.input),
         model=args.model,
+        provider=args.provider,
         rows=rows,
         papers_per_batch=args.papers_per_batch,
     )
@@ -450,9 +708,7 @@ def run_once(
         return state
 
     if client is None:
-        client = DryRunBatchClient() if args.dry_run else OpenAIBatchClient()
-
-    state["metadata"]["dry_run"] = args.dry_run
+        client = build_batch_client(args.provider)
 
     remote_batch_id = state["metadata"].get("remote_batch_id")
     batch = client.get_batch(remote_batch_id) if remote_batch_id else None
@@ -480,10 +736,20 @@ def run_once(
         )
 
     if batch["status"] == "completed":
-        for item in client.download_output(batch["id"]):
+        try:
+            outputs = client.download_output(batch["id"])
+        except BatchOutputDownloadError as error:
+            return persist_batch_failure(
+                state_path=state_path,
+                state=state,
+                batch=batch,
+                status="completed_with_failed_requests",
+                failure_message=str(error),
+            )
+        for item in outputs:
             parsed = parse_output_text(item["output_text"])
             state["papers"][item["custom_id"]] = {
-                "source": "dry_run" if args.dry_run else "openai_batch",
+                "source": client.source_name,
                 "decision": parsed["decision"],
                 "reason": parsed["reason"],
             }
@@ -540,7 +806,6 @@ def build_progress_bar(completed: int, total: int) -> Progress:
 def render_dashboard(state: dict[str, object], action: str, *, now: datetime | None = None) -> Group:
     metadata = state["metadata"]
     progress = derive_progress(state)
-    display_dry_run = metadata.get("display_dry_run", metadata.get("dry_run", False))
 
     header = Table.grid(expand=True)
     header.add_column()
@@ -553,10 +818,7 @@ def render_dashboard(state: dict[str, object], action: str, *, now: datetime | N
         f"[bold]Remote batch[/bold] {metadata.get('remote_batch_id', '-')}",
         f"[bold]Model[/bold] {metadata['model']}",
     )
-    header.add_row(
-        f"[bold]Provider[/bold] {metadata.get('provider', '-')}",
-        f"[bold]Dry run[/bold] {'yes' if display_dry_run else 'no'}",
-    )
+    header.add_row(f"[bold]Provider[/bold] {metadata.get('provider', '-')}", "")
 
     overall = Table.grid(padding=(0, 2))
     overall.add_column()
@@ -598,10 +860,8 @@ def render_dashboard(state: dict[str, object], action: str, *, now: datetime | N
 def render_final_summary(state: dict[str, object]) -> Panel:
     progress = derive_progress(state)
     metadata = state["metadata"]
-    display_dry_run = metadata.get("display_dry_run", metadata.get("dry_run", False))
     lines = [
         f"Status: {metadata['status']}",
-        f"Dry run: {'yes' if display_dry_run else 'no'}",
         f"Completed decisions: {progress['completed']}/{progress['total_papers']}",
         f"Included: {progress['included']}",
         f"Excluded: {progress['excluded']}",
@@ -631,13 +891,10 @@ def run_with_args(
 ) -> dict[str, object]:
     sleeper = sleeper or time.sleep
     console = make_console(stdout)
-    if args.dry_run:
-        client = client if isinstance(client, DryRunBatchClient) else DryRunBatchClient()
     state: dict[str, object] | None = None
     action = "Initializing workflow"
 
     def refresh(current_state: dict[str, object], current_action: str, *, live: Live | None = None) -> None:
-        current_state["metadata"]["display_dry_run"] = args.dry_run
         if live is not None:
             live.update(render_dashboard(current_state, current_action))
         else:
@@ -657,13 +914,9 @@ def run_with_args(
                 refresh(state, action, live=live)
                 continue
 
-            if args.dry_run:
-                action = "Dry run: completing simulated batch"
-                refresh(state, action, live=live)
-            else:
-                action = f"Waiting {args.poll_interval_seconds}s before polling remote batch"
-                refresh(state, action, live=live)
-                sleeper(args.poll_interval_seconds)
+            action = f"Waiting {args.poll_interval_seconds}s before polling remote batch"
+            refresh(state, action, live=live)
+            sleeper(args.poll_interval_seconds)
 
             action = "Polling remote batch and merging results if ready"
             state = run_once(args=args, client=client, workdir=workdir)
@@ -676,10 +929,10 @@ def run_with_args(
             batch_id=args.batch_id,
             input_path=Path(args.input),
             model=args.model,
+            provider=args.provider,
             rows=[],
             papers_per_batch=args.papers_per_batch,
         )
-        initial_state["metadata"]["display_dry_run"] = args.dry_run
         with Live(render_dashboard(initial_state, action), console=console, refresh_per_second=4, transient=False) as live:
             final_state = workflow(live=live)
     else:

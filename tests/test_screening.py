@@ -74,12 +74,34 @@ def test_cli_rejects_non_positive_poll_interval():
         )
 
 
-def test_cli_accepts_dry_run_flag():
-    args = screening.parse_args(
-        ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "10", "--dry-run"]
+def test_cli_rejects_removed_dry_run_flag():
+    with pytest.raises(SystemExit):
+        screening.parse_args(
+            ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "10", "--dry-run"]
+        )
+
+
+def test_cli_accepts_provider_and_defaults_to_openai():
+    default_args = screening.parse_args(
+        ["--input", "papers.csv", "--model", "gpt-5-mini", "--batch-id", "batch-123", "--papers-per-batch", "10"]
+    )
+    explicit_args = screening.parse_args(
+        [
+            "--input",
+            "papers.csv",
+            "--model",
+            "gpt-5-mini",
+            "--batch-id",
+            "batch-123",
+            "--papers-per-batch",
+            "10",
+            "--provider",
+            "gemini",
+        ]
     )
 
-    assert args.dry_run is True
+    assert default_args.provider == "openai"
+    assert explicit_args.provider == "gemini"
 
 
 def test_load_rows_with_id_title_and_abstract(tmp_path):
@@ -163,11 +185,13 @@ def test_build_state_includes_prefiltered_papers_and_timestamps(tmp_path):
         batch_id="batch-123",
         input_path=csv_path,
         model="gpt-5-mini",
+        provider="openai",
         rows=rows,
         papers_per_batch=25,
     )
 
     assert state["metadata"]["batch_id"] == "batch-123"
+    assert state["metadata"]["provider"] == "openai"
     assert state["metadata"]["prefiltered_count"] == 1
     assert state["metadata"]["current_batch_size"] == 0
     assert_has_timestamp(state["metadata"]["started_at"])
@@ -191,7 +215,7 @@ def test_load_or_create_state_adds_missing_timestamp_fields(tmp_path):
             "provider": "openai",
             "model": "gpt-5-mini",
             "seed": screening.SEED,
-            "input_file": "papers.csv",
+            "input_file": str(tmp_path / "papers.csv"),
             "submitted_count": 1,
             "prefiltered_count": 0,
             "papers_per_batch": 25,
@@ -207,6 +231,7 @@ def test_load_or_create_state_adds_missing_timestamp_fields(tmp_path):
         batch_id="batch-123",
         input_path=tmp_path / "papers.csv",
         model="gpt-5-mini",
+        provider="openai",
         rows=rows,
         papers_per_batch=25,
     )
@@ -215,9 +240,115 @@ def test_load_or_create_state_adds_missing_timestamp_fields(tmp_path):
     assert state["metadata"]["total_papers"] == 1
     assert_has_timestamp(state["metadata"]["started_at"])
     assert_has_timestamp(state["metadata"]["updated_at"])
+    assert state["metadata"]["provider"] == "openai"
+
+def test_load_or_create_state_defaults_legacy_provider_to_openai(tmp_path):
+    state_path = tmp_path / "batch-123.json"
+    rows = [{"id": "1", "title": "Paper title", "abstract": "Paper abstract"}]
+    existing_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "model": "gpt-5-mini",
+            "seed": screening.SEED,
+            "input_file": str(tmp_path / "papers.csv"),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(existing_state), encoding="utf-8")
+
+    state = screening.load_or_create_state(
+        state_path=state_path,
+        batch_id="batch-123",
+        input_path=tmp_path / "papers.csv",
+        model="gpt-5-mini",
+        provider="openai",
+        rows=rows,
+        papers_per_batch=25,
+    )
+
+    assert state["metadata"]["provider"] == "openai"
 
 
-def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
+def test_load_or_create_state_rejects_resume_provider_mismatch(tmp_path):
+    state_path = tmp_path / "batch-123.json"
+    rows = [{"id": "1", "title": "Paper title", "abstract": "Paper abstract"}]
+    existing_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "model": "gpt-5-mini",
+            "seed": screening.SEED,
+            "input_file": str(tmp_path / "papers.csv"),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(existing_state), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="provider"):
+        screening.load_or_create_state(
+            state_path=state_path,
+            batch_id="batch-123",
+            input_path=tmp_path / "papers.csv",
+            model="gpt-5-mini",
+            provider="anthropic",
+            rows=rows,
+            papers_per_batch=25,
+        )
+
+
+def test_load_or_create_state_rejects_legacy_dry_run_state(tmp_path):
+    state_path = tmp_path / "batch-123.json"
+    rows = [{"id": "1", "title": "Paper title", "abstract": "Paper abstract"}]
+    existing_state = {
+        "metadata": {
+            "batch_id": "batch-123",
+            "status": "waiting batch",
+            "provider": "openai",
+            "dry_run": True,
+            "model": "gpt-5-mini",
+            "seed": screening.SEED,
+            "input_file": str(tmp_path / "papers.csv"),
+            "submitted_count": 1,
+            "prefiltered_count": 0,
+            "papers_per_batch": 25,
+            "total_papers": 1,
+            "current_batch_size": 0,
+        },
+        "papers": {},
+    }
+    state_path.write_text(json.dumps(existing_state), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="dry-run"):
+        screening.load_or_create_state(
+            state_path=state_path,
+            batch_id="batch-123",
+            input_path=tmp_path / "papers.csv",
+            model="gpt-5-mini",
+            provider="openai",
+            rows=rows,
+            papers_per_batch=25,
+        )
+
+
+def test_batch_clients_expose_source_names():
+    assert screening.OpenAIBatchClient.source_name == "openai_batch"
+    assert screening.AnthropicBatchClient.source_name == "anthropic_batch"
+    assert screening.GeminiBatchClient.source_name == "gemini_batch"
+
+
+def test_openai_batch_client_build_requests_matches_current_format(tmp_path):
     rows = [
         {"id": "1", "title": "", "abstract": "Paper abstract"},
         {"id": "2", "title": "HPC sustainability", "abstract": "Lifecycle carbon assessment of HPC systems."},
@@ -226,11 +357,15 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
         batch_id="batch-123",
         input_path=tmp_path / "papers.csv",
         model="gpt-5-mini",
+        provider="openai",
         rows=rows,
         papers_per_batch=25,
     )
 
-    requests = screening.build_batch_requests(rows=rows, state=state, model="gpt-5-mini")
+    requests = screening.OpenAIBatchClient(client=object()).build_requests(
+        rows=screening.pending_rows(rows, state),
+        model="gpt-5-mini",
+    )
 
     assert requests == [
         {
@@ -254,6 +389,342 @@ def test_build_batch_requests_only_for_non_prefiltered_papers(tmp_path):
             },
         }
     ]
+
+
+def test_anthropic_batch_client_build_requests_uses_messages_batch_shape():
+    rows = [{"id": "2", "title": "HPC sustainability", "abstract": "Lifecycle carbon assessment of HPC systems."}]
+
+    requests = screening.AnthropicBatchClient(client=object()).build_requests(rows=rows, model="claude-sonnet-4")
+
+    assert requests == [
+        {
+            "custom_id": "2",
+            "params": {
+                "model": "claude-sonnet-4",
+                "max_tokens": screening.MAX_OUTPUT_TOKENS,
+                "messages": [{"role": "user", "content": screening.build_prompt(rows[0])}],
+            },
+        }
+    ]
+
+
+def test_anthropic_batch_client_get_batch_normalizes_counts_and_status():
+    class Counts:
+        def __init__(self):
+            self.processing = 1
+            self.succeeded = 2
+            self.errored = 3
+            self.expired = 4
+            self.canceled = 5
+
+    class Batch:
+        def __init__(self):
+            self.id = "remote-123"
+            self.processing_status = "ended"
+            self.request_counts = Counts()
+            self.results_url = "results://remote-123"
+
+    class Batches:
+        def retrieve(self, batch_id):
+            assert batch_id == "remote-123"
+            return Batch()
+
+    class Messages:
+        def __init__(self):
+            self.batches = Batches()
+
+    client = screening.AnthropicBatchClient(client=type("StubClient", (), {"messages": Messages()})())
+
+    batch = client.get_batch("remote-123")
+
+    assert batch == {
+        "id": "remote-123",
+        "status": "completed",
+        "output_file_id": "results://remote-123",
+        "error_file_id": None,
+        "request_counts": {"total": 15, "completed": 2, "failed": 12},
+    }
+
+
+def test_anthropic_batch_client_submit_batch_uses_messages_batches_api():
+    class Counts:
+        def __init__(self):
+            self.processing = 0
+            self.succeeded = 1
+            self.errored = 0
+            self.expired = 0
+            self.canceled = 0
+
+    class Batch:
+        def __init__(self):
+            self.id = "remote-123"
+            self.processing_status = "in_progress"
+            self.request_counts = Counts()
+            self.results_url = "results://remote-123"
+
+    class Batches:
+        def __init__(self):
+            self.created = None
+
+        def create(self, *, requests):
+            self.created = requests
+            return type("CreatedBatch", (), {"id": "remote-123"})()
+
+        def retrieve(self, batch_id):
+            assert batch_id == "remote-123"
+            return Batch()
+
+    batches = Batches()
+    client = screening.AnthropicBatchClient(client=type("StubClient", (), {"messages": type("Messages", (), {"batches": batches})()})())
+
+    batch = client.submit_batch(batch_id="local-123", requests=[{"custom_id": "paper-1", "params": {"model": "claude"}}])
+
+    assert batches.created == [{"custom_id": "paper-1", "params": {"model": "claude"}}]
+    assert batch["id"] == "remote-123"
+    assert batch["status"] == "in_progress"
+
+
+def test_anthropic_batch_client_download_output_extracts_text():
+    class TextBlock:
+        def __init__(self, text):
+            self.type = "text"
+            self.text = text
+
+    class Message:
+        def __init__(self, text):
+            self.content = [TextBlock(text)]
+
+    class ResultPayload:
+        def __init__(self, text):
+            self.type = "succeeded"
+            self.message = Message(text)
+
+    class Result:
+        def __init__(self, custom_id, text):
+            self.custom_id = custom_id
+            self.result = ResultPayload(text)
+
+    class Batches:
+        def results(self, batch_id):
+            assert batch_id == "remote-123"
+            return [Result("paper-1", "{\"decision\":\"include\",\"reason\":[\"IC1\"]}")]
+
+    class Messages:
+        def __init__(self):
+            self.batches = Batches()
+
+    client = screening.AnthropicBatchClient(client=type("StubClient", (), {"messages": Messages()})())
+
+    outputs = client.download_output("remote-123")
+
+    assert outputs == [{"custom_id": "paper-1", "output_text": "{\"decision\":\"include\",\"reason\":[\"IC1\"]}"}]
+
+
+def test_gemini_batch_client_build_requests_creates_json_ready_records():
+    rows = [{"id": "2", "title": "HPC sustainability", "abstract": "Lifecycle carbon assessment of HPC systems."}]
+
+    requests = screening.GeminiBatchClient(client=object()).build_requests(rows=rows, model="gemini-2.5-pro")
+
+    assert requests == [
+        {
+            "custom_id": "2",
+            "model": "gemini-2.5-pro",
+            "request": {
+                "contents": [{"role": "user", "parts": [{"text": screening.build_prompt(rows[0])}]}],
+                "generationConfig": {
+                    "temperature": 0,
+                    "responseMimeType": "application/json",
+                    "responseSchema": screening.RESPONSE_SCHEMA,
+                },
+            },
+        }
+    ]
+
+
+def test_gemini_batch_client_get_batch_normalizes_job_states():
+    class State:
+        def __init__(self, name):
+            self.name = name
+
+    class Dest:
+        def __init__(self):
+            self.file_name = "files/result.jsonl"
+
+    class Batch:
+        def __init__(self, state_name):
+            self.name = "operations/123"
+            self.state = State(state_name)
+            self.dest = Dest()
+
+    class Batches:
+        def get(self, name):
+            return Batch(name)
+
+    client = screening.GeminiBatchClient(client=type("StubClient", (), {"batches": Batches()})())
+
+    assert client.get_batch("JOB_STATE_SUCCEEDED")["status"] == "completed"
+    assert client.get_batch("JOB_STATE_FAILED")["status"] == "failed"
+    assert client.get_batch("JOB_STATE_CANCELLED")["status"] == "cancelled"
+    assert client.get_batch("JOB_STATE_EXPIRED")["status"] == "expired"
+    assert client.get_batch("JOB_STATE_RUNNING")["status"] == "in_progress"
+
+
+def test_gemini_batch_client_submit_batch_uploads_jsonl_and_creates_batch():
+    class UploadedFile:
+        def __init__(self):
+            self.name = "files/input.jsonl"
+
+    class CreatedBatch:
+        def __init__(self):
+            self.name = "operations/123"
+
+    class State:
+        def __init__(self):
+            self.name = "JOB_STATE_RUNNING"
+
+    class Dest:
+        def __init__(self):
+            self.file_name = "files/output.jsonl"
+
+    class Batch:
+        def __init__(self):
+            self.name = "operations/123"
+            self.state = State()
+            self.dest = Dest()
+
+    class Files:
+        def __init__(self):
+            self.uploads = []
+
+        def upload(self, *, file, config):
+            self.uploads.append({"file": file, "config": config})
+            return UploadedFile()
+
+    class Batches:
+        def __init__(self):
+            self.created = []
+
+        def create(self, *, model, src, config):
+            self.created.append({"model": model, "src": src, "config": config})
+            return CreatedBatch()
+
+        def get(self, name):
+            assert name == "operations/123"
+            return Batch()
+
+    files = Files()
+    batches = Batches()
+    client = screening.GeminiBatchClient(client=type("StubClient", (), {"files": files, "batches": batches})())
+
+    batch = client.submit_batch(
+        batch_id="local-123",
+        requests=[{"custom_id": "paper-1", "model": "gemini-2.5-pro", "request": {"contents": []}}],
+    )
+
+    assert files.uploads[0]["config"]["mime_type"] == "jsonl"
+    assert batches.created == [
+        {"model": "gemini-2.5-pro", "src": "files/input.jsonl", "config": {"display_name": "local-123"}}
+    ]
+    assert batch["id"] == "operations/123"
+    assert batch["status"] == "in_progress"
+
+
+def test_gemini_batch_client_download_output_parses_jsonl_and_raises_on_record_errors():
+    class State:
+        def __init__(self, name):
+            self.name = name
+
+    class Dest:
+        def __init__(self):
+            self.file_name = "files/result.jsonl"
+
+    class Batch:
+        def __init__(self):
+            self.name = "operations/123"
+            self.state = State("JOB_STATE_SUCCEEDED")
+            self.dest = Dest()
+
+    class Batches:
+        def get(self, name):
+            assert name == "operations/123"
+            return Batch()
+
+    class Files:
+        def download(self, name):
+            assert name == "files/result.jsonl"
+            return "\n".join(
+                [
+                    json.dumps(
+                        {
+                            "key": "paper-1",
+                            "response": {
+                                "candidates": [
+                                    {
+                                        "content": {
+                                            "parts": [{"text": "{\"decision\":\"include\",\"reason\":[\"IC1\"]}"}]
+                                        }
+                                    }
+                                ]
+                            },
+                        }
+                    ),
+                    json.dumps({"key": "paper-2", "error": {"message": "request failed"}}),
+                ]
+            ).encode("utf-8")
+
+    client = screening.GeminiBatchClient(client=type("StubClient", (), {"batches": Batches(), "files": Files()})())
+
+    with pytest.raises(screening.BatchOutputDownloadError, match="paper-2"):
+        client.download_output("operations/123")
+
+
+def test_run_once_uses_provider_to_build_default_client_and_state(tmp_path, monkeypatch):
+    class Client:
+        source_name = "gemini_batch"
+
+        def build_requests(self, *, rows, model):
+            return [{"custom_id": row["id"], "model": model} for row in rows]
+
+        def get_batch(self, batch_id):
+            return None
+
+        def submit_batch(self, *, batch_id, requests):
+            return {"id": "remote-123", "status": "in_progress", "output_file_id": None, "error_file_id": None, "request_counts": None}
+
+        def download_output(self, batch_id):
+            raise AssertionError("download_output should not be called")
+
+    csv_path = tmp_path / "papers.csv"
+    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
+    created = []
+
+    def fake_build_batch_client(provider):
+        created.append(provider)
+        return Client()
+
+    monkeypatch.setattr(screening, "build_batch_client", fake_build_batch_client)
+
+    result = screening.run_once(
+        args=screening.parse_args(
+            [
+                "--input",
+                str(csv_path),
+                "--model",
+                "gemini-2.5-pro",
+                "--batch-id",
+                "batch-123",
+                "--papers-per-batch",
+                "1",
+                "--provider",
+                "gemini",
+            ]
+        ),
+        workdir=tmp_path,
+    )
+
+    assert created == ["gemini"]
+    assert result["metadata"]["provider"] == "gemini"
+    assert result["metadata"]["remote_batch_id"] == "remote-123"
 
 
 def test_derive_progress_reports_operational_counts():
@@ -339,32 +810,6 @@ def test_render_dashboard_includes_operational_details():
     assert "(5m ago)" in output
 
 
-def test_render_dashboard_includes_dry_run_status():
-    state = {
-        "metadata": {
-            "batch_id": "testing",
-            "status": "waiting batch",
-            "provider": "openai",
-            "dry_run": True,
-            "model": "gpt-5-mini",
-            "submitted_count": 0,
-            "prefiltered_count": 0,
-            "current_batch_size": 0,
-            "total_papers": 1,
-            "started_at": "2026-04-12T10:00:00Z",
-            "updated_at": "2026-04-12T10:05:00Z",
-        },
-        "papers": {},
-    }
-    console = screening.make_console(io.StringIO())
-
-    console.print(screening.render_dashboard(state, "Dry run: completing simulated batch"))
-    output = console.file.getvalue()
-
-    assert "Dry run" in output
-    assert "yes" in output
-
-
 def test_parse_output_text_rejects_invalid_reason_codes():
     with pytest.raises(ValueError, match="Invalid reason"):
         screening.parse_output_text(json.dumps({"decision": "include", "reason": ["IC9"]}))
@@ -437,9 +882,14 @@ def test_run_once_exits_without_api_calls_when_state_is_done(tmp_path):
 
 def test_run_once_submits_batch_and_writes_waiting_state(tmp_path):
     class Client:
+        source_name = "openai_batch"
+
         def __init__(self):
             self.submitted = None
             self.get_batch_calls = []
+
+        def build_requests(self, *, rows, model):
+            return [{"custom_id": row["id"], "model": model} for row in rows]
 
         def get_batch(self, batch_id):
             self.get_batch_calls.append(batch_id)
@@ -501,6 +951,11 @@ def test_run_once_keeps_waiting_state_while_remote_batch_is_running(tmp_path):
 
 def test_run_once_merges_completed_batch_outputs_and_marks_done(tmp_path):
     class Client:
+        source_name = "anthropic_batch"
+
+        def build_requests(self, *, rows, model):
+            raise AssertionError("build_requests should not be called")
+
         def get_batch(self, batch_id):
             assert batch_id == "batch-123"
             return {"id": batch_id, "status": "completed"}
@@ -553,7 +1008,7 @@ def test_run_once_merges_completed_batch_outputs_and_marks_done(tmp_path):
     assert result["metadata"]["current_batch_size"] == 0
     assert "remote_batch_id" not in result["metadata"]
     assert result["papers"]["2"] == {
-        "source": "openai_batch",
+        "source": "anthropic_batch",
         "decision": "include",
         "reason": ["IC1"],
     }
@@ -561,8 +1016,13 @@ def test_run_once_merges_completed_batch_outputs_and_marks_done(tmp_path):
 
 def test_run_once_submits_next_chunk_after_completed_batch(tmp_path):
     class Client:
+        source_name = "gemini_batch"
+
         def __init__(self):
             self.submitted = None
+
+        def build_requests(self, *, rows, model):
+            return [{"custom_id": row["id"], "model": model} for row in rows]
 
         def get_batch(self, batch_id):
             assert batch_id == "batch-123"
@@ -621,7 +1081,7 @@ def test_run_once_submits_next_chunk_after_completed_batch(tmp_path):
     assert result["metadata"]["submitted_count"] == 2
     assert result["metadata"]["current_batch_size"] == 1
     assert result["papers"]["2"] == {
-        "source": "openai_batch",
+        "source": "gemini_batch",
         "decision": "include",
         "reason": ["IC1"],
     }
@@ -630,9 +1090,14 @@ def test_run_once_submits_next_chunk_after_completed_batch(tmp_path):
 
 def test_run_processes_all_chunks_and_renders_rich_output(tmp_path):
     class Client:
+        source_name = "anthropic_batch"
+
         def __init__(self):
             self.submissions = []
             self.downloads = []
+
+        def build_requests(self, *, rows, model):
+            return [{"custom_id": row["id"], "model": model} for row in rows]
 
         def get_batch(self, batch_id):
             if batch_id == "batch-1":
@@ -681,6 +1146,8 @@ def test_run_processes_all_chunks_and_renders_rich_output(tmp_path):
     assert result["metadata"]["current_batch_size"] == 0
     assert result["papers"]["1"]["decision"] == "include"
     assert result["papers"]["2"]["decision"] == "exclude"
+    assert result["papers"]["1"]["source"] == "anthropic_batch"
+    assert result["papers"]["2"]["source"] == "anthropic_batch"
     assert sleeps == [30, 30]
     assert [request["custom_id"] for request in client.submissions[0]["requests"]] == ["1"]
     assert [request["custom_id"] for request in client.submissions[1]["requests"]] == ["2"]
@@ -691,120 +1158,17 @@ def test_run_processes_all_chunks_and_renders_rich_output(tmp_path):
     assert "Screening Complete" in output
 
 
-def test_run_dry_run_processes_all_chunks_without_api_calls(tmp_path):
-    class Client:
-        def __getattr__(self, name):
-            raise AssertionError(f"unexpected API access during dry run: {name}")
-
-    csv_path = tmp_path / "papers.csv"
-    csv_path.write_text(
-        "id,title,abstract\n"
-        "1,HPC sustainability,Lifecycle carbon assessment of HPC systems.\n"
-        "2,HPC water footprint,Water use in supercomputing facilities.\n",
-        encoding="utf-8",
-    )
-    sleeps = []
-    stdout = io.StringIO()
-
-    result = screening.run(
-        [
-            "--input",
-            str(csv_path),
-            "--model",
-            "gpt-5-mini",
-            "--batch-id",
-            "dry-run-batch",
-            "--papers-per-batch",
-            "1",
-            "--dry-run",
-        ],
-        client=Client(),
-        workdir=tmp_path,
-        sleeper=sleeps.append,
-        stdout=stdout,
-    )
-
-    assert result["metadata"]["status"] == "done"
-    assert result["metadata"]["dry_run"] is True
-    assert result["metadata"]["submitted_count"] == 2
-    assert result["metadata"]["current_batch_size"] == 0
-    assert sleeps == []
-    assert result["papers"]["1"] == {
-        "source": "dry_run",
-        "decision": "include",
-        "reason": ["doubt"],
-    }
-    assert result["papers"]["2"] == {
-        "source": "dry_run",
-        "decision": "include",
-        "reason": ["doubt"],
-    }
-    output = stdout.getvalue()
-    assert "Dry run: completing simulated batch" in output
-    assert "Screening Complete" in output
-
-
-def test_run_displays_dry_run_for_existing_done_state(tmp_path):
-    class Client:
-        def __getattr__(self, name):
-            raise AssertionError(f"unexpected API access: {name}")
-
-    csv_path = tmp_path / "papers.csv"
-    csv_path.write_text("id,title,abstract\n1,Paper title,Paper abstract\n", encoding="utf-8")
-    state_path = tmp_path / "testing.json"
-    state_path.write_text(
-        json.dumps(
-            {
-                "metadata": {
-                    "batch_id": "testing",
-                    "status": "done",
-                    "provider": "openai",
-                    "dry_run": False,
-                    "model": "gpt-5-mini",
-                    "seed": screening.SEED,
-                    "input_file": str(csv_path),
-                    "submitted_count": 1,
-                    "prefiltered_count": 0,
-                    "papers_per_batch": 500,
-                    "total_papers": 1,
-                    "current_batch_size": 0,
-                    "started_at": "2026-04-12T10:00:00Z",
-                    "updated_at": "2026-04-12T10:00:00Z",
-                },
-                "papers": {"1": {"source": "openai_batch", "decision": "include", "reason": ["IC1"]}},
-            }
-        ),
-        encoding="utf-8",
-    )
-    stdout = io.StringIO()
-
-    result = screening.run(
-        [
-            "--input",
-            str(csv_path),
-            "--model",
-            "gpt-5-mini",
-            "--batch-id",
-            "testing",
-            "--papers-per-batch",
-            "500",
-            "--dry-run",
-        ],
-        client=Client(),
-        workdir=tmp_path,
-        stdout=stdout,
-    )
-
-    assert result["metadata"]["dry_run"] is False
-    output = stdout.getvalue()
-    assert "Dry run yes" in output
-    assert "Dry run: yes" in output
 
 
 def test_run_stops_after_failed_chunk_and_renders_failure(tmp_path):
     class Client:
+        source_name = "openai_batch"
+
         def __init__(self):
             self.submissions = []
+
+        def build_requests(self, *, rows, model):
+            return [{"custom_id": row["id"], "model": model} for row in rows]
 
         def get_batch(self, batch_id):
             if batch_id == "batch-1":

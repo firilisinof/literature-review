@@ -43,6 +43,7 @@ RESPONSE_SCHEMA = {
     "additionalProperties": False,
 }
 ALLOWED_REASONS = {"IC1", "IC2", "EC1", "EC2", "EC3", "doubt", "missing_metadata"}
+REASON_CODE_RE = re.compile(r"\b(?:IC1|IC2|EC1|EC2|EC3|doubt|missing_metadata)\b", re.IGNORECASE)
 TERMINAL_STATUSES = {
     "done",
     "failed",
@@ -652,14 +653,45 @@ def parse_json_object_from_text(output_text: str) -> dict[str, object]:
     return payload
 
 
+def normalize_reason_codes(reasons: object) -> list[str]:
+    if isinstance(reasons, str):
+        reason_inputs = [reasons]
+    elif isinstance(reasons, list) and all(isinstance(reason, str) for reason in reasons):
+        reason_inputs = list(reasons)
+    else:
+        raise ValueError("Invalid reason")
+
+    normalized_reasons: list[str] = []
+    seen_reasons: set[str] = set()
+    for reason in reason_inputs:
+        extracted_reasons = REASON_CODE_RE.findall(reason)
+        if not extracted_reasons:
+            candidate_reason = reason.strip()
+            if candidate_reason in ALLOWED_REASONS:
+                extracted_reasons = [candidate_reason]
+        for extracted_reason in extracted_reasons:
+            canonical_reason = extracted_reason if extracted_reason in ALLOWED_REASONS else extracted_reason.upper()
+            if canonical_reason == "DOUBT":
+                canonical_reason = "doubt"
+            if canonical_reason == "MISSING_METADATA":
+                canonical_reason = "missing_metadata"
+            if canonical_reason not in ALLOWED_REASONS:
+                raise ValueError("Invalid reason")
+            if canonical_reason not in seen_reasons:
+                normalized_reasons.append(canonical_reason)
+                seen_reasons.add(canonical_reason)
+
+    if not normalized_reasons:
+        raise ValueError("Invalid reason")
+    return normalized_reasons
+
+
 def parse_output_text(output_text: str) -> dict[str, object]:
     payload = parse_json_object_from_text(output_text)
     if payload.get("decision") not in {"include", "exclude"}:
         raise ValueError("Invalid decision")
-    reasons = payload.get("reason")
-    if not isinstance(reasons, list) or not reasons or any(reason not in ALLOWED_REASONS for reason in reasons):
-        raise ValueError("Invalid reason")
-    return {"decision": payload["decision"], "reason": reasons}
+    normalized_reasons = normalize_reason_codes(payload.get("reason"))
+    return {"decision": payload["decision"], "reason": normalized_reasons}
 
 
 def persist_batch_failure(
@@ -770,7 +802,20 @@ def run_once(
                 failure_message=str(error),
             )
         for item in outputs:
-            parsed = parse_output_text(item["output_text"])
+            try:
+                parsed = parse_output_text(item["output_text"])
+            except ValueError as error:
+                output_preview = item["output_text"].strip().replace("\n", "\\n")[:160]
+                return persist_batch_failure(
+                    state_path=state_path,
+                    state=state,
+                    batch=batch,
+                    status="completed_with_failed_requests",
+                    failure_message=(
+                        f"Batch {batch['id']} returned invalid output for {item['custom_id']}: "
+                        f"{error}. Output preview: {output_preview!r}"
+                    ),
+                )
             state["papers"][item["custom_id"]] = {
                 "source": client.source_name,
                 "decision": parsed["decision"],

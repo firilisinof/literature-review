@@ -890,6 +890,20 @@ def test_parse_output_text_accepts_json_with_surrounding_text():
     assert result == {"decision": "include", "reason": ["IC1"]}
 
 
+def test_parse_output_text_accepts_reason_as_string_code():
+    result = screening.parse_output_text('{"decision":"exclude","reason":"EC1"}')
+
+    assert result == {"decision": "exclude", "reason": ["EC1"]}
+
+
+def test_parse_output_text_extracts_codes_from_reason_explanations():
+    result = screening.parse_output_text(
+        '{"decision":"exclude","reason":["EC1: not related to environmental impacts", "EC2 only energy"]}'
+    )
+
+    assert result == {"decision": "exclude", "reason": ["EC1", "EC2"]}
+
+
 def test_build_prompt_includes_selection_criteria():
     prompt = screening.build_prompt(
         {

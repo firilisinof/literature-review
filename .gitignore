@@ -1,4 +1,3 @@
-# Python-generated files
 __pycache__/
 *.py[oc]
 build/
@@ -8,9 +7,6 @@ wheels/
 .ipynb_checkpoints
 .pytest_cache
 .uv-cache
-
-# Virtual environments
 .venv
-
-# macOS
 .DS_Store
+.claude

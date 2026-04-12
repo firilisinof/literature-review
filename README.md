@@ -10,8 +10,8 @@ Raw BibTeX files are in `papers/`:
 - `acm.bib` — ACM Digital Library results
 - `ieee.bib` — IEEE Xplore results
 - `scopus.bib` — Scopus results
-- `papers.bib` — Merged and deduplicated (~3,788 papers)
-- `papers.csv` — screening input: `id,title,abstract` columns
+- `papers.bib` — Merged and deduplicated (3,788 papers)
+- `papers.csv` — screening input: `id,canonical_id,title,abstract` columns. `id` preserves the original row identifier, while `canonical_id` is used to collapse known duplicate rows when counting unique papers.
 
 ## About this literature review
 
@@ -88,6 +88,8 @@ Done in April 11, 2026.
 | -------- | ------- |
 | After the searches | 4812 |
 | After removing duplicates | 3788 |
+| Rows in `papers.csv` after merging with the first search | 3795 |
+| Unique papers after resolving duplicate aliases via `canonical_id` | 3793 |
 
 ### Data extraction
 

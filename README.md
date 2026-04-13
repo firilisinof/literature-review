@@ -13,6 +13,25 @@ Raw BibTeX files are in `papers/`:
 - `papers.bib` — Merged and deduplicated (3,788 papers)
 - `papers.csv` — screening input: `id,canonical_id,title,abstract` columns. `id` preserves the original row identifier, while `canonical_id` is used to collapse known duplicate rows when counting unique papers.
 
+## New search results
+
+Done in April 11, 2026.
+
+| Database | Number of papers |
+| -------- | ------- |
+| ACM | 532 |
+| IEEE | 1505 |
+| Scopus | 2775 |
+
+| Stage | Number of papers |
+| -------- | ------- |
+| After the searches | 4812 |
+| After removing duplicates | 3788 |
+| Rows in `papers.csv` after merging with the first search | 3795 |
+| Unique papers after resolving duplicate aliases via `canonical_id` | 3793 |
+
+Observation: Papers 865 and 2140 both returned "type": "succeeded" from the Anthropic API but with an empty content: `[]` array. The model was called successfully but produced no output. This is a known (rare) Anthropic API edge case where the response is technically successful but the model emitted nothing.
+
 ## About this literature review
 
 My goal was to explore how environmental impacts are quantified in high-performance computing (HPC). The literature on HPC energy consumption is extensive; however, this metric alone is insufficient for fully understanding the sustainability of these systems. Through preliminary searches, I was unable to identify papers that addressed environmental impacts comprehensively. I therefore decided to conduct a literature review on this topic.
@@ -73,23 +92,6 @@ The paper selection process consists of the following steps:
 | EC1 | Reports not related to the literature review scope |
 | EC2 | Reports focusing solely on energy without connecting to broader environmental impacts |
 | EC3 | Reports not in English, unavailable, or inaccessible |
-
-### Search results
-
-Done in April 11, 2026.
-
-| Database | Number of papers |
-| -------- | ------- |
-| ACM | 532 |
-| IEEE | 1505 |
-| Scopus | 2775 |
-
-| Stage | Number of papers |
-| -------- | ------- |
-| After the searches | 4812 |
-| After removing duplicates | 3788 |
-| Rows in `papers.csv` after merging with the first search | 3795 |
-| Unique papers after resolving duplicate aliases via `canonical_id` | 3793 |
 
 ### Data extraction
 

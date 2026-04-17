@@ -11,7 +11,20 @@ Raw BibTeX files are in `papers/`:
 - `ieee.bib` — IEEE Xplore results
 - `scopus.bib` — Scopus results
 - `papers.bib` — Merged and deduplicated (3,788 papers)
-- `papers.csv` — screening input: `id,canonical_id,title,abstract` columns. `id` preserves the original row identifier, while `canonical_id` is used to collapse known duplicate rows when counting unique papers.
+
+Generated review artifacts are organized by directory:
+- `artifacts/all_papers.csv` — screening input: `id,canonical_id,title,abstract` columns. `id` preserves the original row identifier, while `canonical_id` is used to collapse known duplicate rows when counting unique papers.
+- `artifacts/processed.csv` — normalized screening decisions cache built from the provider batch outputs in `results/`
+- `artifacts/unanimous_include.csv` — papers unanimously included by Anthropic, OpenAI, and Gemini
+- `artifacts/included.bib` — BibTeX export for the included papers
+- `artifacts/metadata.csv`, `artifacts/keywording.csv`, `artifacts/extraction.csv` — downstream review artifacts
+- `decisions/` — manual screening decisions
+- `notebooks/` — analysis and batch-download notebooks
+- `scripts/` — helper scripts for generating and submitting provider payloads
+- `payloads/` — batch request files sent to providers
+- `results/` — raw batch outputs downloaded from providers
+- `prompts/` — prompt templates used throughout the review workflow
+- `papers/markdown/` — markdown copies of selected papers
 
 ## New search results
 
@@ -27,8 +40,10 @@ Done in April 11, 2026.
 | -------- | ------- |
 | After the searches | 4812 |
 | After removing duplicates | 3788 |
-| Rows in `papers.csv` after merging with the first search | 3795 |
+| Rows in `artifacts/all_papers.csv` after merging with the first search | 3795 |
 | Unique papers after resolving duplicate aliases via `canonical_id` | 3793 |
+| Unanimous choice between the three AI models `decisions/lucas.csv` | 244 |
+| New papers included | 33 |
 
 Observation: Papers 865 and 2140 both returned "type": "succeeded" from the Anthropic API but with an empty content: `[]` array. The model was called successfully but produced no output. This is a known (rare) Anthropic API edge case where the response is technically successful but the model emitted nothing.
 
@@ -92,55 +107,3 @@ The paper selection process consists of the following steps:
 | EC1 | Reports not related to the literature review scope |
 | EC2 | Reports focusing solely on energy without connecting to broader environmental impacts |
 | EC3 | Reports not in English, unavailable, or inaccessible |
-
-### Data extraction
-
-For each selected paper, we extracted the fields described in the table below.
-
-| Field Name | Description | Values | Details |
-| :--- | :--- | :--- | :--- |
-| `paper_id` | A unique numerical identifier assigned to each paper. | `numerical` | Used as the primary key to link metadata, analysis, and tags. |
-| `title` | The full title of the research paper. | `text` | The official title as indexed in databases. |
-| `publication_year` | The year in which the paper was published. | `numerical` | The calendar year of publication. |
-| `doi` | The Digital Object Identifier for the paper. | `text` | Persistent link to the paper's location on the internet. |
-| `satisfy_ic1` | Indicator specifying whether the paper meets the first inclusion criterion. | `yes`, `no` | - |
-| `satisfy_ic2` | Indicator specifying whether the paper meets the second inclusion criterion. | `yes`, `no` | - |
-| `from_snowballing` | Flag indicating discovery via snowballing vs. database search. | `yes`, `no` | `yes` if discovered via snowballing; `no` if via initial search. |
-| `papers_backward_snowballing` | Count of bibliography references screened. | `numerical` | Total references from this paper's bibliography that were screened. |
-| `papers_forward_snowballing` | Count of newer papers citing this paper that were screened. | `numerical` | Total newer papers citing this paper that were screened. |
-| `citation_key` | Unique BibTeX-style key for citation management. | `text` | Unique identifier used for referencing (e.g., in LaTeX). |
-| `carbon_footprint` | Assesses whether the paper addresses carbon-related impacts. | `addressed`, `partially addressed`, `not addressed` | `addressed` for comprehensive discussion, `partially addressed` for superficial mention and `not addressed` for no mentions. |
-| `production_carbon` | Specifies if production-phase carbon impacts are considered. | `yes`, `no` | Emissions from manufacturing, transport, and construction. |
-| `operational_carbon` | Specifies if operational-phase carbon impacts are considered. | `yes`, `no` | Emissions from energy consumption during active use. |
-| `eol_carbon` | Specifies if end-of-life carbon impacts are considered. | `yes`, `no` | Emissions from decommissioning, disposal, or recycling. |
-| `scope_1` | Specifies if Scope 1 emissions are considered. | `yes`, `no` | Direct emissions from owned or controlled sources. |
-| `scope_2` | Specifies if Scope 2 emissions are considered. | `yes`, `no` | Indirect emissions from purchased energy (electricity, heat, etc.). |
-| `scope_3` | Specifies if Scope 3 emissions are considered. | `yes`, `no` | All other indirect emissions in the value chain. |
-| `water_footprint` | Assesses whether the paper addresses water-related impacts (consumption, extraction, water stress, etc.) | `addressed`, `partially addressed`, `not addressed` | `addressed` for comprehensive discussion, `partially addressed` for superficial mention and `not addressed` for no mentions. |
-| `production_water` | Specifies if production-phase water impacts are considered. | `yes`, `no` | Water consumed/withdrawn during manufacturing and construction. |
-| `operational_water` | Specifies if operational-phase water impacts are considered. | `yes`, `no` | Water used for cooling or indirect use from electricity generation. |
-| `eol_water` | Specifies if end-of-life water impacts are considered. | `yes`, `no` | Water impacts from decommissioning or waste processing. |
-| `material_footprint` | Assesses whether the paper addresses material-related impacts (raw materials, e-waste, resource depletion, etc.) | `addressed`, `partially addressed`, `not addressed` | `addressed` for comprehensive discussion, `partially addressed` for superficial mention and `not addressed` for no mentions. |
-| `production_materials` | Specifies if production-phase material impacts are considered. | `yes`, `no` | Materials used during manufacturing and construction. |
-| `operational_materials` | Specifies if operational-phase material impacts are considered. | `yes`, `no` | Consumables and component replacements during active use. |
-| `eol_materials` | Specifies if end-of-life material impacts are considered. | `yes`, `no` | Materials involved in decommissioning or recycling. |
-| `hardware_management_practices` | Assesses whether the paper addresses hardware management. | `addressed`, `partially addressed`, `not addressed` | `addressed` for comprehensive discussion, `partially addressed` for superficial mention and `not addressed` for no mentions. |
-| `hardware_practices` | Specific practices for hardware management. | `list of strings` | - |
-| `software_optimization_strategies` | Assesses whether the paper addresses software optimization. | `addressed`, `partially addressed`, `not addressed` | `addressed` for comprehensive discussion, `partially addressed` for superficial mention and `not addressed` for no mentions. |
-| `software_strategies` | Specific strategies for software optimization. | `list of strings` | - |
-| `first_order_effects` | Specifies if direct life-cycle impacts are considered. | `yes`, `no` | Direct life-cycle impacts of the systems themselves. |
-| `second_order_effects` | Specifies if indirect life-cycle impacts are considered. | `yes`, `no` | Impacts due to changes in reference activities enabled by the system. |
-| `higher_order_effects` | Specifies if systemic or structural impacts are considered. | `yes`, `no` | Impacts from broader behavioral or societal changes. |
-| `data_analysis` | Specifies if data analysis is used as an experimental approach. | `yes`, `no` | Observing and interpreting measured or collected data. |
-| `modeling` | Specifies if modeling is used as an experimental approach. | `yes`, `no` | Creating mathematical or theoretical representations. |
-| `simulations` | Specifies if simulations are used as an experimental approach. | `yes`, `no` | Running computational experiments in virtual environments. |
-| `experiments_on_real_systems` | Specifies if experiments on real systems are used. | `yes`, `no` | Testing on actual hardware or real physical systems. |
-| `literature_analysis` | Specifies if literature analysis is used. | `yes`, `no` | Primarily reviewing and analyzing others' work. |
-| `methods` | Specific methodologies used in the study. | `list of strings` | - |
-| `primary_sources` | Specifies if primary data sources are used. | `yes`, `no` | Data collected or generated directly by the authors. |
-| `secondary_sources` | Specifies if secondary data sources are used. | `yes`, `no` | Data gathered from outside sources or literature. |
-| `micro_scale` | Specifies if micro-scale spatial boundaries are adopted. | `yes`, `no` | Compute node level (servers, nodes, processors). |
-| `meso_scale` | Specifies if meso-scale spatial boundaries are adopted. | `yes`, `no` | Facility level (data centers, buildings). |
-| `macro_scale` | Specifies if macro-scale spatial boundaries are adopted. | `yes`, `no` | Regional, national, or geographic grid level. |
-| `ex_post` | Specifies if historical/measured assessment is used. | `yes`, `no` | Analysis of existing systems or historical data. |
-| `ex_ante` | Specifies if predictive assessment is used. | `yes`, `no` | Forward-looking analysis or predictions. |

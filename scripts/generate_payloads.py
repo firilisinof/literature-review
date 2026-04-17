@@ -8,9 +8,9 @@ from typing import Literal, TypedDict
 REQUIRED_COLUMNS: tuple[str, str, str] = ("id", "title", "abstract")
 PAYLOAD_SIZE: int = 1000
 MAX_OUTPUT_TOKENS: int = 80
-BASE_DIR: Path = Path(__file__).resolve().parent
-INPUT_PATH: Path = BASE_DIR / "papers" / "papers.csv"
-OUTPUT_DIR: Path = BASE_DIR / "payloads"
+PROJECT_DIR: Path = Path(__file__).resolve().parent.parent
+INPUT_PATH: Path = PROJECT_DIR / "artifacts" / "all_papers.csv"
+OUTPUT_DIR: Path = PROJECT_DIR / "payloads"
 SYSTEM_INTRO: str = (
     "You are screening studies for a systematic mapping study on the environmental "
     "impacts of high-performance computing (HPC)."

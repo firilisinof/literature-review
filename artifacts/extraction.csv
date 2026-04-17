@@ -1,0 +1,64 @@
+﻿paper_id,carbon_footprint,water_footprint,material_footprint,hardware_management_practices,software_optimization_strategies,scopes,carbon_stages,water_stages,material_stages,effects,methodological_dimensions,sources,scale,assement_type
+1,addressed,not addressed,not addressed,addressed,addressed,scope 2;scope 3,production;operational,,,first order,literature analysis,secondary,micro;meso,ex post
+2,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,simulations,secondary,meso;macro,ex post
+3,addressed,partially addressed,not addressed,partially addressed,addressed,scope 2,operational,operational,,first order,data analysis;modeling;simulations,primary,micro;meso,ex post;ex ante
+4,partially addressed,not addressed,not addressed,addressed,not addressed,scope 2,operational,,,first order,data analysis;modeling;experiments on real systems,primary,micro;meso,ex post
+5,not addressed,addressed,not addressed,not addressed,not addressed,,,operational,,first order,modeling;simulations,secondary,meso,ex ante
+6,addressed,not addressed,not addressed,addressed,addressed,scope 2;scope 3,production;operational,,,first order,data analysis;modeling;experiments on real systems;literature analysis,primary;secondary,micro;meso;macro,ex post;ex ante
+7,addressed,not addressed,partially addressed,addressed,addressed,scope 1;scope 2;scope 3,production;operational,,eol,first order,data analysis;modeling;literature analysis,secondary,micro;meso;macro,ex post;ex ante
+8,addressed,not addressed,not addressed,partially addressed,addressed,scope 2,operational,,,first order,data analysis;modeling;experiments on real systems,primary,micro;meso;macro,ex post;ex ante
+9,addressed,not addressed,partially addressed,partially addressed,addressed,scope 2;scope 3,operational,,eol,first order,literature analysis,secondary,micro;meso,ex post;ex ante
+10,addressed,not addressed,not addressed,not addressed,partially addressed,scope 1;scope 2;scope 3,operational,,,first order,data analysis;modeling,primary,micro;meso,ex post
+11,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;modeling;simulations,secondary,meso;macro,ex post;ex ante
+12,addressed,not addressed,not addressed,not addressed,not addressed,scope 2,operational,,,first order,data analysis;modeling;experiments on real systems,primary;secondary,micro;meso,ex ante
+13,not addressed,not addressed,not addressed,addressed,partially addressed,,,,,first order,data analysis;modeling;experiments on real systems,primary,micro;meso,ex post;ex ante
+14,addressed,not addressed,partially addressed,addressed,addressed,scope 2;scope 3,production;operational,,operational,first order,data analysis;modeling;simulations,primary;secondary,micro;meso,ex post;ex ante
+15,addressed,partially addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;modeling,secondary,micro;meso,ex post
+16,addressed,not addressed,not addressed,partially addressed,partially addressed,scope 2,operational,,,first order;second order,data analysis;modeling,secondary,macro,ex post
+17,addressed,not addressed,partially addressed,addressed,addressed,scope 2;scope 3,production;operational,,production;eol,first order,data analysis;modeling;simulations,secondary,meso;macro,ex post;ex ante
+18,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;modeling;experiments on real systems,primary;secondary,micro,ex post
+19,addressed,partially addressed,addressed,addressed,partially addressed,scope 2;scope 3,production;operational,production,production;eol,first order;second order,data analysis;literature analysis,secondary,micro;meso;macro,ex post
+20,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;simulations,secondary,micro;meso;macro,ex post
+21,addressed,not addressed,not addressed,not addressed,not addressed,scope 2,operational,,,first order,data analysis;modeling;experiments on real systems,primary;secondary,meso,ex post
+22,addressed,partially addressed,partially addressed,addressed,addressed,scope 1;scope 2;scope 3,production;operational;eol,operational,production;eol,first order;second order,literature analysis,secondary,micro;meso;macro,ex post;ex ante
+23,partially addressed,partially addressed,not addressed,not addressed,not addressed,,operational,operational,,first order,data analysis;experiments on real systems,primary,meso,ex post
+24,addressed,not addressed,not addressed,partially addressed,partially addressed,scope 2,operational,,,first order;second order,data analysis,secondary,meso;macro,ex post
+25,partially addressed,addressed,not addressed,not addressed,not addressed,,,operational,,first order,modeling;simulations,primary;secondary,meso,ex post;ex ante
+26,addressed,partially addressed,addressed,addressed,partially addressed,scope 2;scope 3,operational,,eol,first order,data analysis;modeling,secondary,meso;macro,ex post;ex ante
+27,addressed,not addressed,partially addressed,not addressed,not addressed,scope 2;scope 3,production;operational,,,first order,data analysis;modeling;literature analysis,secondary,micro;meso,ex post;ex ante
+28,addressed,not addressed,not addressed,not addressed,addressed,scope 2;scope 3,production;operational,,,first order,literature analysis,secondary,micro;meso;macro,ex post;ex ante
+29,not addressed,addressed,not addressed,not addressed,not addressed,,,operational,,first order,data analysis;experiments on real systems,primary,meso,ex post
+30,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;modeling;simulations,secondary,meso;macro,ex post
+52,,,,,,,,,,,,,,
+60,,,,,,,,,,,,,,
+71,,,,,,,,,,,,,,
+77,,,,,,,,,,,,,,
+188,,,,,,,,,,,,,,
+239,,,,,,,,,,,,,,
+404,,,,,,,,,,,,,,
+406,,,,,,,,,,,,,,
+419,,,,,,,,,,,,,,
+421,,,,,,,,,,,,,,
+432,,,,,,,,,,,,,,
+435,,,,,,,,,,,,,,
+477,,,,,,,,,,,,,,
+688,,,,,,,,,,,,,,
+835,,,,,,,,,,,,,,
+838,,,,,,,,,,,,,,
+898,,,,,,,,,,,,,,
+928,,,,,,,,,,,,,,
+962,,,,,,,,,,,,,,
+979,,,,,,,,,,,,,,
+1060,,,,,,,,,,,,,,
+1205,,,,,,,,,,,,,,
+2202,,,,,,,,,,,,,,
+2503,,,,,,,,,,,,,,
+2520,,,,,,,,,,,,,,
+2521,,,,,,,,,,,,,,
+2558,,,,,,,,,,,,,,
+2866,,,,,,,,,,,,,,
+2879,,,,,,,,,,,,,,
+3368,,,,,,,,,,,,,,
+3579,,,,,,,,,,,,,,
+3601,,,,,,,,,,,,,,
+3706,,,,,,,,,,,,,,

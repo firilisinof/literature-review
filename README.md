@@ -18,6 +18,7 @@ Generated review artifacts are organized by directory:
 - `artifacts/unanimous_include.csv` — papers unanimously included by Anthropic, OpenAI, and Gemini
 - `artifacts/included.bib` — BibTeX export for the included papers
 - `artifacts/metadata.csv`, `artifacts/keywording.csv`, `artifacts/extraction.csv` — downstream review artifacts
+- `artifacts/schema_log.md` — per-batch log of schema revisions, keyword resolution, and classification decisions
 - `decisions/` — manual screening decisions
 - `notebooks/` — analysis and batch-download notebooks
 - `scripts/` — helper scripts for generating and submitting provider payloads
@@ -25,6 +26,16 @@ Generated review artifacts are organized by directory:
 - `results/` — raw batch outputs downloaded from providers
 - `prompts/` — prompt templates used throughout the review workflow
 - `papers/markdown/` — markdown copies of selected papers
+
+## Prompt workflow
+
+The review pipeline uses prompt templates in `prompts/` to update the main coding artifacts:
+
+- `prompts/keywording.md` and `prompts/keywording_revision.md` update `artifacts/keywording.csv`
+- `prompts/extraction.md` updates `artifacts/extraction.csv`
+- `prompts/schema.md` maintains `schema.json` and classifies each processed batch in the same pass
+
+The schema workflow is iterative. `prompts/schema.md` derives and revises topical facets from `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/schema_log.md`.
 
 ## New search results
 

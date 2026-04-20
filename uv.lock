@@ -10,6 +10,9 @@ resolution-markers = [
     "python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
+[options]
+prerelease-mode = "allow"
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -1184,6 +1187,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "anthropic" },
+    { name = "bibtexparser" },
     { name = "google-genai" },
     { name = "jupyterlab" },
     { name = "matplotlib" },
@@ -1196,6 +1200,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "anthropic", specifier = ">=0.96.0" },
+    { name = "bibtexparser", specifier = ">=1.4.4" },
     { name = "google-genai", specifier = ">=1.73.1" },
     { name = "jupyterlab", specifier = ">=4.5.6" },
     { name = "matplotlib", specifier = ">=3.10.8" },

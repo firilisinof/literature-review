@@ -1,0 +1,572 @@
+{
+  "facets": [
+    {
+      "name": "Environmental impact focus",
+      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, and a smaller set of papers that frame environmental sustainability in aggregate rather than through one named burden.",
+      "categories": [
+        {
+          "name": "Carbon emissions and footprint",
+          "description": "Papers that explicitly address carbon emissions, carbon footprints, decarbonization, operational or embodied carbon, carbon intensity, or greenhouse gas generation.",
+          "example_keywords": [
+            "carbon emissions",
+            "carbon footprint",
+            "operational emissions",
+            "embodied carbon",
+            "carbon intensity",
+            "greenhouse gas emissions",
+            "lifecycle carbon emissions",
+            "decarbonization"
+          ],
+          "classification": [
+            1,
+            2,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            26,
+            28,
+            30,
+            60,
+            71,
+            77,
+            188,
+            223,
+            239,
+            406,
+            419,
+            421
+          ]
+        },
+        {
+          "name": "Energy and power efficiency",
+          "description": "Papers centered on reducing energy demand, improving power efficiency, reusing waste energy, or optimizing electricity use in HPC systems, workloads, cooling, or data movement.",
+          "example_keywords": [
+            "energy efficiency",
+            "power control",
+            "energy consumption",
+            "energy demand",
+            "energy reuse",
+            "energy productivity metrics",
+            "networking energy",
+            "operations optimization",
+            "power demand shaping"
+          ],
+          "classification": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            8,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            26,
+            30,
+            60,
+            71,
+            77,
+            188,
+            239,
+            406
+          ]
+        },
+        {
+          "name": "Material, waste, and resource burdens",
+          "description": "Papers that highlight construction waste, e-waste, hardware lifetime or reuse, procurement-related burdens, or other material-intensive environmental impacts that are distinct from water use.",
+          "example_keywords": [
+            "construction waste",
+            "e-waste",
+            "resource use",
+            "HPC procurement",
+            "hardware recycling",
+            "hardware reliability",
+            "device reuse",
+            "hardware lifetime"
+          ],
+          "classification": [
+            3,
+            6,
+            7,
+            9,
+            14,
+            17,
+            19,
+            26,
+            419
+          ]
+        },
+        {
+          "name": "Water use and hydrological impacts",
+          "description": "Papers that explicitly address water consumption, water footprint, water-efficient cooling, water scarcity, or thermal impacts on water resources from HPC infrastructure.",
+          "example_keywords": [
+            "water use",
+            "water footprint",
+            "water usage effectiveness",
+            "water-efficient cooling",
+            "groundwater cooling",
+            "aquifer thermal impacts",
+            "embodied water",
+            "water scarcity"
+          ],
+          "classification": [
+            25,
+            29,
+            404
+          ]
+        },
+        {
+          "name": "Aggregate environmental impacts",
+          "description": "Papers that treat HPC sustainability as an aggregate or explicitly multi-impact environmental problem rather than centering one named burden type.",
+          "example_keywords": [
+            "sustainability",
+            "environmental impact",
+            "environmental impacts",
+            "sustainable HPC",
+            "sustainable design"
+          ],
+          "classification": [
+            1,
+            26,
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lifecycle stage",
+      "rationale": "Keywords consistently point to upstream design decisions, operational management, full lifecycle reasoning, and waste-related downstream effects.",
+      "categories": [
+        {
+          "name": "Upstream planning and procurement",
+          "description": "Topics concerned with facility planning, hardware design, procurement, or virtual prototyping before routine operation.",
+          "example_keywords": [
+            "facility planning",
+            "data center design",
+            "hardware design",
+            "supercomputer design",
+            "virtual prototyping",
+            "HPC procurement",
+            "data center planning"
+          ],
+          "classification": [
+            3,
+            5,
+            6,
+            7,
+            17,
+            27,
+            71
+          ]
+        },
+        {
+          "name": "Operational use and control",
+          "description": "Topics addressing the environmental implications of running HPC systems, including scheduling, runtime control, cooling and heat-reuse operations, resource management, reporting, code execution, and data transfer.",
+          "example_keywords": [
+            "HPC operations",
+            "workload scheduling",
+            "operations optimization",
+            "power control",
+            "operational sustainability",
+            "energy reuse",
+            "data movement",
+            "resource management"
+          ],
+          "classification": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            28,
+            29,
+            30,
+            60,
+            71,
+            77,
+            188,
+            223,
+            239,
+            404,
+            406,
+            419,
+            421
+          ]
+        },
+        {
+          "name": "Whole-system lifecycle",
+          "description": "Topics that explicitly connect environmental implications across multiple lifecycle stages, such as design, operation, and disposal, instead of treating one stage in isolation.",
+          "example_keywords": [
+            "lifecycle assessment",
+            "system lifecycle",
+            "lifecycle cost",
+            "lifecycle impacts",
+            "embodied carbon",
+            "operational carbon",
+            "embodied water"
+          ],
+          "classification": [
+            5,
+            6,
+            7,
+            14,
+            17,
+            19,
+            26,
+            27,
+            404,
+            419,
+            421
+          ]
+        },
+        {
+          "name": "End-of-life and residual materials",
+          "description": "Topics concerned with waste streams, residual material burdens, or strategies that extend hardware life through reuse, recycling, or aging-aware operation.",
+          "example_keywords": [
+            "construction waste",
+            "e-waste",
+            "resource use",
+            "hardware recycling",
+            "device reuse",
+            "hardware lifetime"
+          ],
+          "classification": [
+            3,
+            9,
+            17,
+            19,
+            26,
+            419
+          ]
+        }
+      ]
+    },
+    {
+      "name": "System locus",
+      "rationale": "The keywords differentiate where the sustainability problem is situated: in facilities and thermal/energy infrastructure, hardware choices, software and workloads, or operational governance around operators and users.",
+      "categories": [
+        {
+          "name": "Facility, thermal, and energy infrastructure",
+          "description": "Topics focused on data centers, cooling systems, heat recovery, district heating links, onsite or distributed power generation, renewable energy integration, grid coupling, or related site-level infrastructure.",
+          "example_keywords": [
+            "cloud data centers",
+            "data center design",
+            "sustainable cooling",
+            "liquid-cooled supercomputers",
+            "district heating",
+            "groundwater cooling",
+            "renewable energy integration",
+            "energy-system integration",
+            "distributed generation"
+          ],
+          "classification": [
+            2,
+            3,
+            5,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            29,
+            30,
+            71,
+            188,
+            223,
+            404
+          ]
+        },
+        {
+          "name": "Compute hardware and procurement",
+          "description": "Topics focused on hardware components, supercomputer design choices, alternative compute substrates, or procurement decisions that shape environmental outcomes.",
+          "example_keywords": [
+            "liquid-cooled supercomputers",
+            "hardware design",
+            "supercomputer design",
+            "HPC procurement",
+            "embodied carbon",
+            "smartphone crowd computing",
+            "hardware reliability",
+            "hardware lifetime"
+          ],
+          "classification": [
+            3,
+            6,
+            7,
+            14,
+            17,
+            19,
+            27,
+            419,
+            421
+          ]
+        },
+        {
+          "name": "Software, workloads, and data flows",
+          "description": "Topics focused on scheduling, optimization, workload distribution, workload shifting, application and code behavior, or end-to-end movement of data through HPC systems.",
+          "example_keywords": [
+            "workload scheduling",
+            "carbon-aware scheduling",
+            "geographic scheduling",
+            "workload shifting",
+            "cloud federation",
+            "AI workloads",
+            "code optimization",
+            "application-layer optimization",
+            "HPC software",
+            "vectorization"
+          ],
+          "classification": [
+            2,
+            3,
+            7,
+            8,
+            11,
+            13,
+            14,
+            15,
+            17,
+            18,
+            20,
+            22,
+            30,
+            60,
+            77,
+            239,
+            419
+          ]
+        },
+        {
+          "name": "Operational governance and user practices",
+          "description": "Topics focused on how operators, users, and policymakers shape environmental performance through incentives, behavior, awareness, reporting, sustainability metrics, and operational or policy management.",
+          "example_keywords": [
+            "HPC operations",
+            "user behavior",
+            "incentive mechanisms",
+            "environmental awareness",
+            "user-centric reporting",
+            "policy guidance",
+            "carbon reporting"
+          ],
+          "classification": [
+            1,
+            4,
+            7,
+            10,
+            16,
+            22,
+            28,
+            223,
+            239,
+            406,
+            421
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Management and intervention levers",
+      "rationale": "The batches use keywords that repeatedly describe how sustainability is acted on: by making impacts visible, controlling runtime behavior, redesigning infrastructure, or changing organizational incentives and strategy.",
+      "categories": [
+        {
+          "name": "Measurement, accounting, and visibility",
+          "description": "Papers that make environmental impacts measurable or reportable through accounting frameworks, lifecycle assessment, carbon, energy, or water modeling, observability tooling, benchmark datasets, empirical analysis, forecasting, or user-facing reporting.",
+          "example_keywords": [
+            "lifecycle assessment",
+            "carbon accounting",
+            "carbon emission modeling",
+            "benchmark dataset",
+            "environmental forecasting",
+            "user-centric reporting",
+            "digital twin",
+            "energy productivity metrics",
+            "sustainability metrics",
+            "observability stack",
+            "water footprint modeling",
+            "carbon reporting"
+          ],
+          "classification": [
+            3,
+            6,
+            10,
+            13,
+            15,
+            16,
+            17,
+            23,
+            24,
+            26,
+            27,
+            60,
+            71,
+            239,
+            404,
+            406,
+            421
+          ]
+        },
+        {
+          "name": "Runtime control and workload optimization",
+          "description": "Papers that seek lower impact through scheduling, workload shifting, power control, application or code-level optimization, or other runtime management mechanisms.",
+          "example_keywords": [
+            "workload scheduling",
+            "power control",
+            "operations optimization",
+            "carbon-aware scheduling",
+            "geographic scheduling",
+            "workload shifting",
+            "multi-objective optimization",
+            "code optimization",
+            "cooling optimization",
+            "adaptive scheduling",
+            "frequency scaling"
+          ],
+          "classification": [
+            2,
+            3,
+            4,
+            7,
+            8,
+            11,
+            13,
+            14,
+            18,
+            20,
+            22,
+            30,
+            60,
+            77,
+            188,
+            419
+          ]
+        },
+        {
+          "name": "Infrastructure and cooling design",
+          "description": "Papers that improve sustainability through facility planning, onsite or distributed generation, hardware design, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
+          "example_keywords": [
+            "data center design",
+            "sustainable cooling",
+            "hardware design",
+            "liquid-cooled supercomputers",
+            "waste heat reuse",
+            "heat recovery",
+            "groundwater cooling",
+            "thermosyphon cooling",
+            "district heating",
+            "distributed generation",
+            "data center planning"
+          ],
+          "classification": [
+            3,
+            5,
+            7,
+            9,
+            12,
+            19,
+            21,
+            22,
+            23,
+            25,
+            27,
+            29,
+            71,
+            188
+          ]
+        },
+        {
+          "name": "Incentives and strategic framing",
+          "description": "Papers that emphasize sustainability visions, decarbonization roadmaps, user or operator incentives, organizational or policy strategy, or other framing devices for changing behavior.",
+          "example_keywords": [
+            "sustainability",
+            "decarbonization",
+            "environmental impact",
+            "incentive mechanisms",
+            "user incentives",
+            "sustainable computing",
+            "environmental awareness",
+            "policy guidance",
+            "carbon credits",
+            "user behavior"
+          ],
+          "classification": [
+            1,
+            4,
+            7,
+            9,
+            16,
+            17,
+            18,
+            19,
+            22,
+            26,
+            28,
+            223,
+            406
+          ]
+        }
+      ]
+    }
+  ],
+  "unresolved_keywords": [],
+  "schema_notes": "The 4-facet structure still fits after batch 4. Batch 3's split inside `Environmental impact focus` is confirmed rather than expanded: paper 404 fits cleanly in the water-impact category, while the remaining batch-4 papers still cluster around carbon and energy without justifying another impact category. Renewable and power-supply integration remain cross-cutting rather than standalone because paper 188 combines onsite generation with workload-aware control, and paper 223 discusses the same tension at the strategic framing level. Measurement work is now broader but still coherent as one lever, spanning observability and user-facing emissions reporting (239), water-footprint modeling (404), and HPC-wide carbon reporting under limited data (421). Hardware lifetime and aging in paper 419 reinforce the existing material-burden, lifecycle, and end-of-life categories instead of requiring a separate reliability or longevity facet. Waste-heat reuse and facility planning also remain part of the existing infrastructure cluster after paper 71, so no new facet or category was added on this batch."
+}

@@ -14,10 +14,10 @@ Scope:
 - Build facets only from topical dimensions evidenced in `keywords`.
 - Treat `research_type` in `keywording.csv` as context only. It is already coded separately using Wieringa's research types and must not be turned into a facet here.
 - Treat contribution and methodology axes captured in `extraction.csv` (`hardware_management_practices`, `software_optimization_strategies`, `methodological_dimensions`, `scale`, and related fields) as orthogonal dimensions. Do not duplicate them in the schema.
-- Preserve the existing `schema.json` shape. This prompt owns both schema revision and `classification` population.
+- Preserve the existing `artifacts/schema.json` shape. This prompt owns both schema revision and `classification` population.
 
 Per-batch workflow:
-- Read the current schema from `schema.json`. If the file does not exist or is empty, you are in the first round and must derive the schema from scratch from the batch.
+- Read the current schema from `artifacts/schema.json`. If the file does not exist or is empty, you are in the first round and must derive the schema from scratch from the batch.
 - Read the batch rows from `keywording.csv` using these fields: `id`, `title`, `abstract`, `keywords`, `research_type`, `notes`.
 - Read `artifacts/schema_log.md` if it exists so the new entry follows the same format; otherwise create it on this run.
 - Revise the schema and classify the batch in one interleaved loop:
@@ -33,7 +33,7 @@ Per-batch workflow:
 - For every paper in the batch, append its numeric `id` to the `classification` array of every matching category, preserving prior ids and avoiding duplicates.
 - If a paper does not fit any category within a facet, revise the schema first instead of leaving the paper unclassified in that facet.
 - Append one batch entry to `artifacts/schema_log.md`.
-- Write the updated schema back to `schema.json`.
+- Write the updated schema back to `artifacts/schema.json`.
 
 Facet derivation:
 - A facet is a distinct topical dimension along which papers can be meaningfully compared.
@@ -65,7 +65,7 @@ Schema log (`artifacts/schema_log.md`):
   - `Classification:` brief counts per facet, plus any ambiguous or multi-category placements with a one-line rationale, and any paper that required a schema revision before it could be placed.
   - `Notes:` anything added to or changed in `schema_notes`.
 
-Schema structure (`schema.json`):
+Schema structure (`artifacts/schema.json`):
 
 ```json
 {
@@ -91,5 +91,5 @@ Schema structure (`schema.json`):
 The `classification` field must always be present as a JSON array of numeric paper ids. Use an empty array when a category has no ids yet.
 
 Your outputs are:
-- Write the updated schema to `schema.json`.
+- Write the updated schema to `artifacts/schema.json`.
 - Append the new batch entry to `artifacts/schema_log.md`.

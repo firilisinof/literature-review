@@ -29,11 +29,11 @@
 28,addressed,not addressed,not addressed,not addressed,addressed,scope 2;scope 3,production;operational,,,first order,literature analysis,secondary,micro;meso;macro,ex post;ex ante
 29,not addressed,addressed,not addressed,not addressed,not addressed,,,operational,,first order,data analysis;experiments on real systems,primary,meso,ex post
 30,addressed,not addressed,not addressed,not addressed,addressed,scope 2,operational,,,first order,data analysis;modeling;simulations,secondary,meso;macro,ex post
-52,,,,,,,,,,,,,,
 60,,,,,,,,,,,,,,
 71,,,,,,,,,,,,,,
 77,,,,,,,,,,,,,,
 188,,,,,,,,,,,,,,
+223,,,,,,,,,,,,,,
 239,,,,,,,,,,,,,,
 404,,,,,,,,,,,,,,
 406,,,,,,,,,,,,,,
@@ -50,7 +50,6 @@
 962,,,,,,,,,,,,,,
 979,,,,,,,,,,,,,,
 1060,,,,,,,,,,,,,,
-1205,,,,,,,,,,,,,,
 2202,,,,,,,,,,,,,,
 2503,,,,,,,,,,,,,,
 2520,,,,,,,,,,,,,,

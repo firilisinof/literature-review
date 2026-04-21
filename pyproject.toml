@@ -13,5 +13,6 @@ dependencies = [
     "openai>=2.32.0",
     "pandas>=3.0.2",
     "pyzotero>=1.11.0",
+    "rapidfuzz>=3.14.5",
     "scikit-learn>=1.8.0",
 ]

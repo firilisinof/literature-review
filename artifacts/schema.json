@@ -2,7 +2,7 @@
   "facets": [
     {
       "name": "Environmental impact focus",
-      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, and a smaller set of papers that frame environmental sustainability in aggregate rather than through one named burden.",
+      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, biodiversity-related impacts, and a smaller set of papers that frame environmental sustainability in aggregate rather than through one named burden.",
       "categories": [
         {
           "name": "Carbon emissions and footprint",
@@ -51,7 +51,26 @@
             239,
             406,
             419,
-            421
+            421,
+            435,
+            688,
+            835,
+            838,
+            898,
+            962,
+            979,
+            1060,
+            2202,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3368,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -66,7 +85,10 @@
             "energy productivity metrics",
             "networking energy",
             "operations optimization",
-            "power demand shaping"
+            "power demand shaping",
+            "dynamic power scaling",
+            "hybrid energy systems",
+            "hardware efficiency"
           ],
           "classification": [
             1,
@@ -96,20 +118,31 @@
             77,
             188,
             239,
-            406
+            406,
+            688,
+            835,
+            838,
+            962,
+            979,
+            1060,
+            2558,
+            2866,
+            2879,
+            3601,
+            3706
           ]
         },
         {
           "name": "Material, waste, and resource burdens",
-          "description": "Papers that highlight construction waste, e-waste, hardware lifetime or reuse, procurement-related burdens, or other material-intensive environmental impacts that are distinct from water use.",
+          "description": "Papers that highlight construction waste, e-waste, hardware lifetime or reuse, metal and mineral depletion, procurement-related burdens, or other material-intensive environmental impacts that are distinct from water use and biodiversity impacts.",
           "example_keywords": [
             "construction waste",
             "e-waste",
             "resource use",
-            "HPC procurement",
-            "hardware recycling",
-            "hardware reliability",
-            "device reuse",
+            "metal usage",
+            "abiotic resource depletion",
+            "hardware reuse",
+            "lifecycle extension",
             "hardware lifetime"
           ],
           "classification": [
@@ -121,7 +154,9 @@
             17,
             19,
             26,
-            419
+            419,
+            477,
+            928
           ]
         },
         {
@@ -140,7 +175,22 @@
           "classification": [
             25,
             29,
-            404
+            404,
+            2866
+          ]
+        },
+        {
+          "name": "Biodiversity and ecosystem impacts",
+          "description": "Papers that explicitly address biodiversity loss, ecosystem impacts, or biodiversity-related embodied and operational burdens from HPC facilities, hardware, or workloads.",
+          "example_keywords": [
+            "biodiversity impact",
+            "embodied biodiversity",
+            "operational biodiversity",
+            "biodiversity loss",
+            "ecosystem impacts"
+          ],
+          "classification": [
+            432
           ]
         },
         {
@@ -151,12 +201,15 @@
             "environmental impact",
             "environmental impacts",
             "sustainable HPC",
-            "sustainable design"
+            "sustainable design",
+            "ecological sensitivity"
           ],
           "classification": [
             1,
             26,
-            27
+            27,
+            2866,
+            3706
           ]
         }
       ]
@@ -167,7 +220,7 @@
       "categories": [
         {
           "name": "Upstream planning and procurement",
-          "description": "Topics concerned with facility planning, hardware design, procurement, or virtual prototyping before routine operation.",
+          "description": "Topics concerned with facility planning or siting, hardware design, manufacturing, procurement, replacement, or virtual prototyping before routine operation.",
           "example_keywords": [
             "facility planning",
             "data center design",
@@ -175,7 +228,14 @@
             "supercomputer design",
             "virtual prototyping",
             "HPC procurement",
-            "data center planning"
+            "data center planning",
+            "server replacement",
+            "supercomputer manufacturing",
+            "renewable energy planning",
+            "green siting",
+            "replacement cycles",
+            "data center expansion",
+            "heat pump deployment"
           ],
           "classification": [
             3,
@@ -184,7 +244,15 @@
             7,
             17,
             27,
-            71
+            71,
+            838,
+            898,
+            928,
+            1060,
+            2202,
+            2879,
+            3579,
+            3601
           ]
         },
         {
@@ -198,7 +266,10 @@
             "operational sustainability",
             "energy reuse",
             "data movement",
-            "resource management"
+            "resource management",
+            "serverless execution",
+            "cooling control",
+            "programming models"
           ],
           "classification": [
             1,
@@ -239,7 +310,22 @@
             404,
             406,
             419,
-            421
+            421,
+            432,
+            435,
+            688,
+            835,
+            838,
+            962,
+            979,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            3368,
+            3601,
+            3706
           ]
         },
         {
@@ -252,7 +338,10 @@
             "lifecycle impacts",
             "embodied carbon",
             "operational carbon",
-            "embodied water"
+            "embodied water",
+            "embodied biodiversity",
+            "operational biodiversity",
+            "hardware replacement"
           ],
           "classification": [
             5,
@@ -265,7 +354,13 @@
             27,
             404,
             419,
-            421
+            421,
+            432,
+            898,
+            2558,
+            2866,
+            2879,
+            3579
           ]
         },
         {
@@ -277,7 +372,9 @@
             "resource use",
             "hardware recycling",
             "device reuse",
-            "hardware lifetime"
+            "hardware lifetime",
+            "obsolete computers",
+            "lifecycle extension"
           ],
           "classification": [
             3,
@@ -285,7 +382,8 @@
             17,
             19,
             26,
-            419
+            419,
+            477
           ]
         }
       ]
@@ -296,7 +394,7 @@
       "categories": [
         {
           "name": "Facility, thermal, and energy infrastructure",
-          "description": "Topics focused on data centers, cooling systems, heat recovery, district heating links, onsite or distributed power generation, renewable energy integration, grid coupling, or related site-level infrastructure.",
+          "description": "Topics focused on data centers, siting, cooling systems, heat recovery, district heating links, onsite or distributed power generation, renewable energy integration, grid coupling, or related site-level infrastructure.",
           "example_keywords": [
             "cloud data centers",
             "data center design",
@@ -306,7 +404,13 @@
             "groundwater cooling",
             "renewable energy integration",
             "energy-system integration",
-            "distributed generation"
+            "distributed generation",
+            "self-cooled data centers",
+            "hydrogen storage",
+            "liquid cooling",
+            "green siting",
+            "single-phase immersion cooling",
+            "heat pumps"
           ],
           "classification": [
             2,
@@ -333,12 +437,27 @@
             71,
             188,
             223,
-            404
+            404,
+            435,
+            688,
+            838,
+            962,
+            1060,
+            2202,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3579,
+            3601,
+            3706
           ]
         },
         {
           "name": "Compute hardware and procurement",
-          "description": "Topics focused on hardware components, supercomputer design choices, alternative compute substrates, or procurement decisions that shape environmental outcomes.",
+          "description": "Topics focused on hardware components, supercomputer design, server replacement, material composition, alternative compute substrates, or procurement decisions that shape environmental outcomes.",
           "example_keywords": [
             "liquid-cooled supercomputers",
             "hardware design",
@@ -347,7 +466,11 @@
             "embodied carbon",
             "smartphone crowd computing",
             "hardware reliability",
-            "hardware lifetime"
+            "hardware lifetime",
+            "server replacement",
+            "supercomputer manufacturing",
+            "obsolete computers",
+            "metal usage"
           ],
           "classification": [
             3,
@@ -358,7 +481,14 @@
             19,
             27,
             419,
-            421
+            421,
+            432,
+            477,
+            835,
+            898,
+            928,
+            2202,
+            3579
           ]
         },
         {
@@ -374,7 +504,13 @@
             "code optimization",
             "application-layer optimization",
             "HPC software",
-            "vectorization"
+            "vectorization",
+            "serverless computing",
+            "workflow scheduling",
+            "workload analysis",
+            "dynamic power scaling",
+            "code portability",
+            "programming models"
           ],
           "classification": [
             2,
@@ -393,7 +529,15 @@
             60,
             77,
             239,
-            419
+            419,
+            432,
+            435,
+            688,
+            835,
+            898,
+            979,
+            2503,
+            3368
           ]
         },
         {
@@ -406,7 +550,8 @@
             "environmental awareness",
             "user-centric reporting",
             "policy guidance",
-            "carbon reporting"
+            "carbon reporting",
+            "provider-user mitigation"
           ],
           "classification": [
             1,
@@ -419,7 +564,11 @@
             223,
             239,
             406,
-            421
+            421,
+            2520,
+            2521,
+            2558,
+            3706
           ]
         }
       ]
@@ -430,7 +579,7 @@
       "categories": [
         {
           "name": "Measurement, accounting, and visibility",
-          "description": "Papers that make environmental impacts measurable or reportable through accounting frameworks, lifecycle assessment, carbon, energy, or water modeling, observability tooling, benchmark datasets, empirical analysis, forecasting, or user-facing reporting.",
+          "description": "Papers that make environmental impacts measurable or reportable through accounting frameworks, lifecycle assessment, carbon, energy, water, biodiversity, or material modeling, observability tooling, benchmark datasets, empirical analysis, forecasting, or user-facing reporting.",
           "example_keywords": [
             "lifecycle assessment",
             "carbon accounting",
@@ -443,7 +592,15 @@
             "sustainability metrics",
             "observability stack",
             "water footprint modeling",
-            "carbon reporting"
+            "carbon reporting",
+            "biodiversity metrics",
+            "metal usage effectiveness",
+            "carbon footprint modeling",
+            "scenario modeling",
+            "institutional carbon accounting",
+            "job-level analysis",
+            "thermodynamic modeling",
+            "environmental impact modeling"
           ],
           "classification": [
             3,
@@ -462,7 +619,22 @@
             239,
             404,
             406,
-            421
+            421,
+            432,
+            838,
+            898,
+            928,
+            1060,
+            2202,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3368,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -479,7 +651,10 @@
             "code optimization",
             "cooling optimization",
             "adaptive scheduling",
-            "frequency scaling"
+            "frequency scaling",
+            "dynamic power scaling",
+            "serverless scheduling",
+            "programming models"
           ],
           "classification": [
             2,
@@ -497,12 +672,18 @@
             60,
             77,
             188,
-            419
+            419,
+            435,
+            688,
+            962,
+            979,
+            2503,
+            3368
           ]
         },
         {
           "name": "Infrastructure and cooling design",
-          "description": "Papers that improve sustainability through facility planning, onsite or distributed generation, hardware design, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
+          "description": "Papers that improve sustainability through facility planning or siting, power-supply choices, hardware design or replacement, hardware reuse, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
           "example_keywords": [
             "data center design",
             "sustainable cooling",
@@ -514,7 +695,15 @@
             "thermosyphon cooling",
             "district heating",
             "distributed generation",
-            "data center planning"
+            "data center planning",
+            "hardware reuse",
+            "server replacement",
+            "hydrogen storage",
+            "self-cooled data centers",
+            "hybrid energy systems",
+            "single-phase immersion cooling",
+            "green siting",
+            "heat pumps"
           ],
           "classification": [
             3,
@@ -530,7 +719,15 @@
             27,
             29,
             71,
-            188
+            188,
+            477,
+            838,
+            898,
+            1060,
+            2866,
+            2879,
+            3579,
+            3601
           ]
         },
         {
@@ -546,7 +743,9 @@
             "environmental awareness",
             "policy guidance",
             "carbon credits",
-            "user behavior"
+            "user behavior",
+            "provider-user mitigation",
+            "policy incentives"
           ],
           "classification": [
             1,
@@ -561,12 +760,18 @@
             26,
             28,
             223,
-            406
+            406,
+            835,
+            2202,
+            2520,
+            2521,
+            2558,
+            3706
           ]
         }
       ]
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The 4-facet structure still fits after batch 4. Batch 3's split inside `Environmental impact focus` is confirmed rather than expanded: paper 404 fits cleanly in the water-impact category, while the remaining batch-4 papers still cluster around carbon and energy without justifying another impact category. Renewable and power-supply integration remain cross-cutting rather than standalone because paper 188 combines onsite generation with workload-aware control, and paper 223 discusses the same tension at the strategic framing level. Measurement work is now broader but still coherent as one lever, spanning observability and user-facing emissions reporting (239), water-footprint modeling (404), and HPC-wide carbon reporting under limited data (421). Hardware lifetime and aging in paper 419 reinforce the existing material-burden, lifecycle, and end-of-life categories instead of requiring a separate reliability or longevity facet. Waste-heat reuse and facility planning also remain part of the existing infrastructure cluster after paper 71, so no new facet or category was added on this batch."
+  "schema_notes": "The 4-facet structure still fits the full current corpus after batch 7. No new facet or category was needed for the final two papers: heat-pump waste-heat recovery in paper 3601 strengthens the existing upstream, operational, facility, measurement, and infrastructure branches without requiring a separate thermal-retrofit facet, while the global carbon-energy study in paper 3706 still fits the current carbon, energy, aggregate-impact, governance, measurement, and strategic-framing categories. Aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis rather than standing as a distinct impact branch. The corpus also confirms that job- and system-level modeling work can stay under the existing measurement lever, and that infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone facets."
 }

@@ -770,8 +770,142 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Research type",
+      "rationale": "The corpus already carries one Wieringa-coded research type per paper in `keywording.csv`. Representing that coding as a facet makes methodological comparisons explicit alongside the topical facets and supports cross-tabulation for RQ2 and RQ3.",
+      "categories": [
+        {
+          "name": "Validation Research",
+          "description": "Techniques investigated are novel and have not yet been implemented in practice; evidence is typically produced through experiments or other lab-style studies.",
+          "example_keywords": [
+            "novel technique",
+            "lab experiment",
+            "not yet in practice"
+          ],
+          "classification": [
+            2,
+            3,
+            6,
+            8,
+            11,
+            14,
+            17,
+            20,
+            30,
+            60,
+            77,
+            188,
+            404,
+            419,
+            421,
+            432,
+            435,
+            688,
+            962,
+            979,
+            2202,
+            2503,
+            3368,
+            3601,
+            3706
+          ]
+        },
+        {
+          "name": "Evaluation Research",
+          "description": "Techniques are implemented in practice and evaluated in terms of their consequences, benefits, or drawbacks, including studies that identify concrete problems in industry settings.",
+          "example_keywords": [
+            "implemented in practice",
+            "implementation evaluation",
+            "industry problem"
+          ],
+          "classification": [
+            13,
+            15,
+            16,
+            23,
+            24,
+            25,
+            29,
+            239,
+            406,
+            2520,
+            2521,
+            2558
+          ]
+        },
+        {
+          "name": "Solution Proposal",
+          "description": "A solution to a problem is proposed as a novel idea or a significant extension of an existing technique, supported by a small example or a clear line of argument for applicability.",
+          "example_keywords": [
+            "solution proposal",
+            "novel solution",
+            "applicability argument"
+          ],
+          "classification": [
+            10,
+            12,
+            19,
+            26,
+            27,
+            71,
+            838,
+            898,
+            928,
+            1060,
+            2879,
+            3579
+          ]
+        },
+        {
+          "name": "Philosophical Paper",
+          "description": "Papers that structure the field through a taxonomy, conceptual framework, or another new way of looking at existing things.",
+          "example_keywords": [
+            "taxonomy",
+            "conceptual framework",
+            "new way of looking"
+          ],
+          "classification": [
+            1,
+            9,
+            22,
+            835,
+            2866
+          ]
+        },
+        {
+          "name": "Opinion Paper",
+          "description": "Papers that argue how things should be done or whether a technique is good or bad without grounding the claim in related work and formal research methodology.",
+          "example_keywords": [
+            "personal opinion",
+            "normative argument",
+            "how things should be done"
+          ],
+          "classification": [
+            7,
+            18,
+            28,
+            223
+          ]
+        },
+        {
+          "name": "Experience Paper",
+          "description": "Papers that explain what was done in practice and how it was done, based on the authors' own operational experience.",
+          "example_keywords": [
+            "practical experience",
+            "operational lessons",
+            "lessons learned"
+          ],
+          "classification": [
+            4,
+            5,
+            21,
+            477
+          ]
+        }
+      ]
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The 4-facet structure still fits the full current corpus after batch 7. No new facet or category was needed for the final two papers: heat-pump waste-heat recovery in paper 3601 strengthens the existing upstream, operational, facility, measurement, and infrastructure branches without requiring a separate thermal-retrofit facet, while the global carbon-energy study in paper 3706 still fits the current carbon, energy, aggregate-impact, governance, measurement, and strategic-framing categories. Aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis rather than standing as a distinct impact branch. The corpus also confirms that job- and system-level modeling work can stay under the existing measurement lever, and that infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone facets."
+  "schema_notes": "The schema now uses 5 facets: 4 topical facets derived from paper keywords plus a Research type facet that mirrors the Wieringa-coded `research_type` values in `artifacts/keywording.csv` to support methodological comparisons. The topical facets still fit the full current corpus without further splitting: aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis, job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the Research type facet synchronized one-to-one with the `research_type` column."
 }

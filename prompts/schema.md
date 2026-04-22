@@ -8,11 +8,11 @@ RQ2b: Which methodological approaches yield more thorough assessments?
 RQ2c: Does analytical scale affect assessment comprehensiveness?
 RQ3: How has comprehensiveness evolved over time?
 
-Your task is to maintain a single topical faceted schema over paper keywords and to classify each batch of papers into that schema in the same pass. You will be run iteratively over successive batches of papers.
+Your task is to maintain a single faceted schema over paper keywords and to classify each batch of papers into that schema in the same pass. You will be run iteratively over successive batches of papers.
 
 Scope:
 - Build facets only from topical dimensions evidenced in `keywords`.
-- Treat `research_type` in `keywording.csv` as context only. It is already coded separately using Wieringa's research types and must not be turned into a facet here.
+- Treat `research_type` in `keywording.csv` as direct evidence for the dedicated `Research type` facet. Preserve that facet as part of the schema, mirror each Wieringa-coded value into it exactly, and do not derive any additional methodology facets from `research_type`.
 - Treat contribution and methodology axes captured in `extraction.csv` (`hardware_management_practices`, `software_optimization_strategies`, `methodological_dimensions`, `scale`, and related fields) as orthogonal dimensions. Do not duplicate them in the schema.
 - Preserve the existing `artifacts/schema.json` shape. This prompt owns both schema revision and `classification` population.
 
@@ -22,7 +22,8 @@ Per-batch workflow:
 - Read `artifacts/schema_log.md` if it exists so the new entry follows the same format; otherwise create it on this run.
 - Revise the schema and classify the batch in one interleaved loop:
   - Use `keywords` as the primary evidence for facets and categories.
-  - Use `title`, `abstract`, `research_type`, and `notes` only as supporting context to disambiguate topical placement.
+  - Use `title`, `abstract`, and `notes` only as supporting context to disambiguate topical placement.
+  - Use `research_type` directly to maintain the `Research type` facet.
   - Add new categories to existing facets when new papers require them.
   - Add a new facet only when a recurring topical dimension does not fit any existing facet.
   - Split a category if new evidence shows it conflates distinct topical concepts.
@@ -37,6 +38,7 @@ Per-batch workflow:
 
 Facet derivation:
 - A facet is a distinct topical dimension along which papers can be meaningfully compared.
+- The only allowed non-topical facet is `Research type`, which mirrors the already coded Wieringa labels in `keywording.csv`.
 - Derive facets bottom-up from the keywords. Do not impose contribution, research, or methodology structure that belongs elsewhere in the pipeline.
 - Keep facets orthogonal. If two facets substantially overlap, merge or refocus them and record the decision in `schema_notes`.
 - Aim for 3-5 facets. If fewer or more are justified, explain why in `schema_notes` and in the batch log.
@@ -50,6 +52,7 @@ Category derivation:
 Classification rules:
 - Classify a paper under a category only if the paper genuinely addresses it, not if it merely mentions it in passing.
 - A paper can belong to multiple categories within the same facet if it genuinely spans them.
+- Within `Research type`, classify each paper into exactly one category that matches its `research_type` value in `keywording.csv`.
 - A paper should normally appear in at least one category in every facet. If none fit, extend the schema rather than skipping the paper.
 - Preserve prior `classification` ids for unchanged categories.
 - If you rename a category, carry its existing `classification` ids forward unchanged.

@@ -73,3 +73,11 @@ Append one timestamped entry per processed batch using the format defined in `pr
 - Keyword resolution: no keyword-driven changes were required. `unresolved_keywords` remains empty.
 - Classification: unchanged; each paper remains assigned to exactly one `Research type` category copied from `keywording.csv`.
 - Notes: updated `schema_notes` to record that `Research type` intentionally omits `example_keywords` and relies on category descriptions plus one-to-one classifications from the controlled coding field.
+
+## 2026-04-23T13:24:15+02:00
+
+- Batch: methodological-facet extension for all 62 papers currently in `artifacts/extraction.csv`.
+- Schema changes: added 3 new methodological facets populated from the retained extraction fields: `Methodological approach`, `Data source`, and `Assessment orientation`. Added 5 approach categories (`data analysis`, `modeling`, `simulations`, `experiments on real systems`, `literature analysis`), 2 source categories (`primary`, `secondary`), and 2 orientation categories (`ex post`, `ex ante`). No topical facets, topical categories, research-type categories, or unresolved keywords changed.
+- Keyword resolution: no keyword-driven changes were required because the new facets are populated from controlled extraction fields. `unresolved_keywords` remains empty.
+- Classification: `Methodological approach` -> data analysis (51), modeling (52), simulations (22), experiments on real systems (17), literature analysis (14). `Data source` -> primary (29), secondary (57). `Assessment orientation` -> ex post (47), ex ante (44). Multi-category placements are preserved where extraction rows contain semicolon-separated values.
+- Notes: updated `schema_notes` to record the split between 4 topical facets and 4 methodological facets, and to justify exceeding Petersen's 3-5 facet guideline because the additional facets describe how papers conduct assessments rather than adding topical dimensions.

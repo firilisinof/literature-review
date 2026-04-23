@@ -65,3 +65,11 @@ Append one timestamped entry per processed batch using the format defined in `pr
 - Keyword resolution: no keyword-driven changes were required for this backfill because the new facet is populated from the existing `research_type` column. `unresolved_keywords` remains empty.
 - Classification: `Research type` -> Validation Research (25), Evaluation Research (12), Solution Proposal (12), Philosophical Paper (5), Opinion Paper (4), Experience Paper (4). Each paper was placed in exactly one research-type category by copying its single `research_type` value from `keywording.csv`; no duplicates or ambiguities were introduced.
 - Notes: updated `schema_notes` to record that the schema now combines 4 topical facets with 1 orthogonal research-type facet, and that future updates should keep `Research type` synchronized with the `research_type` column in `keywording.csv`.
+
+## 2026-04-23T13:07:11+02:00
+
+- Batch: schema maintenance for all 62 papers currently in `artifacts/keywording.csv`.
+- Schema changes: removed `example_keywords` from the 6 `Research type` categories because the facet is populated from the controlled `research_type` coding rather than keyword inference. No facets, categories, classifications, or unresolved keywords changed.
+- Keyword resolution: no keyword-driven changes were required. `unresolved_keywords` remains empty.
+- Classification: unchanged; each paper remains assigned to exactly one `Research type` category copied from `keywording.csv`.
+- Notes: updated `schema_notes` to record that `Research type` intentionally omits `example_keywords` and relies on category descriptions plus one-to-one classifications from the controlled coding field.

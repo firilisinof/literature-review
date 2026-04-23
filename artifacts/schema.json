@@ -778,11 +778,6 @@
         {
           "name": "Validation Research",
           "description": "Techniques investigated are novel and have not yet been implemented in practice; evidence is typically produced through experiments or other lab-style studies.",
-          "example_keywords": [
-            "novel technique",
-            "lab experiment",
-            "not yet in practice"
-          ],
           "classification": [
             2,
             3,
@@ -814,11 +809,6 @@
         {
           "name": "Evaluation Research",
           "description": "Techniques are implemented in practice and evaluated in terms of their consequences, benefits, or drawbacks, including studies that identify concrete problems in industry settings.",
-          "example_keywords": [
-            "implemented in practice",
-            "implementation evaluation",
-            "industry problem"
-          ],
           "classification": [
             13,
             15,
@@ -837,11 +827,6 @@
         {
           "name": "Solution Proposal",
           "description": "A solution to a problem is proposed as a novel idea or a significant extension of an existing technique, supported by a small example or a clear line of argument for applicability.",
-          "example_keywords": [
-            "solution proposal",
-            "novel solution",
-            "applicability argument"
-          ],
           "classification": [
             10,
             12,
@@ -860,11 +845,6 @@
         {
           "name": "Philosophical Paper",
           "description": "Papers that structure the field through a taxonomy, conceptual framework, or another new way of looking at existing things.",
-          "example_keywords": [
-            "taxonomy",
-            "conceptual framework",
-            "new way of looking"
-          ],
           "classification": [
             1,
             9,
@@ -876,11 +856,6 @@
         {
           "name": "Opinion Paper",
           "description": "Papers that argue how things should be done or whether a technique is good or bad without grounding the claim in related work and formal research methodology.",
-          "example_keywords": [
-            "personal opinion",
-            "normative argument",
-            "how things should be done"
-          ],
           "classification": [
             7,
             18,
@@ -891,11 +866,6 @@
         {
           "name": "Experience Paper",
           "description": "Papers that explain what was done in practice and how it was done, based on the authors' own operational experience.",
-          "example_keywords": [
-            "practical experience",
-            "operational lessons",
-            "lessons learned"
-          ],
           "classification": [
             4,
             5,
@@ -907,5 +877,5 @@
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The schema now uses 5 facets: 4 topical facets derived from paper keywords plus a Research type facet that mirrors the Wieringa-coded `research_type` values in `artifacts/keywording.csv` to support methodological comparisons. The topical facets still fit the full current corpus without further splitting: aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis, job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the Research type facet synchronized one-to-one with the `research_type` column."
+  "schema_notes": "The schema now uses 5 facets: 4 topical facets derived from paper keywords plus a Research type facet that mirrors the Wieringa-coded `research_type` values in `artifacts/keywording.csv` to support methodological comparisons. Because Research type is copied from a controlled coding field rather than inferred from keywords, its categories intentionally omit `example_keywords` and rely on category descriptions plus one-to-one classifications. The topical facets still fit the full current corpus without further splitting: aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis, job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the Research type facet synchronized one-to-one with the `research_type` column."
 }

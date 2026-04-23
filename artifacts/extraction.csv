@@ -29,35 +29,35 @@ id,methodological_approach,data_source,assessment_orientation,notes
 28,literature analysis,secondary,ex post;ex ante,Feature article synthesizes published carbon-footprint studies tools and expert examples; covers current computing emissions and future project/reduction choices.
 29,data analysis;experiments on real systems,primary;secondary,ex post,Changed data source to include secondary because the operating-site measurements are combined with external EWIF water-rate and reference data.
 30,data analysis;modeling;simulations,secondary,ex ante,Changed orientation to ex ante because the proposed MO-GA scheduler is evaluated in modeled cloud-federation experiments using PWA traces and external energy/carbon rates.
-60,,,,
-71,,,,
-77,,,,
-188,,,,
-223,,,,
-239,,,,
-404,,,,
-406,,,,
-419,,,,
-421,,,,
-432,,,,
-435,,,,
-477,,,,
-688,,,,
-835,,,,
-838,,,,
-898,,,,
-928,,,,
-962,,,,
-979,,,,
-1060,,,,
-2202,,,,
-2503,,,,
-2520,,,,
-2521,,,,
-2558,,,,
-2866,,,,
-2879,,,,
-3368,,,,
-3579,,,,
-3601,,,,
-3706,,,,
+60,data analysis;modeling;experiments on real systems,primary;secondary,ex post,"SoCwatch/VTune measurements on NKS-1P and workstation runs quantify code energy; carbon is computed with PUE and external carbon-intensity factors for the measured calculation."
+71,modeling;literature analysis,secondary,ex ante,"Proposes HRF/GSR metrics and works through theoretical/practical data-center scenarios using published heat, emissions, climate, and equipment assumptions for future heat-reuse design."
+77,data analysis;modeling;simulations,secondary,ex ante,"Uses Marconi job/power traces and RTE carbon data to train energy and CO2 prediction models, then evaluates counterfactual carbon-aware scheduling policies in Batsim."
+188,data analysis;modeling;simulations,secondary,ex ante,"PDS is evaluated with real workload traces plus manufacturer/government DG and emissions parameters in a simulator; results estimate future performance, battery, and CO2 effects."
+223,literature analysis,primary;secondary,ex post;ex ante,Feature article synthesizes stakeholder quotes and public reports on current HPC/data-center energy dilemmas and future renewable-generation options.
+239,data analysis;modeling;experiments on real systems,primary;secondary,ex post,"CEEMS is deployed on Jean-Zay and estimates workload energy/emissions from RAPL/IPMI/GPU telemetry with configurable attribution rules plus external emission-factor sources."
+404,data analysis;modeling;simulations,secondary,ex post;ex ante,"ThirstyFLOPS combines published system/log datasets, regional WUE/EWF/scarcity and carbon data, and simulation scripts to estimate existing HPC water footprints and future energy-source scenarios."
+406,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante,"Combines HPC-user survey, EBA/CBA carbon models, Green-ACCESS measurements on real CPUs/GPUs, allocation simulations, and a user-study game."
+419,data analysis;modeling;simulations,secondary,ex ante,"Aging-aware scheduling is modeled and evaluated via simulations using Mira workload traces, literature aging models, and public system data to estimate future lifetime work trade-offs."
+421,data analysis;modeling,secondary,ex post;ex ante,"Applies EasyC to Top500 and public web data with interpolation to estimate 2024 operational/embodied carbon, then projects Top500 footprint trends through 2030."
+432,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante,FABRIC models lifecycle biodiversity impacts from public LCA/vendor/grid data and evaluates real Phoronix workloads on cloud/local platforms plus hypothetical regional placements.
+435,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante,"GridGreen profiles real workflows on HPC-like nodes and AWS Lambda, models embodied/operational carbon with WattTime/public data, and simulates scheduling choices across regions and facilities."
+477,data analysis;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante,"Builds and benchmarks an obsolete-computer cluster with HPL and power measurements, while using e-waste literature/statistics to assess current reuse and future mitigation potential."
+688,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante,"EcoFreq combines measured power-scaling profiles from real CPU/GPU workloads with historical carbon/price data, analytical simulations, and 12-hour validation runs."
+835,data analysis;modeling;literature analysis,secondary,ex post;ex ante,"Synthesizes published blockchain/mining statistics and hardware tables, applies power-to-carbon formulas for current mining devices, and discusses prospective PoS/renewable mitigation."
+838,modeling;literature analysis,primary;secondary,ex ante,Reviews current sustainable-HPC practices and presents the planned S-HPC4AI DT/BIM facility design from project information; assessment is prospective rather than measured.
+898,data analysis;modeling,secondary,ex ante,Analytical replacement model is applied to Niagara specifications and public carbon and embodied-carbon factors to compare future server-lifetime policies.
+928,data analysis;modeling,secondary,ex post,"Builds component-level metal-content and MUE models from public Frontier specifications, datasheets, and literature, then estimates copper and gold use for the existing system."
+962,data analysis;modeling;simulations,secondary,ex ante,"Modelica liquid-cooling model and PPO agents are evaluated in simulation with Alibaba workload traces, estimating prospective energy savings for cooling control."
+979,data analysis;modeling;experiments on real systems,primary;secondary,ex post,"Benchmarks RTM implementations on real AMD and NVIDIA GPUs with runtime and power measurements, then applies carbon-intensity factors to compute operational emissions."
+1060,data analysis;modeling;simulations,secondary,ex post;ex ante,Uses secondary global energy and cost data with ARIMA forecasting and Grey Wolf optimization to estimate current HPC impacts and future hybrid-energy scenarios.
+2202,data analysis;modeling;simulations,primary;secondary,ex post;ex ante,Historical NSF/XSEDE system and facility data partly confirmed by sites calibrate cost power and space models plus forward-looking replacement and hosting scenarios.
+2503,data analysis;modeling;simulations,secondary,ex ante,"Cost-aware DRL scheduler is evaluated in simulation using published production workload traces, renewable profiles, and tariff data for prospective hybrid-energy scheduling."
+2520,data analysis;modeling,secondary,ex post,"Spatial DID, SCM, and synthetic DID estimate historical NSC effects on city carbon emissions from secondary inter-city datasets and robustness checks."
+2521,data analysis;modeling,secondary,ex post,Uses synthetic-control and panel econometric models on 2003-2020 Chinese city data to estimate historical carbon effects of NSCs and NBDCs.
+2558,data analysis;modeling,primary;secondary,ex post,Provider-supplied HPC/HDS usage data for Austrian universities are converted to operational emissions and combined with literature-based embodied estimates for 2021-2022.
+2866,literature analysis,secondary,ex post;ex ante,"Review article synthesizes SPIC experiments, deployments, reliability evidence, sustainability metrics, and future control and standardization directions from published work."
+2879,data analysis;modeling,secondary,ex ante,Develops an LCCA/LCA emission-factor model and applies benchmark and public scenario inputs to support prospective regional IDC/HPC infrastructure decisions.
+3368,data analysis;modeling,secondary,ex post,"Analyzes the PM100 job-power dataset with a fixed Italian grid factor, MLP regression, and CES tiers to retrospectively assess job-level carbon efficiency."
+3579,data analysis;modeling;simulations,primary;secondary,ex post;ex ante,"Implements an LCA and embodied-carbon model using facility-manager data plus public and literature inputs, then simulates replacement expansion carbon-intensity and heat-reuse scenarios."
+3601,modeling;simulations,primary;secondary,ex ante,Thermodynamic and TEWI models simulate HTHP configurations for a proposed Frontier waste-heat district-heating case using ORNL case parameters and literature data.
+3706,data analysis;modeling;simulations,secondary,ex post;ex ante,"Analyzes TOP500 and energy datasets with regression, distribution and Monte Carlo checks, forecasting, Sobol sensitivity, and AHP to estimate historical and future HPC impacts."

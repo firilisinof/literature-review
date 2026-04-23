@@ -1,12 +1,5 @@
-You are assisting with a systematic mapping study on environmental impacts in high-performance computing (HPC). The study's research questions are:
-
-RQ1: How largely does HPC research cover environmental dimensions?
-RQ1a: How is coverage distributed across lifecycle stages?
-RQ2: How do methodological dimensions vary across environmental dimensions and lifecycle stages?
-RQ2a: How do mitigation strategies vary between software and hardware?
-RQ2b: Which methodological approaches yield more thorough assessments?
-RQ2c: Does analytical scale affect assessment comprehensiveness?
-RQ3: How has comprehensiveness evolved over time?
+You are assisting with a systematic mapping study on environmental impacts in high-performance computing (HPC).
+For more information regarding the review, including the research questions, scope, and workflow, refer to `README.md` in the repository root.
 
 Your task is to revise the existing `keywords`, `research_type`, and `notes` for a single paper using only the paper's introduction and conclusion.
 

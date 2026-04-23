@@ -1,34 +1,34 @@
 id,methodological_approach,data_source,assessment_orientation,notes
-1,literature analysis,secondary,ex post,
-2,simulations,secondary,ex post,
-3,data analysis;modeling;simulations,primary,ex post;ex ante,
-4,data analysis;modeling;experiments on real systems,primary,ex post,
-5,modeling;simulations,secondary,ex ante,
-6,data analysis;modeling;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante,
-7,data analysis;modeling;literature analysis,secondary,ex post;ex ante,
-8,data analysis;modeling;experiments on real systems,primary,ex post;ex ante,
-9,literature analysis,secondary,ex post;ex ante,
-10,data analysis;modeling,primary,ex post,
-11,data analysis;modeling;simulations,secondary,ex post;ex ante,
-12,data analysis;modeling;experiments on real systems,primary;secondary,ex ante,
-13,data analysis;modeling;experiments on real systems,primary,ex post;ex ante,
-14,data analysis;modeling;simulations,primary;secondary,ex post;ex ante,
-15,data analysis;modeling,secondary,ex post,
-16,data analysis;modeling,secondary,ex post,
-17,data analysis;modeling;simulations,secondary,ex post;ex ante,
-18,data analysis;modeling;experiments on real systems,primary;secondary,ex post,
-19,data analysis;literature analysis,secondary,ex post,
-20,data analysis;simulations,secondary,ex post,
-21,data analysis;modeling;experiments on real systems,primary;secondary,ex post,
-22,literature analysis,secondary,ex post;ex ante,
-23,data analysis;experiments on real systems,primary,ex post,
-24,data analysis,secondary,ex post,
-25,modeling;simulations,primary;secondary,ex post;ex ante,
-26,data analysis;modeling,secondary,ex post;ex ante,
-27,data analysis;modeling;literature analysis,secondary,ex post;ex ante,
-28,literature analysis,secondary,ex post;ex ante,
-29,data analysis;experiments on real systems,primary,ex post,
-30,data analysis;modeling;simulations,secondary,ex post,
+1,literature analysis,secondary,ex post,Conceptual and literature overview of sustainable HPC and technical improvements; relies on cited work and assesses established impacts rather than a new prospective model.
+2,modeling;simulations,secondary,ex ante,Defines scheduling and energy models and evaluates counterfactual policies through simulations using PWA traces plus DOE/EIA and prior CPU data.
+3,data analysis;modeling;simulations,primary,ex post;ex ante,Digital twin combines power/cooling models and simulations with Frontier telemetry replay; telemetry validates ex post behavior while what-if tests support ex ante optimization.
+4,data analysis;modeling;experiments on real systems,primary,ex post,Fugaku Points was deployed in production and analyzed with job logs and Power API measurements; reward and power equations support modeling of retrospective operations.
+5,data analysis;modeling,primary;secondary,ex ante,LANL facility case study compares future design alternatives with lifecycle-cost and option analysis; uses author case data plus external climate and equipment references.
+6,data analysis;modeling;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante,"Carbon framework combines component carbon modeling, public regional carbon-intensity data, and real-system benchmarking; covers measured impacts and upgrade what-if scenarios."
+7,data analysis;modeling;literature analysis,secondary,ex post;ex ante,Position paper synthesizes literature and applies existing carbon-modeling methods to German HPC examples; current evidence supports forward-looking design and operations opportunities.
+8,data analysis;modeling;experiments on real systems,primary,ex post;ex ante,"Extended abstract summarizes GREENDATAFLOW analyses, ML models, real transfer experiments, and ongoing DRL work; retained primary/ex post plus ex ante coding despite limited method detail."
+9,literature analysis,secondary,ex post;ex ante,"Conceptual and literature synthesis of HPC environmental costs, ethics, and emerging mitigation options; combines current-impact discussion with forward-looking sustainability directions."
+10,data analysis;modeling,primary;secondary,ex post,"Methodology is applied to historical CLAIX/Barnard measurements and SLURM data, combined with SMARD/IPCC/UNECE secondary datasets for retrospective operational carbon accounting."
+11,data analysis;modeling;simulations,secondary,ex post;ex ante,"Simulation study uses PWA workload traces plus electricity-price, wind, and carbon-intensity datasets; models adaptive strategies over historical traces and hypothetical renewable scenarios."
+12,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante,"Changed orientation to include ex post: paper compares modeled data-center schemes and reports Aquasar hot-water-cooled supercomputer as a real deployment; future heat-reuse options remain ex ante."
+13,data analysis;modeling;experiments on real systems,primary,ex post;ex ante,"CRESCO6 study analyzes primary operational, environmental, cooling, and sensor datasets; regression models and idle-node/cooling scenarios support both retrospective assessment and ex ante optimization."
+14,data analysis;modeling;simulations,primary;secondary,ex post;ex ante,"Two-stage eco-efficiency mechanism combines cost/carbon models, cluster simulations, and analysis of actual CMS workloads plus synthetic workloads; evaluates both past trace behavior and prospective allocation choices."
+15,data analysis;modeling,primary;secondary,ex post,"Changed data source to include primary: CRESCO4 study analyzes LSF and Zabbix operational datasets from installed systems, then converts historical useful/wasted work to CO2 using an external Italy carbon factor."
+16,data analysis;modeling,secondary,ex post,"Synthetic-control quasi-natural experiment uses city-level CEADs, CNRDS, yearbook, and NBS data to estimate historical NSC carbon effects and energy-structure mechanisms."
+17,data analysis;modeling;simulations,secondary,ex ante,"Changed orientation to ex ante: CEM is applied to assumed HPC-center parameters and renewable-adoption scenarios rather than a measured deployment; relies on secondary coefficients and simulation outputs."
+18,data analysis;modeling;experiments on real systems,primary;secondary,ex post,"Astrophysics essay combines own timing/energy measurements for N-body workloads with literature scaling and conversion factors; carbon comparisons are retrospective current-practice estimates."
+19,data analysis;literature analysis,secondary,ex post;ex ante,"Changed orientation to include ex ante: survey compares current environmental externalities and smartphone capabilities from secondary sources while advocating SCC and future battery/power improvements."
+20,data analysis;modeling;simulations,secondary,ex ante,"Changed method and orientation: paper defines energy, CO2, profit, and scheduler models and evaluates a proposed two-level scheduler through simulations on PWA traces and DOE/EIA inputs."
+21,data analysis;modeling;experiments on real systems,primary;secondary,ex post,Lindgren heat-recovery system is a deployed installation with recovered-power data from facilities managers and external temperature/emissions factors; carbon and cost savings are retrospective.
+22,literature analysis,secondary,ex post;ex ante,Review article with explicit literature review methodology; uses publications reports and examples to summarize current decarbonization practice and future opportunities.
+23,data analysis;experiments on real systems,primary,ex post,Frontier data descriptor analyzes real-time measurements from facility instrumentation and publishes the resulting waste-heat and power dataset; assessment is retrospective.
+24,data analysis;modeling,secondary,ex post,Changed method to include modeling because synthetic control placebo robustness and mechanism tests estimate historical NSC carbon effects from city-level secondary datasets.
+25,modeling;simulations,primary;secondary,ex post;ex ante,Uses implemented Pawsey GWC context plus DoW/Rockwater and site well data to calibrate a FEFLOW model and simulate future pumping and thermal-plume scenarios.
+26,data analysis;modeling,secondary,ex post;ex ante,Builds energy carbon and e-waste models from published coefficients and industry statistics to estimate 2024 impacts and project 2030 scenarios.
+27,data analysis;modeling;literature analysis,secondary,ex post;ex ante,Develops process-LCA and EIO-LCA model from literature/vendor data and applies it to existing supercomputer designs while supporting prospective design decisions.
+28,literature analysis,secondary,ex post;ex ante,Feature article synthesizes published carbon-footprint studies tools and expert examples; covers current computing emissions and future project/reduction choices.
+29,data analysis;experiments on real systems,primary;secondary,ex post,Changed data source to include secondary because the operating-site measurements are combined with external EWIF water-rate and reference data.
+30,data analysis;modeling;simulations,secondary,ex ante,Changed orientation to ex ante because the proposed MO-GA scheduler is evaluated in modeled cloud-federation experiments using PWA traces and external energy/carbon rates.
 60,,,,
 71,,,,
 77,,,,

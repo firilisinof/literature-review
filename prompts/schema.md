@@ -53,13 +53,15 @@ Classification rules:
 - If you split a category, preserve inherited ids conservatively rather than dropping them. If only the current batch can be reassigned confidently, keep earlier ids on the closest successor category and note the limitation in `schema_notes` and the batch log.
 
 Schema log (`artifacts/schema_log.md`):
-- Append one timestamped heading per batch in ISO 8601 format.
-- Under that heading, add short bullet sections in this order:
-  - `Batch:` identifier or id range and the number of papers processed.
-  - `Schema changes:` new facets, new/split/merged/renamed categories, and any notable description changes.
-  - `Keyword resolution:` keywords moved out of `unresolved_keywords` and new items added there.
-  - `Classification:` brief counts per facet, plus any ambiguous or multi-category placements with a one-line rationale, and any paper that required a schema revision before it could be placed.
-  - `Notes:` anything added to or changed in `schema_notes`.
+- Append one dated heading per batch using `# YYYY-MM-DD` (date only, no time). Multiple entries on the same day are fine; each gets its own heading.
+- Write the entry in a natural, concise tone. Do not use labeled sections like `Batch:`, `Schema changes:`, etc. Match the style of the existing entries in the file.
+- Open with one short line under the heading that identifies the batch (e.g. "Third batch: papers 21-30.") and gives a one-sentence summary of the round (e.g. "No structural changes this round, just broadening." or "Biodiversity showed up as a distinct impact.").
+- Follow with a short bullet list that covers, as applicable:
+  - new facets or categories, and any splits, merges, renames, or notable description changes;
+  - keywords moved out of `unresolved_keywords` or newly added there;
+  - any paper that required a schema revision before it could be placed, and brief rationale for ambiguous or multi-category placements;
+  - anything added to or changed in `schema_notes`.
+- Omit bullets that have nothing to report. Skip per-category counts unless a number is genuinely informative.
 
 Schema structure (`artifacts/schema.json`):
 

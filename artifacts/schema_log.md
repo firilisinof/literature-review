@@ -86,6 +86,6 @@ When processing batches of papers for the first time, append one timestamped ent
 
 Fine adjustments to the schema.
 
-- Renamed facet "Environmental impact focus" to "Environmental impacts.
-- Deleted category "Aggregate environmental impacts". This category was somewhat out of place compared to the others. All the papers had already been classified in some other category, except for paper 27. After reviewing the full text, it was classified in all categories.
-- Updated the descriptions and rationale
+- Renamed facet `Environmental impact focus` to Environmental impacts.
+- Deleted category `Aggregate environmental impacts`. This category was somewhat out of place compared to the others. All the papers had already been classified in some other category, except for paper 27. After reviewing the full text, it was classified in all categories. Updated the descriptions and rationale too.
+- Deleted `Whole-system lifecycle` because it was a cross-stage summary label rather than a concrete lifecycle stage. Updated the facet rationale and `schema_notes` to state that cross-stage lifecycle coverage is represented through multi-category membership in the concrete stage categories.

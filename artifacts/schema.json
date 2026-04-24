@@ -201,8 +201,8 @@
       ]
     },
     {
-      "name": "Lifecycle stage",
-      "rationale": "Keywords consistently point to upstream design decisions, operational management, full lifecycle reasoning, and waste-related downstream effects.",
+      "name": "Lifecycle stages",
+      "rationale": "Keywords consistently point to upstream planning and procurement, operational use and control, and downstream end-of-life or residual-material concerns.",
       "categories": [
         {
           "name": "Upstream planning and procurement",
@@ -312,41 +312,6 @@
             3368,
             3601,
             3706
-          ]
-        },
-        {
-          "name": "Whole-system lifecycle",
-          "description": "Topics that connect environmental implications across multiple lifecycle stages, such as design, operation, and disposal, instead of treating one stage in isolation.",
-          "example_keywords": [
-            "lifecycle assessment",
-            "system lifecycle",
-            "lifecycle cost",
-            "lifecycle impacts",
-            "embodied carbon",
-            "operational carbon",
-            "embodied water",
-            "embodied biodiversity",
-            "operational biodiversity",
-            "hardware replacement"
-          ],
-          "classification": [
-            5,
-            6,
-            7,
-            14,
-            17,
-            19,
-            26,
-            27,
-            404,
-            419,
-            421,
-            432,
-            898,
-            2558,
-            2866,
-            2879,
-            3579
           ]
         },
         {
@@ -1268,5 +1233,5 @@
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The schema now uses 8 facets split into 4 topical facets and 4 methodological facets. The topical facets remain the classification backbone derived from paper keywords, while the methodological facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the topical structure still stays within that target, and the additional methodological facets describe how papers conduct assessments rather than adding more topical dimensions. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The topical facets still fit the full current corpus without further splitting: aggregate environmental framing remains broad enough to absorb ecological-sensitivity and air-pollution modeling when those concerns are coupled to a carbon-centered analysis, job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the methodological facets synchronized one-to-one with their source columns."
+  "schema_notes": "The schema now uses 8 facets split into 4 topical facets and 4 methodological facets. The topical facets remain the classification backbone derived from paper keywords, while the methodological facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the topical structure still stays within that target, and the additional methodological facets describe how papers conduct assessments rather than adding more topical dimensions. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete impact types; broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the methodological facets synchronized one-to-one with their source columns."
 }

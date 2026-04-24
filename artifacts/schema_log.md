@@ -1,6 +1,6 @@
 # Schema Log
 
-Append one timestamped entry per processed batch using the format defined in `prompts/schema.md`.
+When processing batches of papers for the first time, append one timestamped entry per processed batch using the format defined in `prompts/schema.md`.
 
 ## 2026-04-18T14:55:50+02:00
 
@@ -81,3 +81,11 @@ Append one timestamped entry per processed batch using the format defined in `pr
 - Keyword resolution: no keyword-driven changes were required because the new facets are populated from controlled extraction fields. `unresolved_keywords` remains empty.
 - Classification: `Methodological approach` -> data analysis (51), modeling (52), simulations (22), experiments on real systems (17), literature analysis (14). `Data source` -> primary (29), secondary (57). `Assessment orientation` -> ex post (47), ex ante (44). Multi-category placements are preserved where extraction rows contain semicolon-separated values.
 - Notes: updated `schema_notes` to record the split between 4 topical facets and 4 methodological facets, and to justify exceeding Petersen's 3-5 facet guideline because the additional facets describe how papers conduct assessments rather than adding topical dimensions.
+
+# 2026-04-24T10:24:00+00:00
+
+Fine adjustments to the schema.
+
+- Renamed facet "Environmental impact focus" to "Environmental impacts.
+- Deleted category "Aggregate environmental impacts". This category was somewhat out of place compared to the others. All the papers had already been classified in some other category, except for paper 27. After reviewing the full text, it was classified in all categories.
+- Updated the descriptions and rationale

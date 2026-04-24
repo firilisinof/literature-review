@@ -1,12 +1,12 @@
 {
   "facets": [
     {
-      "name": "Environmental impact focus",
-      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, biodiversity-related impacts, and a smaller set of papers that frame environmental sustainability in aggregate rather than through one named burden.",
+      "name": "Environmental impacts",
+      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, and biodiversity-related impacts.",
       "categories": [
         {
           "name": "Carbon emissions and footprint",
-          "description": "Papers that explicitly address carbon emissions, carbon footprints, decarbonization, operational or embodied carbon, carbon intensity, or greenhouse gas generation.",
+          "description": "Papers that address carbon emissions, carbon footprints, decarbonization, operational or embodied carbon, carbon intensity, or greenhouse gas generation.",
           "example_keywords": [
             "carbon emissions",
             "carbon footprint",
@@ -41,6 +41,7 @@
             23,
             24,
             26,
+            27,
             28,
             30,
             60,
@@ -112,6 +113,7 @@
             23,
             24,
             26,
+            27,
             30,
             60,
             71,
@@ -154,6 +156,7 @@
             17,
             19,
             26,
+            27,
             419,
             477,
             928
@@ -161,7 +164,7 @@
         },
         {
           "name": "Water use and hydrological impacts",
-          "description": "Papers that explicitly address water consumption, water footprint, water-efficient cooling, water scarcity, or thermal impacts on water resources from HPC infrastructure.",
+          "description": "Papers that address water consumption, water footprint, water-efficient cooling, water scarcity, or thermal impacts on water resources from HPC infrastructure.",
           "example_keywords": [
             "water use",
             "water footprint",
@@ -174,6 +177,7 @@
           ],
           "classification": [
             25,
+            27,
             29,
             404,
             2866
@@ -181,7 +185,7 @@
         },
         {
           "name": "Biodiversity and ecosystem impacts",
-          "description": "Papers that explicitly address biodiversity loss, ecosystem impacts, or biodiversity-related embodied and operational burdens from HPC facilities, hardware, or workloads.",
+          "description": "Papers that address biodiversity loss, ecosystem impacts, or biodiversity-related embodied and operational burdens from HPC facilities, hardware, or workloads.",
           "example_keywords": [
             "biodiversity impact",
             "embodied biodiversity",
@@ -190,26 +194,8 @@
             "ecosystem impacts"
           ],
           "classification": [
-            432
-          ]
-        },
-        {
-          "name": "Aggregate environmental impacts",
-          "description": "Papers that treat HPC sustainability as an aggregate or explicitly multi-impact environmental problem rather than centering one named burden type.",
-          "example_keywords": [
-            "sustainability",
-            "environmental impact",
-            "environmental impacts",
-            "sustainable HPC",
-            "sustainable design",
-            "ecological sensitivity"
-          ],
-          "classification": [
-            1,
-            26,
             27,
-            2866,
-            3706
+            432
           ]
         }
       ]
@@ -330,7 +316,7 @@
         },
         {
           "name": "Whole-system lifecycle",
-          "description": "Topics that explicitly connect environmental implications across multiple lifecycle stages, such as design, operation, and disposal, instead of treating one stage in isolation.",
+          "description": "Topics that connect environmental implications across multiple lifecycle stages, such as design, operation, and disposal, instead of treating one stage in isolation.",
           "example_keywords": [
             "lifecycle assessment",
             "system lifecycle",

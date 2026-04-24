@@ -880,7 +880,7 @@
       "rationale": "This facet describes the methodological approaches papers use to conduct or support their environmental assessments, enabling cross-tabulation between topical coverage and assessment methods.",
       "categories": [
         {
-          "name": "data analysis",
+          "name": "Data analysis",
           "description": "Papers that analyze empirical, benchmark, operational, survey, public, or derived datasets as part of the assessment.",
           "classification": [
             3,
@@ -937,7 +937,7 @@
           ]
         },
         {
-          "name": "modeling",
+          "name": "Modeling",
           "description": "Papers that formulate analytical, statistical, lifecycle, cost, energy, carbon, thermal, or optimization models to conduct the assessment.",
           "classification": [
             2,
@@ -995,7 +995,7 @@
           ]
         },
         {
-          "name": "simulations",
+          "name": "Simulations",
           "description": "Papers that evaluate scenarios, schedulers, control policies, or system behavior through simulation rather than only closed-form models or direct measurements.",
           "classification": [
             2,
@@ -1023,7 +1023,7 @@
           ]
         },
         {
-          "name": "experiments on real systems",
+          "name": "Experiments on real systems",
           "description": "Papers that run workloads, benchmarks, deployments, measurements, or interventions on real hardware, facilities, platforms, or operational systems.",
           "classification": [
             4,
@@ -1046,7 +1046,7 @@
           ]
         },
         {
-          "name": "literature analysis",
+          "name": "Literature analysis",
           "description": "Papers that synthesize, review, classify, or conceptually analyze prior publications, reports, standards, or documented practice as part of the assessment.",
           "classification": [
             1,
@@ -1072,7 +1072,7 @@
       "rationale": "This facet describes the source basis papers use to conduct their environmental assessments, separating direct study data from reused external evidence.",
       "categories": [
         {
-          "name": "primary",
+          "name": "Primary",
           "description": "Papers that use measurements, telemetry, experiments, surveys, interviews, provider data, facility data, or case information obtained directly for the study.",
           "classification": [
             3,
@@ -1107,7 +1107,7 @@
           ]
         },
         {
-          "name": "secondary",
+          "name": "Secondary",
           "description": "Papers that use literature values, public datasets, public reports, manufacturer data, external emission factors, benchmark traces, standards, or other already available sources.",
           "classification": [
             1,
@@ -1176,7 +1176,7 @@
       "rationale": "This facet describes whether papers conduct environmental assessments retrospectively on observed systems or prospectively on scenarios, designs, forecasts, or interventions.",
       "categories": [
         {
-          "name": "ex post",
+          "name": "Ex post",
           "description": "Papers that assess existing, historical, measured, deployed, or currently observed systems and impacts.",
           "classification": [
             1,
@@ -1229,7 +1229,7 @@
           ]
         },
         {
-          "name": "ex ante",
+          "name": "Ex ante",
           "description": "Papers that assess prospective, modeled, hypothetical, simulated, planned, forecast, or what-if systems and interventions.",
           "classification": [
             2,

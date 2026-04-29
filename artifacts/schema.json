@@ -73,7 +73,7 @@
             "water scarcity"
           ],
           "classification": [
-            25, 27,29,404,2866
+            25,29,404,2866
           ]
         },
         {
@@ -87,7 +87,7 @@
             "ecosystem impacts"
           ],
           "classification": [
-            27, 432
+            432
           ]
         }
       ]

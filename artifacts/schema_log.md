@@ -99,3 +99,9 @@ Fine adjustments to the schema.
 - Renamed facet `Environmental impact focus` to Environmental impacts.
 - Deleted category `Aggregate environmental impacts`. This category was somewhat out of place compared to the others. All the papers had already been classified in some other category, except for paper 27. After reviewing the full text, it was classified in all categories. Updated the descriptions and rationale too.
 - Deleted `Whole-system lifecycle` because it was a cross-stage summary label rather than a concrete lifecycle stage. Updated the facet rationale and `schema_notes` to state that cross-stage lifecycle coverage is represented through multi-category membership in the concrete stage categories.
+
+# 2026-04-29
+
+Phase-1 anchor cleanup. Rechecked the six heavily labeled environmental-impact papers and tightened one overbroad case.
+
+- Removed paper 27 from `Water use and hydrological impacts` and `Biodiversity and ecosystem impacts` after the full-text check showed that water only appears as a cooling-medium design detail and biodiversity is not treated directly.

@@ -2,7 +2,7 @@
   "facets": [
     {
       "name": "Environmental impacts",
-      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, energy and power efficiency concerns, water-related burdens, material or waste burdens, and biodiversity-related impacts.",
+      "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, water-related burdens, material or waste burdens, and biodiversity-related impacts.",
       "categories": [
         {
           "name": "Carbon emissions and footprint",
@@ -19,27 +19,6 @@
           ],
           "classification": [
             1, 2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 30, 60, 71, 77, 188, 223, 239, 406, 419, 421, 435, 688, 835, 838, 898, 962, 979, 1060, 2202, 2503, 2520, 2521, 2558, 2866, 2879, 3368, 3579, 3601, 3706
-          ]
-        },
-        {
-          "name": "Energy and power efficiency",
-          "description": "Papers centered on reducing energy demand, improving power efficiency, reusing waste energy, or optimizing electricity use in HPC systems, workloads, cooling, or data movement.",
-          "example_keywords": [
-            "energy efficiency",
-            "power control",
-            "energy consumption",
-            "energy demand",
-            "energy reuse",
-            "energy productivity metrics",
-            "networking energy",
-            "operations optimization",
-            "power demand shaping",
-            "dynamic power scaling",
-            "hybrid energy systems",
-            "hardware efficiency"
-          ],
-          "classification": [
-            1, 2, 3, 4, 5, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 30, 60, 71, 77, 188, 239, 406, 688, 835, 838, 962, 979, 1060, 2558, 2866, 2879, 3601, 3706
           ]
         },
         {
@@ -73,7 +52,7 @@
             "water scarcity"
           ],
           "classification": [
-            25,29,404,2866
+            5, 25, 29, 404, 2866
           ]
         },
         {
@@ -489,5 +468,5 @@
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The schema now uses 8 facets split into 4 topical facets and 4 methodological facets. The topical facets remain the classification backbone derived from paper keywords, while the methodological facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the topical structure still stays within that target, and the additional methodological facets describe how papers conduct assessments rather than adding more topical dimensions. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete impact types; broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the methodological facets synchronized one-to-one with their source columns."
+  "schema_notes": "The schema now uses 8 facets split into 4 topical facets and 4 methodological facets. The topical facets remain the classification backbone derived from paper keywords, while the methodological facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the topical structure still stays within that target, and the additional methodological facets describe how papers conduct assessments rather than adding more topical dimensions. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete endpoint-style impact types: carbon, material/resource burdens, water, and biodiversity. Energy and power efficiency is excluded from this facet because it is a driver, midpoint, or operational-efficiency concern rather than an environmental impact category. Broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. Paper 5 remains covered under water impacts because its full text explicitly discusses cooling water demand, water availability and treatment concerns, and dry-cooler reductions in cooling-water use. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the methodological facets synchronized one-to-one with their source columns."
 }

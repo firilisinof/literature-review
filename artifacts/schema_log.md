@@ -105,3 +105,11 @@ Fine adjustments to the schema.
 Phase-1 anchor cleanup. Rechecked the six heavily labeled environmental-impact papers and tightened one overbroad case.
 
 - Removed paper 27 from `Water use and hydrological impacts` and `Biodiversity and ecosystem impacts` after the full-text check showed that water only appears as a cooling-medium design detail and biodiversity is not treated directly.
+
+# 2026-04-30
+
+Environmental-impact cleanup after rechecking the role of energy efficiency and paper 5.
+
+- Removed `Energy and power efficiency` from `Environmental impacts`. Energy efficiency is now treated as an operational driver, midpoint, or intervention concern rather than an endpoint-style environmental impact category.
+- Added paper 5 to `Water use and hydrological impacts`. Although its keyword row was previously energy-focused, the full text explicitly discusses HPC cooling water demand, water availability, treatment and discharge concerns, and an adiabatic dry-cooler design that reduces cooling-water use by about 88%.
+- Coverage check after the deletion: all 62 papers still have at least one remaining environmental-impact category. Distribution is now carbon 54, materials/resource burdens 12, water 5, biodiversity 1.

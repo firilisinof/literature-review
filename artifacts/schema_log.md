@@ -113,3 +113,11 @@ Environmental-impact cleanup after rechecking the role of energy efficiency and 
 - Removed `Energy and power efficiency` from `Environmental impacts`. Energy efficiency is now treated as an operational driver, midpoint, or intervention concern rather than an endpoint-style environmental impact category.
 - Added paper 5 to `Water use and hydrological impacts`. Although its keyword row was previously energy-focused, the full text explicitly discusses HPC cooling water demand, water availability, treatment and discharge concerns, and an adiabatic dry-cooler design that reduces cooling-water use by about 88%.
 - Coverage check after the deletion: all 62 papers still have at least one remaining environmental-impact category. Distribution is now carbon 54, materials/resource burdens 12, water 5, biodiversity 1.
+
+# 2026-04-30
+
+Lifecycle-stage cleanup after tracing the removal of `Whole-system lifecycle`.
+
+- Restored concrete stage memberships that were lost when the cross-stage summary category was deleted. Added upstream tags for papers 404, 421, 432, 2558, and 2866; operational tags for papers 27, 898, 2879, and 3579; and end-of-life tags for papers 432, 2879, and 3579.
+- Left weaker cases unchanged: papers 5, 6, 7, 14, 17, 19, 26, and 419 already have the defensible concrete stages supported by the current evidence, and paper 2866 remains upstream plus operational rather than end-of-life because the review discusses LCA and deployment challenges without a clear disposal-stage treatment.
+- Coverage check after the repair: all 62 papers still have at least one lifecycle-stage category. Distribution is now upstream 20, operational 58, end-of-life 10; lifecycle-stage breadth is 41 papers with one stage, 16 with two stages, and 5 with all three.

@@ -74,7 +74,7 @@ Research-type backfill. Added `Research type` as a fifth facet, mirroring the Wi
 
 - Added 6 categories: `Validation Research`, `Evaluation Research`, `Solution Proposal`, `Philosophical Paper`, `Opinion Paper`, `Experience Paper`.
 - Distribution across the 62 papers: Validation 25, Evaluation 12, Solution Proposal 12, Philosophical 5, Opinion 4, Experience 4. One paper, one value — copied straight from the CSV.
-- Schema now mixes 4 topical facets with 1 orthogonal research-type facet. `Research type` should stay in sync with the CSV column going forward.
+- Schema now mixes 4 facets from keywording with 1 predefined research-type facet. `Research type` should stay in sync with the CSV column going forward.
 
 # 2026-04-23
 
@@ -85,12 +85,12 @@ Cleaned up the research-type facet.
 
 # 2026-04-23
 
-Extended the schema with methodological facets drawn from the retained extraction fields.
+Extended the schema with predefined facets drawn from the retained extraction fields.
 
 - Added 3 facets: `Methodological approach`, `Data source`, `Assessment orientation`.
 - Approach categories: `data analysis`, `modeling`, `simulations`, `experiments on real systems`, `literature analysis`. Source categories: `primary`, `secondary`. Orientation: `ex post`, `ex ante`.
 - Distribution across the 62 papers: approach — data analysis 51, modeling 52, simulations 22, experiments on real systems 17, literature analysis 14; source — primary 29, secondary 57; orientation — ex post 47, ex ante 44. Multi-category placements preserved where extraction rows had semicolon-separated values.
-- The schema now has 4 topical facets plus 4 methodological facets. This exceeds Petersen's 3-5 guideline, but the extra facets describe how assessments are conducted rather than adding topical dimensions, so the split is justified.
+- The schema now has 4 facets from keywording plus 4 predefined facets. This exceeds Petersen's 3-5 guideline, but the extra facets describe how assessments are conducted rather than adding more dimensions from keywording, so the split is justified.
 
 # 2026-04-24
 
@@ -121,3 +121,10 @@ Lifecycle-stage cleanup after tracing the removal of `Whole-system lifecycle`.
 - Restored concrete stage memberships that were lost when the cross-stage summary category was deleted. Added upstream tags for papers 404, 421, 432, 2558, and 2866; operational tags for papers 27, 898, 2879, and 3579; and end-of-life tags for papers 432, 2879, and 3579.
 - Left weaker cases unchanged: papers 5, 6, 7, 14, 17, 19, 26, and 419 already have the defensible concrete stages supported by the current evidence, and paper 2866 remains upstream plus operational rather than end-of-life because the review discusses LCA and deployment challenges without a clear disposal-stage treatment.
 - Coverage check after the repair: all 62 papers still have at least one lifecycle-stage category. Distribution is now upstream 20, operational 58, end-of-life 10; lifecycle-stage breadth is 41 papers with one stage, 16 with two stages, and 5 with all three.
+
+# 2026-04-30
+
+Terminology alignment. No classifications changed.
+
+- Reworded the schema notes and workflow language to use `facets from keywording` / `predefined facets` as the facet-family terminology.
+- `Research type`, `Methodological approach`, `Data source`, and `Assessment orientation` are now described consistently as predefined facets synchronized from controlled coding fields.

@@ -4,22 +4,26 @@ For more information regarding the review, including the research questions, sco
 Your task is to maintain a single faceted schema over paper keywords and to classify each batch of papers into that schema in the same pass. You will be run iteratively over successive batches of papers.
 
 Scope:
-- Build facets only from topical dimensions evidenced in `keywords`.
-- Treat `research_type` in `keywording.csv` as direct evidence for the dedicated `Research type` facet. Preserve that facet as part of the schema, mirror each Wieringa-coded value into it exactly, and do not derive any additional methodology facets from `research_type`.
-- Treat contribution and methodology axes captured in `extraction.csv` (`hardware_management_practices`, `software_optimization_strategies`, `methodological_dimensions`, `scale`, and related fields) as orthogonal dimensions. Do not duplicate them in the schema.
+- Maintain two facet families: facets from keywording and predefined facets.
+- Derive and revise the facets from keywording only from dimensions evidenced in `keywords`.
+- Treat `research_type` in `keywording.csv` as direct evidence for the dedicated predefined `Research type` facet. Preserve that facet as part of the schema and mirror each Wieringa-coded value into it exactly.
+- Treat `methodological_approach`, `data_source`, and `assessment_orientation` in `extraction.csv` as direct evidence for the predefined `Methodological approach`, `Data source`, and `Assessment orientation` facets. Preserve semicolon-separated multi-value coding.
+- Treat other contribution and methodology axes captured in `extraction.csv` (`hardware_management_practices`, `software_optimization_strategies`, `methodological_dimensions`, `scale`, and related fields) as orthogonal dimensions. Do not duplicate them in the schema.
 - Preserve the existing `artifacts/schema.json` shape. This prompt owns both schema revision and `classification` population.
 
 Per-batch workflow:
 - Read the current schema from `artifacts/schema.json`. If the file does not exist or is empty, you are in the first round and must derive the schema from scratch from the batch.
 - Read the batch rows from `keywording.csv` using these fields: `id`, `title`, `abstract`, `keywords`, `research_type`, `notes`.
+- Read the matching batch rows from `extraction.csv` using these fields when synchronizing predefined facets: `id`, `methodological_approach`, `data_source`, `assessment_orientation`.
 - Read `artifacts/schema_log.md` if it exists so the new entry follows the same format; otherwise create it on this run.
 - Revise the schema and classify the batch in one interleaved loop:
   - Use `keywords` as the primary evidence for facets and categories.
-  - Use `title`, `abstract`, and `notes` only as supporting context to disambiguate topical placement.
+  - Use `title`, `abstract`, and `notes` only as supporting context to disambiguate placement in facets from keywording.
   - Use `research_type` directly to maintain the `Research type` facet.
+  - Use `methodological_approach`, `data_source`, and `assessment_orientation` directly to maintain the corresponding predefined facets.
   - Add new categories to existing facets when new papers require them.
-  - Add a new facet only when a recurring topical dimension does not fit any existing facet.
-  - Split a category if new evidence shows it conflates distinct topical concepts.
+  - Add a new facet from keywording only when a recurring dimension from keywording does not fit any existing facet.
+  - Split a category if new evidence shows it conflates distinct concepts.
   - Merge categories if they are not distinguishable in practice.
   - Move keywords out of `unresolved_keywords` when they now fit a category.
   - Update descriptions and `example_keywords` to reflect the latest evidence.
@@ -30,11 +34,11 @@ Per-batch workflow:
 - Write the updated schema back to `artifacts/schema.json`.
 
 Facet derivation:
-- A facet is a distinct topical dimension along which papers can be meaningfully compared.
-- The only allowed non-topical facet is `Research type`, which mirrors the already coded Wieringa labels in `keywording.csv`.
-- Derive facets bottom-up from the keywords. Do not impose contribution, research, or methodology structure that belongs elsewhere in the pipeline.
+- A facet from keywording is a distinct keyword-evidenced dimension along which papers can be meaningfully compared.
+- The predefined facets are `Research type`, `Methodological approach`, `Data source`, and `Assessment orientation`; mirror their controlled source columns exactly.
+- Derive facets from keywording bottom-up from the keywords. Do not impose contribution, research, or methodology structure that belongs elsewhere in the pipeline.
 - Keep facets orthogonal. If two facets substantially overlap, merge or refocus them and record the decision in `schema_notes`.
-- Aim for 3-5 facets. If fewer or more are justified, explain why in `schema_notes` and in the batch log.
+- Aim for 3-5 facets from keywording. If fewer or more are justified, explain why in `schema_notes` and in the batch log.
 
 Category derivation:
 - Categories within a facet should be mutually exclusive where practical, while still broad enough to cover multiple papers.
@@ -46,6 +50,7 @@ Classification rules:
 - Classify a paper under a category only if the paper genuinely addresses it, not if it merely mentions it in passing.
 - A paper can belong to multiple categories within the same facet if it genuinely spans them.
 - Within `Research type`, classify each paper into exactly one category that matches its `research_type` value in `keywording.csv`.
+- Within `Methodological approach`, `Data source`, and `Assessment orientation`, mirror every semicolon-separated value from the corresponding `extraction.csv` field.
 - A paper should normally appear in at least one category in every facet. If none fit, extend the schema rather than skipping the paper.
 - Preserve prior `classification` ids for unchanged categories.
 - If you rename a category, carry its existing `classification` ids forward unchanged.
@@ -70,7 +75,7 @@ Schema structure (`artifacts/schema.json`):
   "facets": [
     {
       "name": "facet name",
-      "rationale": "why this topical facet is justified by the keywords",
+      "rationale": "why this facet is justified by the keywords or predefined coding source",
       "categories": [
         {
           "name": "category name",

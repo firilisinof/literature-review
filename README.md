@@ -35,7 +35,7 @@ The review pipeline uses prompt templates in `prompts/` to update the main codin
 - `prompts/extraction.md` updates `artifacts/extraction.csv`
 - `prompts/schema.md` maintains `artifacts/schema.json` and classifies each processed batch in the same pass
 
-The schema workflow is iterative. `prompts/schema.md` derives and revises topical facets from `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/schema_log.md`.
+The schema workflow is iterative. `prompts/schema.md` derives and revises the facets from keywording in `keywording.csv`, keeps predefined facets synchronized with controlled coding fields, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/schema_log.md`.
 
 ## New search results
 

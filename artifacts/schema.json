@@ -339,7 +339,7 @@
     },
     {
       "name": "Research type",
-      "rationale": "The corpus already carries one Wieringa-coded research type per paper in `keywording.csv`. Representing that coding as a facet makes methodological comparisons explicit alongside the topical facets and supports cross-tabulation for RQ2 and RQ3.",
+      "rationale": "The corpus already carries one Wieringa-coded research type per paper in `keywording.csv`. Representing that coding as a predefined facet makes comparisons explicit alongside the facets from keywording and supports cross-tabulation for RQ2 and RQ3.",
       "categories": [
         {
           "name": "Validation Research",
@@ -387,7 +387,7 @@
     },
     {
       "name": "Methodological approach",
-      "rationale": "This facet describes the methodological approaches papers use to conduct or support their environmental assessments, enabling cross-tabulation between topical coverage and assessment methods.",
+      "rationale": "This predefined facet describes the methodological approaches papers use to conduct or support their environmental assessments, enabling cross-tabulation between coverage from keywording and assessment methods.",
       "categories": [
         {
           "name": "Data analysis",
@@ -428,7 +428,7 @@
     },
     {
       "name": "Data source",
-      "rationale": "This facet describes the source basis papers use to conduct their environmental assessments, separating direct study data from reused external evidence.",
+      "rationale": "This predefined facet describes the source basis papers use to conduct their environmental assessments, separating direct study data from reused external evidence.",
       "categories": [
         {
           "name": "Primary",
@@ -448,7 +448,7 @@
     },
     {
       "name": "Assessment orientation",
-      "rationale": "This facet describes whether papers conduct environmental assessments retrospectively on observed systems or prospectively on scenarios, designs, forecasts, or interventions.",
+      "rationale": "This predefined facet describes whether papers conduct environmental assessments retrospectively on observed systems or prospectively on scenarios, designs, forecasts, or interventions.",
       "categories": [
         {
           "name": "Ex post",
@@ -468,5 +468,5 @@
     }
   ],
   "unresolved_keywords": [],
-  "schema_notes": "The schema now uses 8 facets split into 4 topical facets and 4 methodological facets. The topical facets remain the classification backbone derived from paper keywords, while the methodological facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the topical structure still stays within that target, and the additional methodological facets describe how papers conduct assessments rather than adding more topical dimensions. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete endpoint-style impact types: carbon, material/resource burdens, water, and biodiversity. Energy and power efficiency is excluded from this facet because it is a driver, midpoint, or operational-efficiency concern rather than an environmental impact category. Broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. Paper 5 remains covered under water impacts because its full text explicitly discusses cooling water demand, water availability and treatment concerns, and dry-cooler reductions in cooling-water use. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. A targeted repair restored concrete stage memberships for papers whose former `Whole-system lifecycle` label had hidden clear multi-stage evidence: 27, 404, 421, 432, 898, 2558, 2866, 2879, and 3579. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone topical facets. When new papers are added, keep the methodological facets synchronized one-to-one with their source columns."
+  "schema_notes": "The schema now uses 8 facets split into 4 facets from keywording and 4 predefined facets. The facets from keywording remain the classification backbone derived from paper keywords, while the predefined facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the facets from keywording still stay within that target, and the additional predefined facets describe how papers conduct assessments rather than adding more dimensions from keywording. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete endpoint-style impact types: carbon, material/resource burdens, water, and biodiversity. Energy and power efficiency is excluded from this facet because it is a driver, midpoint, or operational-efficiency concern rather than an environmental impact category. Broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. Paper 5 remains covered under water impacts because its full text explicitly discusses cooling water demand, water availability and treatment concerns, and dry-cooler reductions in cooling-water use. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. A targeted repair restored concrete stage memberships for papers whose former `Whole-system lifecycle` label had hidden clear multi-stage evidence: 27, 404, 421, 432, 898, 2558, 2866, 2879, and 3579. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone facets from keywording. When new papers are added, keep the predefined facets synchronized one-to-one with their source columns."
 }

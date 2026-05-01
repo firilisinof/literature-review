@@ -17,8 +17,8 @@ Generated review artifacts are organized by directory:
 - `artifacts/processed.csv` — normalized screening decisions cache built from the provider batch outputs in `results/`
 - `artifacts/unanimous_include.csv` — papers unanimously included by Anthropic, OpenAI, and Gemini
 - `artifacts/included.bib` — BibTeX export for the included papers
-- `artifacts/metadata.csv`, `artifacts/keywording.csv`, `artifacts/extraction.csv` — downstream review artifacts
-- `artifacts/schema_log.md` — per-batch log of schema revisions, keyword resolution, and classification decisions
+- `artifacts/metadata.csv`, `artifacts/keywording.csv`, `artifacts/extraction.csv`, `artifacts/others.csv`, `artifacts/scheme.json` — downstream review artifacts
+- `artifacts/scheme_log.md` — per-batch log of SMS scheme revisions, keyword resolution, and classification decisions
 - `decisions/` — manual screening decisions
 - `notebooks/` — analysis and batch-download notebooks
 - `scripts/` — helper scripts for generating and submitting provider payloads
@@ -33,9 +33,9 @@ The review pipeline uses prompt templates in `prompts/` to update the main codin
 
 - `prompts/keywording.md` and `prompts/keywording_revision.md` update `artifacts/keywording.csv`
 - `prompts/extraction.md` updates `artifacts/extraction.csv`
-- `prompts/schema.md` maintains `artifacts/schema.json` and classifies each processed batch in the same pass
+- `prompts/scheme.md` maintains `artifacts/scheme.json` and classifies each processed batch in the same pass
 
-The schema workflow is iterative. `prompts/schema.md` derives and revises the facets from keywording in `keywording.csv`, keeps predefined facets synchronized with controlled coding fields, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/schema_log.md`.
+The scheme workflow is iterative. `prompts/scheme.md` derives and revises the SMS scheme facets using keyword evidence in `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/scheme_log.md`. Methodology codings from `artifacts/extraction.csv` are organized separately in `artifacts/others.csv`, while `research_type` remains in `artifacts/keywording.csv`.
 
 ## New search results
 

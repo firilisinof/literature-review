@@ -1,16 +1,16 @@
-# Schema Log
+# Scheme Log
 
-Notes on how the schema evolved across batches. Each section is dated and summarizes what changed and why.
+Notes on how the SMS classification scheme evolved across batches. Each section is dated and summarizes what changed and why.
 
 # 2026-04-18
 
-First batch: papers 1-10. Initialized the schema from scratch.
+First batch: papers 1-10. Initialized the scheme from scratch.
 
 - Added 4 facets: `Environmental impact focus`, `Lifecycle stage`, `System locus`, and `Management and intervention levers`.
 - Added 15 starting categories covering carbon, energy, and material burdens; the main lifecycle stages; the facility/hardware/software/user loci; and the measurement/control/design/incentive levers.
-- All batch keywords fit into the initial categories, so `unresolved_keywords` is empty.
+- All batch keywords fit into the initial categories, so there were no unresolved keywords.
 - A few papers landed in multiple places. Paper 3 spans upstream design, runtime operations, and material burdens because its digital twin combines liquid cooling, virtual prototyping, and construction waste. Paper 7 is a position paper that touches several intervention levers at once. Paper 9 sits in both carbon and material impact categories because its keywords jointly emphasize emissions, e-waste, and resource use rather than energy alone.
-- Noted in `schema_notes` that 4 facets is enough for now but that the operational stage and measurement categories may need splitting as finer-grained topics arrive.
+- Recorded that 4 facets were enough for the initial scheme, while the operational stage and measurement categories might need splitting as finer-grained topics arrived.
 
 # 2026-04-18
 
@@ -57,7 +57,7 @@ Sixth batch: papers 1060, 2202, 2503, 2520, 2521, 2558, 2866, 2879, 3368, 3579. 
 - Added examples like `hybrid energy systems`, `renewable energy planning`, `green siting`, `replacement cycles`, `data center expansion`, `single-phase immersion cooling`, `scenario modeling`, `institutional carbon accounting`, `job-level analysis`, `provider-user mitigation`.
 - Broadened `Upstream planning and procurement`, `Facility, thermal, and energy infrastructure`, and `Infrastructure and cooling design` to make siting-related planning decisions explicit. `air pollution` in paper 2520 stayed secondary to that paper's carbon framing and didn't justify a new impact category.
 - Paper 1060 pairs forecasting with Grey Wolf optimization to size a hybrid-energy mix. Paper 2202 uses historical scenarios to compare replacement cycles, carbon, power, and green-siting trade-offs. Paper 2503's DRL scheduler couples job dispatch with center-level renewables and pricing. Paper 2558 inventories operational and embodied emissions and turns them into provider-user mitigation. Paper 2866's review combines CUE/WUE/REF/LCA with waste-heat and immersion-cooling deployment. Paper 2879's decision-support model covers procurement, construction, operation, and regional siting. Paper 3368 (CES) is a job-level metric intended to inform carbon-aware scheduling. Paper 3579 models replacement timing, data-center expansion, embodied carbon, grid intensity, and heat reuse jointly.
-- The 4-facet structure still absorbs scenario planning, institutional accounting, and immersion-cooling reviews without further branching. Job-level carbon-efficiency work still fits the measurement-plus-runtime split instead of needing a workload-metrics category.
+- The 4-facet scheme still absorbs scenario planning, institutional accounting, and immersion-cooling reviews without further branching. Job-level carbon-efficiency work still fits the measurement-plus-runtime split instead of needing a workload-metrics category.
 
 # 2026-04-22
 
@@ -66,39 +66,15 @@ Seventh batch: papers 3601, 3706. Small wrap-up.
 - Added examples like `heat pump deployment`, `thermodynamic modeling`, `environmental impact modeling`, `policy incentives`, `ecological sensitivity`. Structure unchanged.
 - `low-GWP refrigerants` and `district heating` reinforced the facility and infrastructure branches. `global HPC analysis`, `environmental impact modeling`, and `policy incentives` fit the existing measurement and strategic-framing branches.
 - Paper 3601 spans upstream planning and operational control because it's a thermodynamic feasibility study for recovering Frontier waste heat through heat pumps rather than a deployed system. Paper 3706 spans carbon, energy, and aggregate environmental impacts and also covers facility, governance, measurement, and strategic framing thanks to its global center-level emissions modeling paired with policy-incentive analysis.
-- The full corpus still fits the 4 facets. Heat-pump waste-heat recovery stays part of the infrastructure cluster; ecological-sensitivity modeling stays part of the aggregate-impact branch when coupled to carbon analysis.
-
-# 2026-04-22
-
-Research-type backfill. Added `Research type` as a fifth facet, mirroring the Wieringa-coded `research_type` column already in `keywording.csv`.
-
-- Added 6 categories: `Validation Research`, `Evaluation Research`, `Solution Proposal`, `Philosophical Paper`, `Opinion Paper`, `Experience Paper`.
-- Distribution across the 62 papers: Validation 25, Evaluation 12, Solution Proposal 12, Philosophical 5, Opinion 4, Experience 4. One paper, one value — copied straight from the CSV.
-- Schema now mixes 4 facets from keywording with 1 predefined research-type facet. `Research type` should stay in sync with the CSV column going forward.
-
-# 2026-04-23
-
-Cleaned up the research-type facet.
-
-- Dropped `example_keywords` from the 6 `Research type` categories because that facet is populated from the controlled `research_type` coding, not keyword inference. Category descriptions carry the meaning.
-- Classifications unchanged.
-
-# 2026-04-23
-
-Extended the schema with predefined facets drawn from the retained extraction fields.
-
-- Added 3 facets: `Methodological approach`, `Data source`, `Assessment orientation`.
-- Approach categories: `data analysis`, `modeling`, `simulations`, `experiments on real systems`, `literature analysis`. Source categories: `primary`, `secondary`. Orientation: `ex post`, `ex ante`.
-- Distribution across the 62 papers: approach — data analysis 51, modeling 52, simulations 22, experiments on real systems 17, literature analysis 14; source — primary 29, secondary 57; orientation — ex post 47, ex ante 44. Multi-category placements preserved where extraction rows had semicolon-separated values.
-- The schema now has 4 facets from keywording plus 4 predefined facets. This exceeds Petersen's 3-5 guideline, but the extra facets describe how assessments are conducted rather than adding more dimensions from keywording, so the split is justified.
+- The full corpus still fits the 4-facet scheme. Heat-pump waste-heat recovery stays part of the infrastructure cluster; ecological-sensitivity modeling stays part of the aggregate-impact branch when coupled to carbon analysis.
 
 # 2026-04-24
 
-Fine adjustments to the schema.
+Fine adjustments to the scheme.
 
 - Renamed facet `Environmental impact focus` to Environmental impacts.
 - Deleted category `Aggregate environmental impacts`. This category was somewhat out of place compared to the others. All the papers had already been classified in some other category, except for paper 27. After reviewing the full text, it was classified in all categories. Updated the descriptions and rationale too.
-- Deleted `Whole-system lifecycle` because it was a cross-stage summary label rather than a concrete lifecycle stage. Updated the facet rationale and `schema_notes` to state that cross-stage lifecycle coverage is represented through multi-category membership in the concrete stage categories.
+- Deleted `Whole-system lifecycle` because it was a cross-stage summary label rather than a concrete lifecycle stage. Updated the facet rationale to state that cross-stage lifecycle coverage is represented through multi-category membership in the concrete stage categories.
 
 # 2026-04-29
 
@@ -122,9 +98,15 @@ Lifecycle-stage cleanup after tracing the removal of `Whole-system lifecycle`.
 - Left weaker cases unchanged: papers 5, 6, 7, 14, 17, 19, 26, and 419 already have the defensible concrete stages supported by the current evidence, and paper 2866 remains upstream plus operational rather than end-of-life because the review discusses LCA and deployment challenges without a clear disposal-stage treatment.
 - Coverage check after the repair: all 62 papers still have at least one lifecycle-stage category. Distribution is now upstream 20, operational 58, end-of-life 10; lifecycle-stage breadth is 41 papers with one stage, 16 with two stages, and 5 with all three.
 
-# 2026-04-30
+# 2026-05-01
 
-Terminology alignment. No classifications changed.
+Scheme split for the SMS resubmission. The scheme is now limited to the four keyword-derived SMS facets, with methodology codings organized separately.
 
-- Reworded the schema notes and workflow language to use `facets from keywording` / `predefined facets` as the facet-family terminology.
-- `Research type`, `Methodological approach`, `Data source`, and `Assessment orientation` are now described consistently as predefined facets synchronized from controlled coding fields.
+- Moved the previous scheme notes into this log and removed note fields from `scheme.json`.
+- The four-facet scheme stays within Petersen's 3-5 facet guideline: Environmental impacts, Lifecycle stages, System locus, and Management and intervention levers.
+- Environmental impacts contains only concrete endpoint-style impact types: carbon, material/resource burdens, water, and biodiversity. Energy and power efficiency remains outside the impact facet because it is a driver, midpoint, or operational-efficiency concern rather than an environmental impact category.
+- Broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. Paper 5 remains covered under water impacts because its full text discusses cooling water demand, water availability and treatment concerns, and dry-cooler reductions in cooling-water use.
+- Lifecycle stages contains only concrete stage categories. Cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers.
+- The earlier lifecycle repair remains part of the scheme history: concrete stage memberships were restored for papers 27, 404, 421, 432, 898, 2558, 2866, 2879, and 3579 after the former `Whole-system lifecycle` label had hidden clear multi-stage evidence.
+- Job- and system-level modeling still fits the existing measurement lever. Infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone scheme facets.
+- `Research type` remains in `keywording.csv`. `Methodological approach`, `Data source`, and `Assessment orientation` are organized in `others.csv` rather than in the SMS scheme.

@@ -18,7 +18,60 @@
             "decarbonization"
           ],
           "classification": [
-            1, 2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 30, 60, 71, 77, 188, 223, 239, 406, 419, 421, 435, 688, 835, 838, 898, 962, 979, 1060, 2202, 2503, 2520, 2521, 2558, 2866, 2879, 3368, 3579, 3601, 3706
+            1,
+            2,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            26,
+            27,
+            28,
+            30,
+            60,
+            71,
+            77,
+            188,
+            223,
+            239,
+            406,
+            419,
+            421,
+            435,
+            688,
+            835,
+            838,
+            898,
+            962,
+            979,
+            1060,
+            2202,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3368,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -35,7 +88,18 @@
             "hardware lifetime"
           ],
           "classification": [
-            3, 6, 7, 9, 14, 17, 19, 26, 27, 419, 477, 928
+            3,
+            6,
+            7,
+            9,
+            14,
+            17,
+            19,
+            26,
+            27,
+            419,
+            477,
+            928
           ]
         },
         {
@@ -52,7 +116,11 @@
             "water scarcity"
           ],
           "classification": [
-            5, 25, 29, 404, 2866
+            5,
+            25,
+            29,
+            404,
+            2866
           ]
         },
         {
@@ -95,7 +163,26 @@
             "heat pump deployment"
           ],
           "classification": [
-            3, 5, 6, 7, 17, 27, 71, 404, 421, 432, 838, 898, 928, 1060, 2202, 2558, 2866, 2879, 3579, 3601
+            3,
+            5,
+            6,
+            7,
+            17,
+            27,
+            71,
+            404,
+            421,
+            432,
+            838,
+            898,
+            928,
+            1060,
+            2202,
+            2558,
+            2866,
+            2879,
+            3579,
+            3601
           ]
         },
         {
@@ -115,7 +202,64 @@
             "programming models"
           ],
           "classification": [
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 60, 71, 77, 188, 223, 239, 404, 406, 419, 421, 432, 435, 688, 835, 838, 898, 962, 979, 2503, 2520, 2521, 2558, 2866, 2879, 3368, 3579, 3601, 3706
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            60,
+            71,
+            77,
+            188,
+            223,
+            239,
+            404,
+            406,
+            419,
+            421,
+            432,
+            435,
+            688,
+            835,
+            838,
+            898,
+            962,
+            979,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3368,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -132,7 +276,16 @@
             "lifecycle extension"
           ],
           "classification": [
-            3, 9, 17, 19, 26, 419, 432, 477, 2879, 3579
+            3,
+            9,
+            17,
+            19,
+            26,
+            419,
+            432,
+            477,
+            2879,
+            3579
           ]
         }
       ]
@@ -162,7 +315,46 @@
             "heat pumps"
           ],
           "classification": [
-            2, 3, 5, 8, 9, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 29, 30, 71, 188, 223, 404, 435, 688, 838, 962, 1060, 2202, 2503, 2520, 2521, 2558, 2866, 2879, 3579, 3601, 3706
+            2,
+            3,
+            5,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            29,
+            30,
+            71,
+            188,
+            223,
+            404,
+            435,
+            688,
+            838,
+            962,
+            1060,
+            2202,
+            2503,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -183,7 +375,22 @@
             "metal usage"
           ],
           "classification": [
-            3, 6, 7, 14, 17, 19, 27, 419, 421, 432, 477, 835, 898, 928, 2202, 3579
+            3,
+            6,
+            7,
+            14,
+            17,
+            19,
+            27,
+            419,
+            421,
+            432,
+            477,
+            835,
+            898,
+            928,
+            2202,
+            3579
           ]
         },
         {
@@ -208,7 +415,31 @@
             "programming models"
           ],
           "classification": [
-            2, 3, 7, 8, 11, 13, 14, 15, 17, 18, 20, 22, 30, 60, 77, 239, 419, 432, 435, 688, 835, 898, 979, 2503, 3368
+            2,
+            3,
+            7,
+            8,
+            11,
+            13,
+            14,
+            15,
+            17,
+            18,
+            20,
+            22,
+            30,
+            60,
+            77,
+            239,
+            419,
+            432,
+            435,
+            688,
+            835,
+            898,
+            979,
+            2503,
+            3368
           ]
         },
         {
@@ -225,7 +456,21 @@
             "provider-user mitigation"
           ],
           "classification": [
-            1, 4, 7, 10, 16, 22, 28, 223, 239, 406, 421, 2520, 2521, 2558, 3706
+            1,
+            4,
+            7,
+            10,
+            16,
+            22,
+            28,
+            223,
+            239,
+            406,
+            421,
+            2520,
+            2521,
+            2558,
+            3706
           ]
         }
       ]
@@ -260,7 +505,38 @@
             "environmental impact modeling"
           ],
           "classification": [
-            3, 6, 10, 13, 15, 16, 17, 23, 24, 26, 27, 60, 71, 239, 404, 406, 421, 432, 838, 898, 928, 1060, 2202, 2520, 2521, 2558, 2866, 2879, 3368, 3579, 3601, 3706
+            3,
+            6,
+            10,
+            13,
+            15,
+            16,
+            17,
+            23,
+            24,
+            26,
+            27,
+            60,
+            71,
+            239,
+            404,
+            406,
+            421,
+            432,
+            838,
+            898,
+            928,
+            1060,
+            2202,
+            2520,
+            2521,
+            2558,
+            2866,
+            2879,
+            3368,
+            3579,
+            3601,
+            3706
           ]
         },
         {
@@ -283,7 +559,28 @@
             "programming models"
           ],
           "classification": [
-            2, 3, 4, 7, 8, 11, 13, 14, 18, 20, 22, 30, 60, 77, 188, 419, 435, 688, 962, 979, 2503, 3368
+            2,
+            3,
+            4,
+            7,
+            8,
+            11,
+            13,
+            14,
+            18,
+            20,
+            22,
+            30,
+            60,
+            77,
+            188,
+            419,
+            435,
+            688,
+            962,
+            979,
+            2503,
+            3368
           ]
         },
         {
@@ -311,7 +608,28 @@
             "heat pumps"
           ],
           "classification": [
-            3, 5, 7, 9, 12, 19, 21, 22, 23, 25, 27, 29, 71, 188, 477, 838, 898, 1060, 2866, 2879, 3579, 3601
+            3,
+            5,
+            7,
+            9,
+            12,
+            19,
+            21,
+            22,
+            23,
+            25,
+            27,
+            29,
+            71,
+            188,
+            477,
+            838,
+            898,
+            1060,
+            2866,
+            2879,
+            3579,
+            3601
           ]
         },
         {
@@ -332,141 +650,28 @@
             "policy incentives"
           ],
           "classification": [
-            1, 4, 7, 9, 16, 17, 18, 19, 22, 26, 28, 223, 406, 835, 2202, 2520, 2521, 2558, 3706
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Research type",
-      "rationale": "The corpus already carries one Wieringa-coded research type per paper in `keywording.csv`. Representing that coding as a predefined facet makes comparisons explicit alongside the facets from keywording and supports cross-tabulation for RQ2 and RQ3.",
-      "categories": [
-        {
-          "name": "Validation Research",
-          "description": "Techniques investigated are novel and have not yet been implemented in practice; evidence is typically produced through experiments or other lab-style studies.",
-          "classification": [
-            2, 3, 6, 8, 11, 14, 17, 20, 30, 60, 77, 188, 404, 419, 421, 432, 435, 688, 962, 979, 2202, 2503, 3368, 3601, 3706
-          ]
-        },
-        {
-          "name": "Evaluation Research",
-          "description": "Techniques are implemented in practice and evaluated in terms of their consequences, benefits, or drawbacks, including studies that identify concrete problems in industry settings.",
-          "classification": [
-            13, 15, 16, 23, 24, 25, 29, 239, 406, 2520, 2521, 2558
-          ]
-        },
-        {
-          "name": "Solution Proposal",
-          "description": "A solution to a problem is proposed as a novel idea or a significant extension of an existing technique, supported by a small example or a clear line of argument for applicability.",
-          "classification": [
-            10, 12, 19, 26, 27, 71, 838, 898, 928, 1060, 2879, 3579
-          ]
-        },
-        {
-          "name": "Philosophical Paper",
-          "description": "Papers that structure the field through a taxonomy, conceptual framework, or another new way of looking at existing things.",
-          "classification": [
-            1, 9, 22, 835, 2866
-          ]
-        },
-        {
-          "name": "Opinion Paper",
-          "description": "Papers that argue how things should be done or whether a technique is good or bad without grounding the claim in related work and formal research methodology.",
-          "classification": [
-            7, 18, 28, 223
-          ]
-        },
-        {
-          "name": "Experience Paper",
-          "description": "Papers that explain what was done in practice and how it was done, based on the authors' own operational experience.",
-          "classification": [
-            4, 5, 21, 477
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Methodological approach",
-      "rationale": "This predefined facet describes the methodological approaches papers use to conduct or support their environmental assessments, enabling cross-tabulation between coverage from keywording and assessment methods.",
-      "categories": [
-        {
-          "name": "Data analysis",
-          "description": "Papers that analyze empirical, benchmark, operational, survey, public, or derived datasets as part of the assessment.",
-          "classification": [
-            3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 30, 60, 77, 188, 239, 404, 406, 419, 421, 432, 435, 477, 688, 835, 898, 928, 962, 979, 1060, 2202, 2503, 2520, 2521, 2558, 2879, 3368, 3579, 3706
-          ]
-        },
-        {
-          "name": "Modeling",
-          "description": "Papers that formulate analytical, statistical, lifecycle, cost, energy, carbon, thermal, or optimization models to conduct the assessment.",
-          "classification": [
-            2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 24, 25, 26, 27, 30, 60, 71, 77, 188, 239, 404, 406, 419, 421, 432, 435, 688, 835, 838, 898, 928, 962, 979, 1060, 2202, 2503, 2520, 2521, 2558, 2879, 3368, 3579, 3601, 3706
-          ]
-        },
-        {
-          "name": "Simulations",
-          "description": "Papers that evaluate scenarios, schedulers, control policies, or system behavior through simulation rather than only closed-form models or direct measurements.",
-          "classification": [
-            2, 3, 11, 14, 17, 20, 25, 30, 77, 188, 404, 406, 419, 435, 688, 962, 1060, 2202, 2503, 3579, 3601, 3706
-          ]
-        },
-        {
-          "name": "Experiments on real systems",
-          "description": "Papers that run workloads, benchmarks, deployments, measurements, or interventions on real hardware, facilities, platforms, or operational systems.",
-          "classification": [
-            4, 6, 8, 12, 13, 18, 21, 23, 29, 60, 239, 406, 432, 435, 477, 688, 979
-          ]
-        },
-        {
-          "name": "Literature analysis",
-          "description": "Papers that synthesize, review, classify, or conceptually analyze prior publications, reports, standards, or documented practice as part of the assessment.",
-          "classification": [
-            1, 6, 7, 9, 19, 22, 27, 28, 71, 223, 477, 835, 838, 2866
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Data source",
-      "rationale": "This predefined facet describes the source basis papers use to conduct their environmental assessments, separating direct study data from reused external evidence.",
-      "categories": [
-        {
-          "name": "Primary",
-          "description": "Papers that use measurements, telemetry, experiments, surveys, interviews, provider data, facility data, or case information obtained directly for the study.",
-          "classification": [
-            3, 4, 5, 6, 8, 10, 12, 13, 14, 15, 18, 21, 23, 25, 29, 60, 223, 239, 406, 432, 435, 477, 688, 838, 979, 2202, 2558, 3579, 3601
-          ]
-        },
-        {
-          "name": "Secondary",
-          "description": "Papers that use literature values, public datasets, public reports, manufacturer data, external emission factors, benchmark traces, standards, or other already available sources.",
-          "classification": [
-            1, 2, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 60, 71, 77, 188, 223, 239, 404, 406, 419, 421, 432, 435, 477, 688, 835, 838, 898, 928, 962, 979, 1060, 2202, 2503, 2520, 2521, 2558, 2866, 2879, 3368, 3579, 3601, 3706
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Assessment orientation",
-      "rationale": "This predefined facet describes whether papers conduct environmental assessments retrospectively on observed systems or prospectively on scenarios, designs, forecasts, or interventions.",
-      "categories": [
-        {
-          "name": "Ex post",
-          "description": "Papers that assess existing, historical, measured, deployed, or currently observed systems and impacts.",
-          "classification": [
-            1, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 60, 223, 239, 404, 406, 421, 432, 435, 477, 688, 835, 928, 979, 1060, 2202, 2520, 2521, 2558, 2866, 3368, 3579, 3706
-          ]
-        },
-        {
-          "name": "Ex ante",
-          "description": "Papers that assess prospective, modeled, hypothetical, simulated, planned, forecast, or what-if systems and interventions.",
-          "classification": [
-            2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 17, 19, 20, 22, 25, 26, 27, 28, 30, 71, 77, 188, 223, 404, 406, 419, 421, 432, 435, 477, 688, 835, 838, 898, 962, 1060, 2202, 2503, 2866, 2879, 3579, 3601, 3706
+            1,
+            4,
+            7,
+            9,
+            16,
+            17,
+            18,
+            19,
+            22,
+            26,
+            28,
+            223,
+            406,
+            835,
+            2202,
+            2520,
+            2521,
+            2558,
+            3706
           ]
         }
       ]
     }
-  ],
-  "unresolved_keywords": [],
-  "schema_notes": "The schema now uses 8 facets split into 4 facets from keywording and 4 predefined facets. The facets from keywording remain the classification backbone derived from paper keywords, while the predefined facets are controlled coding overlays used for cross-tabulation and method-coverage analysis: Research type mirrors `research_type` in `artifacts/keywording.csv`, and Methodological approach, Data source, and Assessment orientation mirror the retained extraction fields in `artifacts/extraction.csv`. This deliberately exceeds Petersen's 3-5 facet guideline because the facets from keywording still stay within that target, and the additional predefined facets describe how papers conduct assessments rather than adding more dimensions from keywording. Controlled-code facets intentionally omit `example_keywords` and rely on category descriptions plus direct classification arrays. The Environmental impacts facet now contains only concrete endpoint-style impact types: carbon, material/resource burdens, water, and biodiversity. Energy and power efficiency is excluded from this facet because it is a driver, midpoint, or operational-efficiency concern rather than an environmental impact category. Broad aggregate environmental framing is represented through membership in one or more specific impact categories rather than a separate summary category. Paper 5 remains covered under water impacts because its full text explicitly discusses cooling water demand, water availability and treatment concerns, and dry-cooler reductions in cooling-water use. The Lifecycle stages facet now contains only concrete stage categories; cross-stage lifecycle reasoning is represented by multi-category membership across upstream, operational, and end-of-life stages, while lifecycle assessment as a measurement/accounting method remains captured under Management and intervention levers. A targeted repair restored concrete stage memberships for papers whose former `Whole-system lifecycle` label had hidden clear multi-stage evidence: 27, 404, 421, 432, 898, 2558, 2866, 2879, and 3579. Job- and system-level modeling still fits the existing measurement lever, and infrastructure planning, renewable integration, and waste-heat utilization remain cross-cutting themes rather than standalone facets from keywording. When new papers are added, keep the predefined facets synchronized one-to-one with their source columns."
+  ]
 }

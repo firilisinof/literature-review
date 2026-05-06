@@ -1,0 +1,5 @@
+font.family: Roboto Condensed
+font.size: 14
+axes.axisbelow: True
+legend.frameon: False
+pdf.fonttype: 42

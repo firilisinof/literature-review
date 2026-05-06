@@ -6,12 +6,12 @@ Your task is to maintain the SMS classification scheme over paper keywords and t
 Scope:
 - Maintain only the SMS scheme facets derived from keywording.
 - Derive and revise facets only from dimensions evidenced in `keywords`.
-- Do not add research-type or methodology-coding dimensions to the scheme. `research_type` stays in `keywording.csv`; methodological approach, data source, and assessment orientation stay in the extraction/others workflow.
+- Do not add research-type or methodology-coding dimensions to the scheme. `research_type`, methodological approach, data source, and assessment orientation stay in the extraction/others workflow.
 - Preserve the `artifacts/scheme.json` shape. This prompt owns both scheme revision and `classification` population.
 
 Per-batch workflow:
 - Read the current scheme from `artifacts/scheme.json`. If the file does not exist or is empty, you are in the first round and must derive the scheme from scratch from the batch.
-- Read the batch rows from `keywording.csv` using these fields: `id`, `title`, `abstract`, `keywords`, `research_type`, `notes`.
+- Read the batch rows from `keywording.csv` using these fields: `id`, `title`, `abstract`, `keywords`, `notes`.
 - Read `artifacts/scheme_log.md` if it exists so the new entry follows the same format; otherwise create it on this run.
 - Revise the scheme and classify the batch in one interleaved loop:
   - Use `keywords` as the primary evidence for facets and categories.

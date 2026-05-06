@@ -1,63 +1,63 @@
-id,methodological_approach,data_source,assessment_orientation
-1,literature analysis,secondary,ex post
-2,modeling;simulations,secondary,ex ante
-3,data analysis;modeling;simulations,primary,ex post;ex ante
-4,data analysis;modeling;experiments on real systems,primary,ex post
-5,data analysis;modeling,primary;secondary,ex ante
-6,data analysis;modeling;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante
-7,data analysis;modeling;literature analysis,secondary,ex post;ex ante
-8,data analysis;modeling;experiments on real systems,primary,ex post;ex ante
-9,literature analysis,secondary,ex post;ex ante
-10,data analysis;modeling,primary;secondary,ex post
-11,data analysis;modeling;simulations,secondary,ex post;ex ante
-12,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante
-13,data analysis;modeling;experiments on real systems,primary,ex post;ex ante
-14,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
-15,data analysis;modeling,primary;secondary,ex post
-16,data analysis;modeling,secondary,ex post
-17,data analysis;modeling;simulations,secondary,ex ante
-18,data analysis;modeling;experiments on real systems,primary;secondary,ex post
-19,data analysis;literature analysis,secondary,ex post;ex ante
-20,data analysis;modeling;simulations,secondary,ex ante
-21,data analysis;modeling;experiments on real systems,primary;secondary,ex post
-22,literature analysis,secondary,ex post;ex ante
-23,data analysis;experiments on real systems,primary,ex post
-24,data analysis;modeling,secondary,ex post
-25,modeling;simulations,primary;secondary,ex post;ex ante
-26,data analysis;modeling,secondary,ex post;ex ante
-27,data analysis;modeling;literature analysis,secondary,ex post;ex ante
-28,literature analysis,secondary,ex post;ex ante
-29,data analysis;experiments on real systems,primary;secondary,ex post
-30,data analysis;modeling;simulations,secondary,ex ante
-60,data analysis;modeling;experiments on real systems,primary;secondary,ex post
-71,modeling;literature analysis,secondary,ex ante
-77,data analysis;modeling;simulations,secondary,ex ante
-188,data analysis;modeling;simulations,secondary,ex ante
-223,literature analysis,primary;secondary,ex post;ex ante
-239,data analysis;modeling;experiments on real systems,primary;secondary,ex post
-404,data analysis;modeling;simulations,secondary,ex post;ex ante
-406,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
-419,data analysis;modeling;simulations,secondary,ex ante
-421,data analysis;modeling,secondary,ex post;ex ante
-432,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante
-435,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
-477,data analysis;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante
-688,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
-835,data analysis;modeling;literature analysis,secondary,ex post;ex ante
-838,modeling;literature analysis,primary;secondary,ex ante
-898,data analysis;modeling,secondary,ex ante
-928,data analysis;modeling,secondary,ex post
-962,data analysis;modeling;simulations,secondary,ex ante
-979,data analysis;modeling;experiments on real systems,primary;secondary,ex post
-1060,data analysis;modeling;simulations,secondary,ex post;ex ante
-2202,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
-2503,data analysis;modeling;simulations,secondary,ex ante
-2520,data analysis;modeling,secondary,ex post
-2521,data analysis;modeling,secondary,ex post
-2558,data analysis;modeling,primary;secondary,ex post
-2866,literature analysis,secondary,ex post;ex ante
-2879,data analysis;modeling,secondary,ex ante
-3368,data analysis;modeling,secondary,ex post
-3579,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
-3601,modeling;simulations,primary;secondary,ex ante
-3706,data analysis;modeling;simulations,secondary,ex post;ex ante
+id,research_type,methodological_approach,data_source,assessment_orientation
+1,Philosophical Paper,literature analysis,secondary,ex post
+2,Validation Research,modeling;simulations,secondary,ex ante
+3,Validation Research,data analysis;modeling;simulations,primary,ex post;ex ante
+4,Experience Paper,data analysis;modeling;experiments on real systems,primary,ex post
+5,Experience Paper,data analysis;modeling,primary;secondary,ex ante
+6,Validation Research,data analysis;modeling;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante
+7,Opinion Paper,data analysis;modeling;literature analysis,secondary,ex post;ex ante
+8,Validation Research,data analysis;modeling;experiments on real systems,primary,ex post;ex ante
+9,Philosophical Paper,literature analysis,secondary,ex post;ex ante
+10,Solution Proposal,data analysis;modeling,primary;secondary,ex post
+11,Validation Research,data analysis;modeling;simulations,secondary,ex post;ex ante
+12,Solution Proposal,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante
+13,Evaluation Research,data analysis;modeling;experiments on real systems,primary,ex post;ex ante
+14,Validation Research,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
+15,Evaluation Research,data analysis;modeling,primary;secondary,ex post
+16,Evaluation Research,data analysis;modeling,secondary,ex post
+17,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+18,Opinion Paper,data analysis;modeling;experiments on real systems,primary;secondary,ex post
+19,Solution Proposal,data analysis;literature analysis,secondary,ex post;ex ante
+20,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+21,Experience Paper,data analysis;modeling;experiments on real systems,primary;secondary,ex post
+22,Philosophical Paper,literature analysis,secondary,ex post;ex ante
+23,Evaluation Research,data analysis;experiments on real systems,primary,ex post
+24,Evaluation Research,data analysis;modeling,secondary,ex post
+25,Evaluation Research,modeling;simulations,primary;secondary,ex post;ex ante
+26,Solution Proposal,data analysis;modeling,secondary,ex post;ex ante
+27,Solution Proposal,data analysis;modeling;literature analysis,secondary,ex post;ex ante
+28,Opinion Paper,literature analysis,secondary,ex post;ex ante
+29,Evaluation Research,data analysis;experiments on real systems,primary;secondary,ex post
+30,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+60,Validation Research,data analysis;modeling;experiments on real systems,primary;secondary,ex post
+71,Solution Proposal,modeling;literature analysis,secondary,ex ante
+77,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+188,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+223,Opinion Paper,literature analysis,primary;secondary,ex post;ex ante
+239,Evaluation Research,data analysis;modeling;experiments on real systems,primary;secondary,ex post
+404,Validation Research,data analysis;modeling;simulations,secondary,ex post;ex ante
+406,Evaluation Research,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
+419,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+421,Validation Research,data analysis;modeling,secondary,ex post;ex ante
+432,Validation Research,data analysis;modeling;experiments on real systems,primary;secondary,ex post;ex ante
+435,Validation Research,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
+477,Experience Paper,data analysis;experiments on real systems;literature analysis,primary;secondary,ex post;ex ante
+688,Validation Research,data analysis;modeling;simulations;experiments on real systems,primary;secondary,ex post;ex ante
+835,Philosophical Paper,data analysis;modeling;literature analysis,secondary,ex post;ex ante
+838,Solution Proposal,modeling;literature analysis,primary;secondary,ex ante
+898,Solution Proposal,data analysis;modeling,secondary,ex ante
+928,Solution Proposal,data analysis;modeling,secondary,ex post
+962,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+979,Validation Research,data analysis;modeling;experiments on real systems,primary;secondary,ex post
+1060,Solution Proposal,data analysis;modeling;simulations,secondary,ex post;ex ante
+2202,Validation Research,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
+2503,Validation Research,data analysis;modeling;simulations,secondary,ex ante
+2520,Evaluation Research,data analysis;modeling,secondary,ex post
+2521,Evaluation Research,data analysis;modeling,secondary,ex post
+2558,Evaluation Research,data analysis;modeling,primary;secondary,ex post
+2866,Philosophical Paper,literature analysis,secondary,ex post;ex ante
+2879,Solution Proposal,data analysis;modeling,secondary,ex ante
+3368,Validation Research,data analysis;modeling,secondary,ex post
+3579,Solution Proposal,data analysis;modeling;simulations,primary;secondary,ex post;ex ante
+3601,Validation Research,modeling;simulations,primary;secondary,ex ante
+3706,Validation Research,data analysis;modeling;simulations,secondary,ex post;ex ante

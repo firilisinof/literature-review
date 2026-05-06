@@ -35,7 +35,7 @@ The review pipeline uses prompt templates in `prompts/` to update the main codin
 - `prompts/extraction.md` updates `artifacts/extraction.csv`
 - `prompts/scheme.md` maintains `artifacts/scheme.json` and classifies each processed batch in the same pass
 
-The scheme workflow is iterative. `prompts/scheme.md` derives and revises the SMS scheme facets using keyword evidence in `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/scheme_log.md`. Methodology codings from `artifacts/extraction.csv` are organized separately in `artifacts/others.csv`, while `research_type` remains in `artifacts/keywording.csv`.
+The scheme workflow is iterative. `prompts/scheme.md` derives and revises the SMS scheme facets using keyword evidence in `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/scheme_log.md`. Research type is stored in `artifacts/others.csv` alongside methodology codings organized from `artifacts/extraction.csv`.
 
 ## New search results
 

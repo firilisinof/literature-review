@@ -5,7 +5,7 @@
       "rationale": "The keywords across the processed batches distinguish carbon-oriented impacts, water-related burdens, material or waste burdens, and biodiversity-related impacts.",
       "categories": [
         {
-          "name": "Carbon emissions and footprint",
+          "name": "Carbon emissions",
           "description": "Papers that address carbon emissions, carbon footprints, decarbonization, operational or embodied carbon, carbon intensity, or greenhouse gas generation.",
           "example_keywords": [
             "carbon emissions",
@@ -75,7 +75,7 @@
           ]
         },
         {
-          "name": "Material, waste, and resource burdens",
+          "name": "Materials and waste",
           "description": "Papers that highlight construction waste, e-waste, hardware lifetime or reuse, metal and mineral depletion, procurement-related burdens, or other material-intensive environmental impacts that are distinct from water use and biodiversity impacts.",
           "example_keywords": [
             "construction waste",
@@ -103,7 +103,7 @@
           ]
         },
         {
-          "name": "Water use and hydrological impacts",
+          "name": "Water use",
           "description": "Papers that address water consumption, water footprint, water-efficient cooling, water scarcity, or thermal impacts on water resources from HPC infrastructure.",
           "example_keywords": [
             "water use",
@@ -124,7 +124,7 @@
           ]
         },
         {
-          "name": "Biodiversity and ecosystem impacts",
+          "name": "Biodiversity and ecosystems",
           "description": "Papers that address biodiversity loss, ecosystem impacts, or biodiversity-related embodied and operational burdens from HPC facilities, hardware, or workloads.",
           "example_keywords": [
             "biodiversity impact",
@@ -141,10 +141,10 @@
     },
     {
       "name": "Lifecycle stages",
-      "rationale": "Keywords consistently point to upstream planning and procurement, operational use and control, and downstream end-of-life or residual-material concerns.",
+      "rationale": "Keywords consistently point to Production-stage decisions, Operational system use, and downstream End of Life or residual-material concerns.",
       "categories": [
         {
-          "name": "Upstream planning and procurement",
+          "name": "Production",
           "description": "Topics concerned with facility planning or siting, hardware design, manufacturing, procurement, replacement, or virtual prototyping before routine operation.",
           "example_keywords": [
             "facility planning",
@@ -186,7 +186,7 @@
           ]
         },
         {
-          "name": "Operational use and control",
+          "name": "Operational",
           "description": "Topics addressing the environmental implications of running HPC systems, including scheduling, runtime control, cooling and heat-reuse operations, resource management, reporting, code execution, and data transfer.",
           "example_keywords": [
             "HPC operations",
@@ -263,7 +263,7 @@
           ]
         },
         {
-          "name": "End-of-life and residual materials",
+          "name": "End of Life",
           "description": "Topics concerned with waste streams, residual material burdens, or strategies that extend hardware life through reuse, recycling, or aging-aware operation.",
           "example_keywords": [
             "construction waste",
@@ -292,10 +292,10 @@
     },
     {
       "name": "System locus",
-      "rationale": "The keywords differentiate where the sustainability problem is situated: in facilities and thermal/energy infrastructure, hardware choices, software and workloads, or operational governance around operators and users.",
+      "rationale": "The keywords differentiate where the sustainability problem is situated: in facilities and energy infrastructure, hardware choices, or software and workloads.",
       "categories": [
         {
-          "name": "Facility, thermal, and energy infrastructure",
+          "name": "Facility and energy infrastructure",
           "description": "Topics focused on data centers, siting, cooling systems, heat recovery, district heating links, onsite or distributed power generation, renewable energy integration, grid coupling, or related site-level infrastructure.",
           "example_keywords": [
             "cloud data centers",
@@ -315,11 +315,13 @@
             "heat pumps"
           ],
           "classification": [
+            1,
             2,
             3,
             5,
             8,
             9,
+            10,
             11,
             12,
             13,
@@ -334,6 +336,7 @@
             24,
             25,
             26,
+            28,
             29,
             30,
             71,
@@ -358,8 +361,8 @@
           ]
         },
         {
-          "name": "Compute hardware and procurement",
-          "description": "Topics focused on hardware components, supercomputer design, server replacement, material composition, alternative compute substrates, or procurement decisions that shape environmental outcomes.",
+          "name": "Compute hardware",
+          "description": "Topics focused on hardware components, supercomputer design, server replacement, material composition, or alternative compute substrates that shape environmental outcomes.",
           "example_keywords": [
             "liquid-cooled supercomputers",
             "hardware design",
@@ -375,7 +378,9 @@
             "metal usage"
           ],
           "classification": [
+            1,
             3,
+            4,
             6,
             7,
             14,
@@ -394,7 +399,7 @@
           ]
         },
         {
-          "name": "Software, workloads, and data flows",
+          "name": "Software and workloads",
           "description": "Topics focused on scheduling, optimization, workload distribution, workload shifting, application and code behavior, or end-to-end movement of data through HPC systems.",
           "example_keywords": [
             "workload scheduling",
@@ -415,10 +420,13 @@
             "programming models"
           ],
           "classification": [
+            1,
             2,
             3,
+            4,
             7,
             8,
+            10,
             11,
             13,
             14,
@@ -427,10 +435,12 @@
             18,
             20,
             22,
+            28,
             30,
             60,
             77,
             239,
+            406,
             419,
             432,
             435,
@@ -441,37 +451,6 @@
             2503,
             3368
           ]
-        },
-        {
-          "name": "Operational governance and user practices",
-          "description": "Topics focused on how operators, users, and policymakers shape environmental performance through incentives, behavior, awareness, reporting, sustainability metrics, and operational or policy management.",
-          "example_keywords": [
-            "HPC operations",
-            "user behavior",
-            "incentive mechanisms",
-            "environmental awareness",
-            "user-centric reporting",
-            "policy guidance",
-            "carbon reporting",
-            "provider-user mitigation"
-          ],
-          "classification": [
-            1,
-            4,
-            7,
-            10,
-            16,
-            22,
-            28,
-            223,
-            239,
-            406,
-            421,
-            2520,
-            2521,
-            2558,
-            3706
-          ]
         }
       ]
     },
@@ -480,7 +459,7 @@
       "rationale": "The batches use keywords that repeatedly describe how sustainability is acted on: by making impacts visible, controlling runtime behavior, redesigning infrastructure, or changing organizational incentives and strategy.",
       "categories": [
         {
-          "name": "Measurement, accounting, and visibility",
+          "name": "Measurement and accounting",
           "description": "Papers that make environmental impacts measurable or reportable through accounting frameworks, lifecycle assessment, carbon, energy, water, biodiversity, or material modeling, observability tooling, benchmark datasets, empirical analysis, forecasting, or user-facing reporting.",
           "example_keywords": [
             "lifecycle assessment",
@@ -540,7 +519,7 @@
           ]
         },
         {
-          "name": "Runtime control and workload optimization",
+          "name": "Workload and runtime optimization",
           "description": "Papers that seek lower impact through scheduling, workload shifting, power control, application or code-level optimization, or other runtime management mechanisms.",
           "example_keywords": [
             "workload scheduling",
@@ -584,7 +563,7 @@
           ]
         },
         {
-          "name": "Infrastructure and cooling design",
+          "name": "Infrastructure design",
           "description": "Papers that improve sustainability through facility planning or siting, power-supply choices, hardware design or replacement, hardware reuse, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
           "example_keywords": [
             "data center design",
@@ -633,7 +612,7 @@
           ]
         },
         {
-          "name": "Incentives and strategic framing",
+          "name": "Incentives and policy",
           "description": "Papers that emphasize sustainability visions, decarbonization roadmaps, user or operator incentives, organizational or policy strategy, or other framing devices for changing behavior.",
           "example_keywords": [
             "sustainability",

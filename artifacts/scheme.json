@@ -292,7 +292,7 @@
     },
     {
       "name": "System locus",
-      "rationale": "The keywords differentiate where the sustainability problem is situated: in facilities and energy infrastructure, hardware choices, or software and workloads.",
+      "rationale": "The keywords differentiate where the environmental impacts of HPC are situated: in facilities and energy infrastructure, hardware choices, or software and workloads.",
       "categories": [
         {
           "name": "Facility and energy infrastructure",
@@ -456,7 +456,7 @@
     },
     {
       "name": "Management and intervention levers",
-      "rationale": "The batches use keywords that repeatedly describe how sustainability is acted on: by making impacts visible, controlling runtime behavior, redesigning infrastructure, or changing organizational incentives and strategy.",
+      "rationale": "The batches use keywords that repeatedly describe how the environmental impacts of HPC are addressed: by making impacts visible, controlling runtime behavior, redesigning infrastructure, or changing organizational incentives and strategy.",
       "categories": [
         {
           "name": "Measurement and accounting",
@@ -564,7 +564,7 @@
         },
         {
           "name": "Infrastructure design",
-          "description": "Papers that improve sustainability through facility planning or siting, power-supply choices, hardware design or replacement, hardware reuse, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
+          "description": "Papers that reduce the environmental impacts of HPC through facility planning or siting, power-supply choices, hardware design or replacement, hardware reuse, cooling choices, waste heat recovery, water-aware cooling, district heating links, or other engineering decisions about infrastructure and compute substrates.",
           "example_keywords": [
             "data center design",
             "sustainable cooling",
@@ -613,7 +613,7 @@
         },
         {
           "name": "Incentives and policy",
-          "description": "Papers that emphasize sustainability visions, decarbonization roadmaps, user or operator incentives, organizational or policy strategy, or other framing devices for changing behavior.",
+          "description": "Papers that emphasize visions for reducing environmental impacts, decarbonization roadmaps, user or operator incentives, organizational or policy strategy, or other framing devices for changing behavior.",
           "example_keywords": [
             "sustainability",
             "decarbonization",

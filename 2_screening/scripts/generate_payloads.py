@@ -8,21 +8,21 @@ from typing import Literal, TypedDict
 REQUIRED_COLUMNS: tuple[str, str, str] = ("id", "title", "abstract")
 PAYLOAD_SIZE: int = 1000
 MAX_OUTPUT_TOKENS: int = 80
-PROJECT_DIR: Path = Path(__file__).resolve().parent.parent
+PROJECT_DIR: Path = Path(__file__).resolve().parents[2]
 INPUT_PATH: Path = PROJECT_DIR / "artifacts" / "all_papers.csv"
-OUTPUT_DIR: Path = PROJECT_DIR / "payloads"
+OUTPUT_DIR: Path = PROJECT_DIR / "2_screening" / "payloads"
 SYSTEM_INTRO: str = (
     "You are screening studies for a systematic mapping study on the environmental "
     "impacts of high-performance computing (HPC)."
 )
 SYSTEM_RULES: str = (
     "Include if ANY of the following apply:\n"
-    "- IC1: The paper addresses at least one environmental impact in the HPC context\n"
-    "- IC2: The paper presents methodologies for predicting or measuring the environmental impacts of HPC systems\n\n"
+    "- IC1: Reports addressing at least one environmental impact in the HPC context\n"
+    "- IC2: Reports presenting methodologies for predicting or measuring the environmental impacts of HPC systems\n\n"
     "Exclude if ANY of the following apply:\n"
-    "- EC1: The paper is not related to the environmental impacts of HPC\n"
-    "- EC2: The paper focuses solely on energy consumption without connecting to broader environmental impacts\n"
-    "- EC3: The paper is not in English, is unavailable, or is inaccessible\n\n"
+    "- EC1: Reports not related to the literature review scope\n"
+    "- EC2: Reports focusing solely on energy without connecting to broader environmental impacts\n"
+    "- EC3: Reports not in English, unavailable, or inaccessible\n\n"
     "Return JSON only with keys decision and reason.\n"
     "Allowed decisions: include, exclude.\n"
     "Allowed reason values: IC1, IC2, EC1, EC2, EC3, doubt.\n"

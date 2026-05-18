@@ -1,120 +1,141 @@
-# Literature Review
+# Literature Review Artifacts
 
-Tools for collecting and screening papers in a systematic mapping study on the environmental impacts of high-performance computing (HPC).
+Artifacts pipeline of the paper "The Environmental Impacts Of High-Performance Computing: A Systematic Mapping Study".
 
-## Data sources
+The pipeline is organized into four phases. Each phase has its own folder with a README.
 
-Papers were collected from three databases using a keyword search string targeting environmental impacts of HPC systems. The full search strings and review protocol are documented in below.
+```
+1_search/      Database exports and merged BibTeX
+2_screening/   AI + human title/abstract screening
+3_coding/      Prompt-driven keywording, extraction, and scheme classification
+4_analysis/    Scripts and notebooks that produce paper-facing tables and figures
+artifacts/     All generated outputs (read by every phase)
+figures/       Generated figures (consumed by the paper)
+tables/        Generated LaTeX tables (consumed by the paper)
+```
 
-Raw BibTeX files are in `papers/`:
-- `acm.bib` — ACM Digital Library results
-- `ieee.bib` — IEEE Xplore results
-- `scopus.bib` — Scopus results
-- `papers.bib` — Merged and deduplicated (3,788 papers)
+The project is managed by `uv`. Run any Python entry point with `uv run python <path>`.
 
-Generated review artifacts are organized by directory:
-- `artifacts/all_papers.csv` — screening input: `id,canonical_id,title,abstract` columns. `id` preserves the original row identifier, while `canonical_id` is used to collapse known duplicate rows when counting unique papers.
-- `artifacts/processed.csv` — normalized screening decisions cache built from the provider batch outputs in `results/`
-- `artifacts/unanimous_include.csv` — papers unanimously included by Anthropic, OpenAI, and Gemini
-- `artifacts/included.bib` — BibTeX export for the included papers
-- `artifacts/metadata.csv`, `artifacts/keywording.csv`, `artifacts/extraction.csv`, `artifacts/others.csv`, `artifacts/scheme.json` — downstream review artifacts
-- `artifacts/scheme_log.md` — per-batch log of SMS scheme revisions, keyword resolution, and classification decisions
-- `decisions/` — manual screening decisions
-- `notebooks/` — analysis and batch-download notebooks
-- `scripts/` — helper scripts for generating and submitting provider payloads
-- `payloads/` — batch request files sent to providers
-- `results/` — raw batch outputs downloaded from providers
-- `prompts/` — prompt templates used throughout the review workflow
-- `papers/markdown/` — markdown copies of selected papers
+## Research questions
 
-## Prompt workflow
-
-The review pipeline uses prompt templates in `prompts/` to update the main coding artifacts:
-
-- `prompts/keywording.md` and `prompts/keywording_revision.md` update `artifacts/keywording.csv`
-- `prompts/extraction.md` updates `artifacts/extraction.csv`
-- `prompts/scheme.md` maintains `artifacts/scheme.json` and classifies each processed batch in the same pass
-
-The scheme workflow is iterative. `prompts/scheme.md` derives and revises the SMS scheme facets using keyword evidence in `keywording.csv`, stores category memberships in `classification` as JSON arrays of numeric paper ids, and appends batch-level provenance to `artifacts/scheme_log.md`. Research type is stored in `artifacts/others.csv` alongside methodology codings organized from `artifacts/extraction.csv`.
-
-## New search results
-
-Done in April 11, 2026.
-
-| Database | Number of papers |
-| -------- | ------- |
-| ACM | 532 |
-| IEEE | 1505 |
-| Scopus | 2775 |
-
-| Stage | Number of papers |
-| -------- | ------- |
-| After the searches | 4812 |
-| After removing duplicates | 3788 |
-| Rows in `artifacts/all_papers.csv` after merging with the first search | 3795 |
-| Unique papers after resolving duplicate aliases via `canonical_id` | 3793 |
-| Unanimous choice between the three AI models `decisions/lucas.csv` | 244 |
-| New papers included | 33 |
-
-Observation: Papers 865 and 2140 both returned "type": "succeeded" from the Anthropic API but with an empty content: `[]` array. The model was called successfully but produced no output. This is a known (rare) Anthropic API edge case where the response is technically successful but the model emitted nothing.
-
-## About this literature review
-
-My goal was to explore how environmental impacts are quantified in high-performance computing (HPC). The literature on HPC energy consumption is extensive; however, this metric alone is insufficient for fully understanding the sustainability of these systems. Through preliminary searches, I was unable to identify papers that addressed environmental impacts comprehensively. I therefore decided to conduct a literature review on this topic.
-
-After receiving the journal reviews, I need to revise several parts of the study. I am currently reframing the paper as a systematic mapping study. I am also repeating the searches to identify additional papers. The new searches returned 3,788 papers. I am using an automated AI batch-screening process for screening that evaluates titles and abstracts and decides whether to include or exclude each paper.
-
-### Research questions
-
-| ID | Research Question |
+| ID | Research question |
 | :--- | :--- |
-| RQ1 | To what extent does HPC research cover environmental dimensions? |
-| RQ1a | How is the coverage of environmental impacts distributed across lifecycle stages? |
-| RQ2 | How do methodological dimensions vary across environmental dimensions and lifecycle stages? |
-| RQ2a | How do mitigation strategies vary between software and hardware interventions? |
-| RQ2b | Which methodological approaches yield more thorough environmental assessments? |
-| RQ2c | Does analytical scale affect assessment comprehensiveness? |
-| RQ3 | How has the comprehensiveness of environmental assessments evolved over time in HPC research? |
+| RQ1 | What is the current landscape of research on the environmental impacts of HPC? |
+| RQ2 | How does the literature study and address the environmental impacts of HPC? |
+| RQ3 | Where are the blind spots in current research on the environmental impacts of HPC? |
 
+## Selection criteria
 
-### Search string
+Include if any apply:
+- **IC1**: Reports addressing at least one environmental impact in the HPC context.
+- **IC2**: Reports presenting methodologies for predicting or measuring the environmental impacts of HPC systems.
 
-The search string used to find papers is:
+Exclude if any apply:
+- **EC1**: Reports not related to the literature review scope.
+- **EC2**: Reports focusing solely on energy without connecting to broader environmental impacts.
+- **EC3**: Reports not in English, unavailable, or inaccessible.
+
+## Search string
 
 ```
 (
-    TITLE-ABS-KEY("high-performance computing" OR supercomputing OR supercomputer OR HPC) 
-    AND 
+    TITLE-ABS-KEY("high-performance computing" OR supercomputing OR supercomputer OR HPC)
+    AND
     TITLE-ABS-KEY("sustainability" OR "sustainable" OR "ecological" OR "footprint" OR "environmental impact" OR "carbon emission" OR "greenhouse gas" OR "water consumption" OR "water usage" OR "lifecycle assessment" OR "LCA" OR "embodied carbon" OR "e-waste" OR "electronic waste" OR "material depletion" OR "resource consumption" OR "rare earth")
 )
 ```
 
-Initially, it was just TITLE for the HPC terms. The last search included abstract and keywords too.
+Initial run used `TITLE` only for the HPC terms. The April 2026 run added abstract and keywords.
 
-### Databases
+## Search yields (April 2026 re-run)
 
-Three databases were used to collect papers:
+| Database | Papers |
+| -------- | -----: |
+| ACM | 532 |
+| IEEE | 1,505 |
+| Scopus | 2,775 |
 
-- ACM Digital Library
-- IEEE Xplore
-- Scopus
+| Stage | Papers |
+| -------- | -----: |
+| After the searches | 4,812 |
+| After deduplication | 3,788 |
+| Rows in `artifacts/all_papers.csv` after merging with the first search | 3,795 |
+| Unique papers after collapsing duplicate aliases via `canonical_id` | 3,793 |
+| Unanimous includes across the three AI raters (`unanimous_include.csv`) | 244 |
+| New papers included in the final corpus | 33 |
+| Final corpus (consumed by the paper) | 62 |
 
-### Selection criteria
+## Pipeline
 
-The paper selection process consists of the following steps:
+### Phase 1 — Search and merge (`1_search/`)
 
-1. Search for papers in the three databases using the proposed search string
-2. Merge the papers from all sources into a single set without duplications
-3. Screen titles and abstracts against the selection criteria
-4. Apply a snowballing technique to identify additional papers
+Manual exports from each database. The merge step produces `papers.bib` and the screening input `artifacts/all_papers.csv`.
 
-| ID | Inclusion Criteria (IC) |
-| :--- | :--- |
-| IC1 | Reports addressing at least one environmental impact in the HPC context |
-| IC2 | Reports presenting methodologies for predicting or measuring the environmental impacts of HPC systems |
+Outputs:
+- `1_search/acm.bib`, `ieee.bib`, `scopus.bib` — raw exports
+- `1_search/papers.bib` — merged, deduplicated
+- `artifacts/all_papers.csv` — screening input with columns `id, canonical_id, title, abstract`
 
-| ID | Exclusion Criteria (EC) |
-| :--- | :--- |
-| EC1 | Reports not related to the literature review scope |
-| EC2 | Reports focusing solely on energy without connecting to broader environmental impacts |
-| EC3 | Reports not in English, unavailable, or inaccessible |
+### Phase 2 — AI and human screening (`2_screening/`)
+
+Three AI providers (OpenAI, Anthropic, Gemini) screen every paper in `all_papers.csv`. Papers unanimously included are routed to two human raters whose decisions are merged into a final include/exclude set.
+
+```sh
+uv run python 2_screening/scripts/generate_payloads.py
+uv run python 2_screening/scripts/submit_payload.py 2_screening/payloads/<file>.jsonl
+```
+
+Then open the notebooks (`uv run jupyter lab`):
+- `2_screening/notebooks/evaluate_raters.ipynb` — rater agreement metrics, writes `artifacts/processed.csv` and `artifacts/unanimous_include.csv`.
+- `2_screening/notebooks/analyze_decisions.ipynb` — merges `2_screening/decisions/{first,lucas,victor}.csv`; writes `artifacts/conflicts.csv` and `artifacts/included.bib`.
+
+Observation: Papers 865 and 2140 returned `"type": "succeeded"` from the Anthropic API with an empty `content: []`. Known rare Anthropic edge case (successful response, empty output).
+
+### Phase 3 — Coding (`3_coding/`)
+
+Prompt-driven per-paper coding against markdown copies of the corpus papers. The markdowns themselves are not included in this repository because the underlying papers are third-party publications and not redistributable; obtain them from the original publishers via the DOIs in `artifacts/included.bib`. Each prompt owns specific columns in specific artifact files:
+
+| Prompt | Updates |
+| ------ | ------- |
+| `prompts/keywording.md` (initial) and `prompts/keywording_revision.md` (full-text revision) | `artifacts/keywording.csv` |
+| `prompts/extraction.md` | `artifacts/extraction.csv` |
+| `prompts/scheme.md` | `artifacts/scheme.json`, `artifacts/scheme_log.md`, `artifacts/others.csv` |
+
+The scheme workflow is iterative. `scheme.md` derives and revises the four SMS facets from `keywording.csv`, stores per-category paper-id arrays in `classification`, and appends a dated entry to `scheme_log.md` for every batch.
+
+### Phase 4 — Analysis and outputs (`4_analysis/`)
+
+```sh
+uv run python 4_analysis/scripts/build_merge.py                    # -> artifacts/merge.csv
+uv run python 4_analysis/scripts/build_presence_matrix.py          # -> tables/presence-matrix.tex
+uv run python 4_analysis/scripts/build_venue_categories_table.py   # -> tables/venue-categories.tex
+```
+
+Open `4_analysis/notebooks/plots.ipynb` (`uv run jupyter lab`) and run all cells to refresh `figures/`.
+
+The paper repository copies `figures/` and `tables/` in when it builds. Nothing in this repository writes outside its own tree.
+
+## Artifacts reference
+
+All files live in `artifacts/` unless noted.
+
+| File | Producer | Consumer | Notes |
+| ---- | -------- | -------- | ----- |
+| `all_papers.csv` | Search merge (manual) | screening payloads, every downstream notebook | screening input, 3,795 rows |
+| `processed.csv` | `evaluate_raters.ipynb` | `evaluate_raters.ipynb` | normalized AI screening cache |
+| `unanimous_include.csv` | `evaluate_raters.ipynb` | human rater input | 244 papers |
+| `conflicts.csv` | `analyze_decisions.ipynb` | `analyze_decisions.ipynb` | human-rater disagreement log, resolved manually |
+| `included.bib` | `analyze_decisions.ipynb` | the paper bibliography | BibTeX export of included papers; refresh when the corpus changes |
+| `keywording.csv` | `prompts/keywording.md` | `prompts/scheme.md` | per-paper keywords |
+| `extraction.csv` | `prompts/extraction.md` | `build_merge.py` | source of truth for `methodological_approach`, `data_source`, `assessment_orientation` |
+| `others.csv` | `prompts/scheme.md` | `build_merge.py` | only `research_type` is used downstream; the other columns duplicate `extraction.csv` and are kept as a transparency byproduct of the scheme workflow (not part of the final analysis) |
+| `scheme.json` | `prompts/scheme.md` | `build_merge.py` | facet definitions and `classification` arrays |
+| `scheme_log.md` | `prompts/scheme.md` | reproducibility audit | dated per-batch revision notes |
+| `metadata.csv` | one-shot Zotero sync and venue enrichment, committed | `build_merge.py` | paper metadata spine for the 62-paper corpus |
+| `merge.csv` | `build_merge.py` | tables, figures | master joined view |
+
+## Repository conventions
+
+- Managed with `uv`. Do not invoke `python` directly; use `uv run python <script>`.
+- Do not list AI systems in `Co-authored-by:` trailers.
+- Keep commit messages concise.

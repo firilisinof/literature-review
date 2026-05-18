@@ -4,15 +4,16 @@ Artifacts pipeline of the paper "The Environmental Impacts Of High-Performance C
 
 The pipeline is organized into four phases. Each phase has its own folder with a README.
 
-```
-1_search/      Database exports and merged BibTeX
-2_screening/   AI + human title/abstract screening
-3_coding/      Prompt-driven keywording, extraction, and scheme classification
-4_analysis/    Scripts and notebooks that produce paper-facing tables and figures
-artifacts/     All generated outputs (read by every phase)
-figures/       Generated figures (consumed by the paper)
-tables/        Generated LaTeX tables (consumed by the paper)
-```
+- [1_search/](1_search/README.md) — Database exports and merged BibTeX
+- [2_screening/](2_screening/README.md) — AI and human title/abstract screening
+- [3_coding/](3_coding/README.md) — Prompt-driven keywording, extraction, and scheme classification
+- [4_analysis/](4_analysis/README.md) — Scripts and notebooks that produce paper-facing tables and figures
+
+Additional files are available at:
+
+- `artifacts/` — All generated outputs (read by every phase)
+- `figures/` — Generated figures (consumed by the paper)
+- `tables/` — Generated LaTeX tables (consumed by the paper)
 
 The project is managed by `uv`. Run any Python entry point with `uv run python <path>`.
 

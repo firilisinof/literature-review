@@ -1,4 +1,4 @@
-# Literature Review Artifacts
+# Systematic Mapping Study (SMS) Artifacts
 
 Artifacts pipeline of the paper "The Environmental Impacts Of High-Performance Computing: A Systematic Mapping Study".
 
@@ -16,55 +16,6 @@ Additional files are available at:
 - `tables/` — Generated LaTeX tables (consumed by the paper)
 
 The project is managed by `uv`. Run any Python entry point with `uv run python <path>`.
-
-## Research questions
-
-| ID | Research question |
-| :--- | :--- |
-| RQ1 | What is the current landscape of research on the environmental impacts of HPC? |
-| RQ2 | How does the literature study and address the environmental impacts of HPC? |
-| RQ3 | Where are the blind spots in current research on the environmental impacts of HPC? |
-
-## Selection criteria
-
-Include if any apply:
-- **IC1**: Reports addressing at least one environmental impact in the HPC context.
-- **IC2**: Reports presenting methodologies for predicting or measuring the environmental impacts of HPC systems.
-
-Exclude if any apply:
-- **EC1**: Reports not related to the literature review scope.
-- **EC2**: Reports focusing solely on energy without connecting to broader environmental impacts.
-- **EC3**: Reports not in English, unavailable, or inaccessible.
-
-## Search string
-
-```
-(
-    TITLE-ABS-KEY("high-performance computing" OR supercomputing OR supercomputer OR HPC)
-    AND
-    TITLE-ABS-KEY("sustainability" OR "sustainable" OR "ecological" OR "footprint" OR "environmental impact" OR "carbon emission" OR "greenhouse gas" OR "water consumption" OR "water usage" OR "lifecycle assessment" OR "LCA" OR "embodied carbon" OR "e-waste" OR "electronic waste" OR "material depletion" OR "resource consumption" OR "rare earth")
-)
-```
-
-Initial run used `TITLE` only for the HPC terms. The April 2026 run added abstract and keywords.
-
-## Search yields (April 2026 re-run)
-
-| Database | Papers |
-| -------- | -----: |
-| ACM | 532 |
-| IEEE | 1,505 |
-| Scopus | 2,775 |
-
-| Stage | Papers |
-| -------- | -----: |
-| After the searches | 4,812 |
-| After deduplication | 3,788 |
-| Rows in `artifacts/all_papers.csv` after merging with the first search | 3,795 |
-| Unique papers after collapsing duplicate aliases via `canonical_id` | 3,793 |
-| Unanimous includes across the three AI raters (`unanimous_include.csv`) | 244 |
-| New papers included in the final corpus | 33 |
-| Final corpus (consumed by the paper) | 62 |
 
 ## Pipeline
 
@@ -134,9 +85,3 @@ All files live in `artifacts/` unless noted.
 | `scheme_log.md` | `prompts/scheme.md` | reproducibility audit | dated per-batch revision notes |
 | `metadata.csv` | one-shot Zotero sync and venue enrichment, committed | `build_merge.py` | paper metadata spine for the 62-paper corpus |
 | `merge.csv` | `build_merge.py` | tables, figures | master joined view |
-
-## Repository conventions
-
-- Managed with `uv`. Do not invoke `python` directly; use `uv run python <script>`.
-- Do not list AI systems in `Co-authored-by:` trailers.
-- Keep commit messages concise.

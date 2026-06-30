@@ -10,4 +10,5 @@ wheels/
 .venv
 .DS_Store
 .claude
+.codex
 2_screening/payloads/

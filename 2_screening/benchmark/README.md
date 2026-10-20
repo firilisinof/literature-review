@@ -8,6 +8,8 @@ Keep the published criteria fixed. No paid model requests are authorized yet.
 - `benchmark.jsonl`: all 595 records, one JSON object per line.
 - `build_dataset.py`: rebuilds the dataset from the original screening files.
 - `README.md`: the evaluation plan and source notes.
+- `prompt.txt`: the shared screening instructions.
+- `run_development.py`: prepares or sends development requests.
 
 Each record has `record_id`, `title`, `abstract`, `label`, `split`, `cohort`,
 `label_source`, and `abstract_source`. Use the `split` field to select records.
@@ -26,6 +28,89 @@ uv run --no-project --with bibtexparser==1.4.4 python 2_screening/benchmark/buil
 The script checks IDs, human decisions, abstract matches, and split counts before
 writing the dataset. It makes no model requests. `uv` can download the parser
 package if it is not cached. There is no separate test command or audit file.
+
+## Run development screening
+
+The runner uses Python's standard library. It reads only the 119 development
+records. It never selects held-out records. Dry-run is the default and needs
+no API key, model download, or running server.
+
+Preview one record for each model:
+
+```sh
+python 2_screening/benchmark/run_development.py --dry-run --limit 1
+```
+
+Prepare all 119 requests for each of the five models in one file:
+
+```sh
+python 2_screening/benchmark/run_development.py --dry-run --output preview.jsonl
+```
+
+Use `--model jev`, `decisions`, `kev-4b`, `kev-9b`, or `qwen` to select one model.
+The prompt and paper text are the same across models. The request format differs
+by API. Each model must return `include` or `exclude` under the published criteria.
+
+Live runs require `--execute` and a new `--output` path. Hosted runs also require
+`TYPESAFE_API_KEY` for Jev or `OPENAI_API_KEY` for OpenAI Decisions. Do not run a
+paid service until paid requests are approved. A later approved Jev run would use:
+
+```sh
+python 2_screening/benchmark/run_development.py --model jev --execute --limit 1 --output jev-development.jsonl
+```
+
+Local models need a running server. The runner does not install or load weights.
+Start Kev from [its source repository](https://github.com/jaredpalmer/kev),
+using a local checkpoint downloaded from the selected `v1.0` revision:
+
+```sh
+uv run --extra serve python -m kev.serve --run /path/to/kev-4b-checkpoint --port 8009
+```
+
+Use port 8010 for Kev-9B. Both Kev servers accept the request model name
+`kev-latest`. The checkpoint loaded by each server determines the actual model.
+Verify that it matches the selected model and record the checkpoint and server
+commit hashes with `--revision`. The runner records this supplied value but
+cannot verify the weights loaded by the server.
+
+Serve Qwen with a compatible vLLM installation, using the chosen model commit:
+
+```sh
+vllm serve Qwen/Qwen3-8B --revision MODEL_COMMIT --port 8000
+```
+
+Replace `MODEL_COMMIT` with the selected commit hash. Qwen requests disable
+thinking with `chat_template_kwargs`, use temperature 0, and allow 16 output
+tokens for a single label. Truncated or malformed answers are technical errors.
+No input text is truncated by the runner. The server must reject oversized
+inputs rather than silently truncate them.
+
+For example, after starting the Kev-4B server:
+
+```sh
+python 2_screening/benchmark/run_development.py --model kev-4b --execute --revision 'MODEL_COMMIT; SERVER_COMMIT' --limit 1 --output kev4-development.jsonl
+```
+
+Replace the revision placeholders with the actual hashes. Use `--url` to set the
+full endpoint URL of a local server on another machine or port. The defaults are
+`http://localhost:8009/v1/systemone` for Kev-4B,
+`http://localhost:8010/v1/systemone` for Kev-9B, and
+`http://localhost:8000/v1/chat/completions` for Qwen.
+
+Each output line records the paper ID, model, request, prompt hash, and run time.
+Live results also contain the raw response, elapsed seconds, decision, and status. Raw responses preserve probabilities and token usage when supplied.
+The runner makes one request at a time, waits at most 60 seconds per request,
+and does not retry. A failed request has `status: error` and `decision: null`.
+An error is not an inclusion or exclusion decision. HTTP errors also record the status code. Existing output files are never
+overwritten. A dry-run file contains requests only, not simulated predictions.
+
+The runner does not score results or calculate billing. Keep predictions fixed
+before joining them to the human labels for the agreed metrics.
+
+Request formats follow the [TypeSafe API](https://docs.typesafe.ai/api),
+[OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions),
+and [Qwen model card](https://huggingface.co/Qwen/Qwen3-8B).
+Live API access and GPU inference have not been tested.
 
 ## Split and evaluation
 

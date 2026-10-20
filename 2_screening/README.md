@@ -1,18 +1,26 @@
-# 2 — Screening
+# 2 Screening
 
-Title/abstract screening across three AI raters (OpenAI, Anthropic, Gemini) plus two human raters. Unanimous AI includes are sent to the humans; their decisions are merged and conflicts resolved manually.
+This stage screens titles and abstracts with three AI raters: OpenAI, Anthropic,
+and Gemini. Two human reviewers check the records that all three AI raters
+include. A manual review resolves disagreements between the human reviewers.
 
 ## Layout
 
-- `scripts/generate_payloads.py` — read `artifacts/all_papers.csv`, write per-provider batch payloads into `payloads/` (gitignored: regenerated on demand).
-- `scripts/submit_payload.py` — submit one payload file to a provider's batch API.
-- `results/` — raw batch outputs (`{provider}-batch-{NNN}.jsonl`) kept for reproducibility.
-- `decisions/first.csv` — initial pilot screening on the first search.
-- `decisions/lucas.csv`, `decisions/victor.csv` — two human raters on the April 2026 AI-unanimous set.
-- `notebooks/evaluate_raters.ipynb` — AI rater agreement and screening cache.
-- `notebooks/analyze_decisions.ipynb` — human screening merge, conflict log, included BibTeX.
+| File or folder | Purpose |
+| --- | --- |
+| `scripts/generate_payloads.py` | Reads `artifacts/all_papers.csv` and writes batch requests for each provider to `payloads/`. Git ignores these generated files. |
+| `scripts/submit_payload.py` | Sends one request file to a provider's batch API. |
+| `results/` | Keeps raw batch outputs (`{provider}-batch-{NNN}.jsonl`) so results can be checked. |
+| `decisions/first.csv` | Contains human decisions for the initial search and snowball findings. |
+| `decisions/lucas.csv`, `decisions/victor.csv` | Contain human decisions for the April 2026 set selected by all three AI raters. |
+| `notebooks/evaluate_raters.ipynb` | Checks AI agreement and saves screening results. |
+| `notebooks/analyze_decisions.ipynb` | Combines human decisions and writes the conflict log and included BibTeX records. |
 
 ## Run order
+
+The commands below describe the original screening workflow. The submission
+command sends requests to a model provider. For benchmark preparation, use the
+local rebuild command in the benchmark README.
 
 ```sh
 uv run python scripts/generate_payloads.py
@@ -32,4 +40,11 @@ uv run jupyter lab notebooks/analyze_decisions.ipynb     # -> conflicts.csv, inc
 | `../artifacts/conflicts.csv` | `analyze_decisions.ipynb` |
 | `../artifacts/included.bib` | `analyze_decisions.ipynb` |
 
-The screening prompt's IC/EC strings are embedded in `scripts/generate_payloads.py`. The current `results/*.jsonl` were produced under earlier phrasing; only future re-runs reflect the updated text.
+The IC/EC text for the screening prompt is in `scripts/generate_payloads.py`.
+The current `results/*.jsonl` used earlier wording. New runs use the updated text.
+
+## Methodology benchmark
+
+[benchmark/README.md](benchmark/README.md) describes the benchmark with human labels.
+It explains ID corrections, abstract sources, approved record removals, and local
+checks. The benchmark keeps the published criteria and the original source files.

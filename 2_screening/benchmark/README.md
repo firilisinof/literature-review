@@ -11,6 +11,7 @@ Keep the published criteria fixed. No paid model requests are authorized yet.
 - `prompt.txt`: the shared screening instructions.
 - `run_development.py`: prepares or sends development requests.
 - `run_local.py`: starts the pinned local servers and runs development requests.
+- `compare_development.py`: scores saved development runs and plots the comparison.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
 - `results/`: dated response files and the local run summary.
 
@@ -144,6 +145,17 @@ The 20261021 summary also contains the development comparison. Successful
 runs do not keep extra logs or duplicate input files.
 
 ## Split and evaluation
+
+Compare all five saved development runs for one date without making requests:
+
+```sh
+uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/compare_development.py --date 20261021
+```
+
+The script checks the development IDs, prompt hash, response decisions, and
+complete coverage before scoring. It writes a comparison JSON and two PNG
+plots under `results/`. It uses only development labels. Raw responses stay
+unchanged. The comparison JSON includes two-sided 95% Wilson recall intervals.
 
 | Set | Include | Exclude | Total |
 | --- | ---: | ---: | ---: |

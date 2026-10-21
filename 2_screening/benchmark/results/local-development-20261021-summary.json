@@ -1,0 +1,1206 @@
+{
+  "prompt_sha256": "760f0697c375b94bccb58ea0d3435cf66c5cff4681026aff7b47179824a784e3",
+  "gpu": "NVIDIA L40S, GPU 0",
+  "concurrency": 1,
+  "retries": 0,
+  "held_out_used": false,
+  "models": [
+    {
+      "model": "kev-4b",
+      "records": 119,
+      "valid": 119,
+      "errors": [],
+      "startup_seconds": 12.03874536299918,
+      "run_seconds": 15.248014417000377,
+      "request_seconds": 15.147593,
+      "mean_request_seconds": 0.1272906974789916,
+      "median_request_seconds": 0.121758,
+      "max_request_seconds": 0.656913,
+      "server_lifetime_seconds": 27.70575755400023
+    },
+    {
+      "model": "kev-9b",
+      "records": 119,
+      "valid": 119,
+      "errors": [],
+      "startup_seconds": 12.032989698000165,
+      "run_seconds": 15.602906587000689,
+      "request_seconds": 15.51975,
+      "mean_request_seconds": 0.13041806722689075,
+      "median_request_seconds": 0.125679,
+      "max_request_seconds": 0.653043,
+      "server_lifetime_seconds": 28.01213388100041
+    },
+    {
+      "model": "qwen",
+      "records": 119,
+      "valid": 119,
+      "errors": [],
+      "startup_seconds": 40.050673338000706,
+      "run_seconds": 8.424381187000108,
+      "request_seconds": 8.324048,
+      "mean_request_seconds": 0.06994998319327732,
+      "median_request_seconds": 0.068079,
+      "max_request_seconds": 0.474712,
+      "server_lifetime_seconds": 49.294861182001114
+    }
+  ],
+  "comparison": {
+    "split": "development",
+    "records": 119,
+    "human_includes": 12,
+    "human_excludes": 107,
+    "prompt_sha256": "760f0697c375b94bccb58ea0d3435cf66c5cff4681026aff7b47179824a784e3",
+    "metrics": {
+      "kev-4b": {
+        "true_inclusions": 12,
+        "false_exclusions": 0,
+        "false_inclusions": 57,
+        "true_exclusions": 50,
+        "recall": 1.0,
+        "recall_wilson_95": [
+          0.7575059933447592,
+          1.0
+        ],
+        "precision": 0.17391304347826086,
+        "retained": 69,
+        "retained_fraction": 0.5798319327731093,
+        "human_disagreements": 57,
+        "coverage": 1.0,
+        "errors": 0,
+        "false_exclusion_ids": []
+      },
+      "kev-9b": {
+        "true_inclusions": 11,
+        "false_exclusions": 1,
+        "false_inclusions": 36,
+        "true_exclusions": 71,
+        "recall": 0.9166666666666666,
+        "recall_wilson_95": [
+          0.646120088858883,
+          0.9851349055950829
+        ],
+        "precision": 0.23404255319148937,
+        "retained": 47,
+        "retained_fraction": 0.3949579831932773,
+        "human_disagreements": 37,
+        "coverage": 1.0,
+        "errors": 0,
+        "false_exclusion_ids": [
+          "5"
+        ]
+      },
+      "qwen": {
+        "true_inclusions": 12,
+        "false_exclusions": 0,
+        "false_inclusions": 44,
+        "true_exclusions": 63,
+        "recall": 1.0,
+        "recall_wilson_95": [
+          0.7575059933447592,
+          1.0
+        ],
+        "precision": 0.21428571428571427,
+        "retained": 56,
+        "retained_fraction": 0.47058823529411764,
+        "human_disagreements": 44,
+        "coverage": 1.0,
+        "errors": 0,
+        "false_exclusion_ids": []
+      }
+    },
+    "pairwise_disagreements": {
+      "kev-4b / kev-9b": 22,
+      "kev-4b / qwen": 17,
+      "kev-9b / qwen": 15
+    },
+    "all_three_agree": 92,
+    "all_three_wrong_ids": [
+      "44",
+      "49",
+      "107",
+      "368",
+      "412",
+      "553",
+      "599",
+      "675",
+      "836",
+      "924",
+      "984",
+      "1027",
+      "1270",
+      "1388",
+      "1456",
+      "1483",
+      "1535",
+      "1571",
+      "1694",
+      "1754",
+      "2082",
+      "2129",
+      "2256",
+      "2347",
+      "2569",
+      "2673",
+      "2735",
+      "2778",
+      "2937",
+      "3053",
+      "3221",
+      "3373",
+      "3585"
+    ],
+    "records_with_any_human_disagreement": [
+      {
+        "record_id": "5",
+        "label": "include",
+        "title": "Designing an Energy-Efficient HPC Supercomputing Center",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "44",
+        "label": "exclude",
+        "title": "Energy Efficient Frequency Scaling on\\&nbsp;GPUs in\\&nbsp;Heterogeneous HPC Systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "49",
+        "label": "exclude",
+        "title": "perun: Benchmarking Energy Consumption of\\&nbsp;High-Performance Computing Applications",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "107",
+        "label": "exclude",
+        "title": "RE-UPS: an adaptive distributed energy storage system for dynamically managing solar energy in green datacenters",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "169",
+        "label": "exclude",
+        "title": "A HPC based cloud model for real-time energy optimisation",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "189",
+        "label": "exclude",
+        "title": "A Power-Aware Based Storage Architecture for High Performance Computing",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "240",
+        "label": "exclude",
+        "title": "AIOps and Sustainability: Transforming Data Centers for a Greener Future",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "320",
+        "label": "exclude",
+        "title": "From BigDog to BigDawg: Transitioning an HPC Cluster for Sustainability",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "368",
+        "label": "exclude",
+        "title": "Reducing HPC energy footprint for large scale GPU accelerated workloads",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "412",
+        "label": "exclude",
+        "title": "Energy-Optimized Supercomputer Networks Using Wind Energy",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "466",
+        "label": "exclude",
+        "title": "Acceleration of MPI Mechanisms for Sustainable HPC Applications",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "501",
+        "label": "exclude",
+        "title": "Design Technologies for Green and Sustainable Computing Systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "553",
+        "label": "exclude",
+        "title": "CO2 Emission Aware Scheduling for Deep Neural Network Training Workloads",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "599",
+        "label": "exclude",
+        "title": "Data Center Energy Reduction by Lowering Chip-to-Supply Thermal Resistance",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "675",
+        "label": "exclude",
+        "title": "Clover: Toward Sustainable AI with Carbon-Aware Machine Learning Inference Service",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "738",
+        "label": "exclude",
+        "title": "Thermal Performance Characteristic of Single-phase Immersion Cooling on Servers with Optimized Heatsink Design",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "836",
+        "label": "exclude",
+        "title": "A Green Cloud-Based Framework for Energy-Efficient Task Scheduling Using Carbon Intensity Data for Heterogeneous Cloud Servers",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "924",
+        "label": "exclude",
+        "title": "ROA: Energy and Environment Aware Task Scheduling in Cloud Computing",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "940",
+        "label": "exclude",
+        "title": "ColonyOS: A Meta-OS for Computing Continuums",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "984",
+        "label": "exclude",
+        "title": "Efficient Multi-Workload Execution for Sustainable GPU Performance",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1027",
+        "label": "exclude",
+        "title": "Energy-Aware HPC Scheduling with LLM-Based Power Prediction",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1039",
+        "label": "exclude",
+        "title": "Enhanced Reliability of Large BGA Assemblies for AI Server and HPC Application",
+        "predictions": {
+          "kev-4b": "exclude",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1227",
+        "label": "exclude",
+        "title": "Money for Research, Not Energy Bills: Finding Energy and Cost Savings in High-Performance Computer Facility Designs",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1270",
+        "label": "exclude",
+        "title": "System-level thermal-aware design of 3D multiprocessors with inter-tier liquid cooling",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1388",
+        "label": "exclude",
+        "title": "A sustainable approach to large ICT science based infrastructures; the case for radio astronomy",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1456",
+        "label": "exclude",
+        "title": "Towards greener services in cloud computing: Research and future directives",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1483",
+        "label": "exclude",
+        "title": "Workshop: Sustainable and energy efficient data centers",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1535",
+        "label": "exclude",
+        "title": "How Much Energy Can Green HPC Cloud Users Save?",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1549",
+        "label": "exclude",
+        "title": "Embedded Accelerators for Scientific High-Performance Computing: An Energy Study of OpenCL Gaussian Elimination Workloads",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "1571",
+        "label": "exclude",
+        "title": "Benchmarking Energy Efficiency, Power Costs and Carbon Emissions on Heterogeneous Systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1586",
+        "label": "exclude",
+        "title": "SIM-Cumulus: An Academic Cloud for the Provisioning of Network-Simulation-as-a-Service (NSaaS)",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "1694",
+        "label": "exclude",
+        "title": "Energy\\&\\#x2010;Aware Approaches for HPC Systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1754",
+        "label": "exclude",
+        "title": "Efficiency Near the Edge: Increasing the Energy Efficiency of FFTs on GPUs for Real-Time Edge Computing",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1756",
+        "label": "exclude",
+        "title": "Autonomic Runtime Adaptation Framework for Power Management in Large-Scale High-Performance Computing Systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1826",
+        "label": "exclude",
+        "title": "Energy Measurement Laboratory for Heterogeneous Hardware Evaluation",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "1871",
+        "label": "exclude",
+        "title": "Peachy Parallel Assignments (EduPar 2022)",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "2080",
+        "label": "exclude",
+        "title": "Mathematical Modeling of Sustainable Coastal Systems Development Scenarios Based on Game-Theoretic Concepts of Hierarchical Management Using Supercomputer Technologies",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "2082",
+        "label": "exclude",
+        "title": "The Emerging Challenge of variable Capacity Scheduling",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2129",
+        "label": "exclude",
+        "title": "Environmentally opportunistic computing: Computation as catalyst for sustainable design",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2136",
+        "label": "exclude",
+        "title": "itwinai: Enabling Scalable AI Workflows on HPC for Digital Twins in Science",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "2256",
+        "label": "exclude",
+        "title": "Optimizing Kubernetes Performance, Efficiency And Energy Footprint In Heterogenous Hpc Environments",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2337",
+        "label": "exclude",
+        "title": "The role of environmental ethics and sustainability in research ethics for linguistics: What is currently available in terms of guidance and how might that be improved?",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "2347",
+        "label": "exclude",
+        "title": "Evalix: Classification and prediction of job resource consumption on HPC platforms",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2379",
+        "label": "exclude",
+        "title": "Potentials for reduction of environmental impacts of construction using hpc",
+        "predictions": {
+          "kev-4b": "exclude",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2569",
+        "label": "exclude",
+        "title": "Modern methods of energy consumption optimization in FPGA-based heterogeneous HPC systems",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2673",
+        "label": "exclude",
+        "title": "Exploratory data analysis for data center energy management",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2735",
+        "label": "exclude",
+        "title": "Advances in Numerical Modeling for Heat Transfer and Thermal Management: A Review of Computational Approaches and Environmental Impacts",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2778",
+        "label": "exclude",
+        "title": "Scalable Deep Learning for~Industry 4.0: Speedup with~Distributed Deep Learning and~Environmental Sustainability Considerations",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "2937",
+        "label": "exclude",
+        "title": "Toward a GPU-enabled billionaire SVD in pyLOM",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3035",
+        "label": "exclude",
+        "title": "Greening Digital",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "3053",
+        "label": "exclude",
+        "title": "Cloud-computing approach for an environmental, social, and corporate governance focus in universities and businesses",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3088",
+        "label": "exclude",
+        "title": "Thermodynamic characterization of a direct water cooled server rack running synthetic and real high performance computing work loads",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3149",
+        "label": "exclude",
+        "title": "PAAS: Power aware algorithm for scheduling in high performance computing",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3221",
+        "label": "exclude",
+        "title": "Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, SC 2023",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3236",
+        "label": "exclude",
+        "title": "Proceedings of 2025 Supercomputing Asia Conference, SCA 2025",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "3373",
+        "label": "exclude",
+        "title": "Forecasting power-efficiency related key performance indicators for modern data centers using LSTMs",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3448",
+        "label": "exclude",
+        "title": "Supercomputer simulation of oil spills in the azov sea",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "3585",
+        "label": "exclude",
+        "title": "Energy wall for exascale supercomputing",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "include",
+          "qwen": "include"
+        }
+      },
+      {
+        "record_id": "3667",
+        "label": "exclude",
+        "title": "Numerical simulation of long-term fate of CO2 stored in deep reservoir rocks on massively parallel vector supercomputer",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      },
+      {
+        "record_id": "3692",
+        "label": "exclude",
+        "title": "Mechanical and rheological properties of High-Performance concrete (HPC) incorporating waste glass as cementitious material and fine aggregate",
+        "predictions": {
+          "kev-4b": "include",
+          "kev-9b": "exclude",
+          "qwen": "exclude"
+        }
+      }
+    ],
+    "response_sha256": {
+      "kev-4b": "e9154ad82801a3e861b346deb35593acf000e7f23549a2ff5dd7eb81cf2f7ed7",
+      "kev-9b": "11f356ece7b5e36b621effb45f88e3319661dec20be51e5cd2cba8972c152b69",
+      "qwen": "f6112397866f0c8b953a6dea0a2fbb34e6172a01a5a182c30b0894f3f4c6e760"
+    }
+  },
+  "runs": {
+    "kev-4b": {
+      "model": {
+        "repo": "jaredpalmer/kev-4b",
+        "revision": "6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+        "path": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+        "base": "Qwen/Qwen3.5-4B-Base",
+        "base_revision": "1001bb4d826a52d1f399e183466143f4da7b741b",
+        "base_path": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--Qwen--Qwen3.5-4B-Base/snapshots/1001bb4d826a52d1f399e183466143f4da7b741b"
+      },
+      "server_command": [
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/kev-env/bin/python",
+        "-m",
+        "kev.serve",
+        "--run",
+        "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+        "--device",
+        "cuda",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8009"
+      ],
+      "runner_command": [
+        "python3",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/run_development.py",
+        "--model",
+        "kev-4b",
+        "--execute",
+        "--revision",
+        "model=6cfce5c2fa4b4bd64026336ab649c5ca78857d52; base=1001bb4d826a52d1f399e183466143f4da7b741b; server=1f04cfa28e6a708485b28a9585010b9e436b776e",
+        "--output",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/kev-4b.jsonl"
+      ],
+      "environment": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "OMP_NUM_THREADS": "4",
+        "KEV_TRUNCATE_STATES": "0",
+        "KEV_FUSED": "0",
+        "KEV_CUDA_GRAPHS": "0"
+      },
+      "gpu_uuid": "GPU-232102f9-4532-ed4b-ea90-14f69694cf48",
+      "concurrency": 1,
+      "started_at": "2026-10-21T20:29:25.634165+00:00",
+      "server_models": {
+        "models": [
+          {
+            "name": "kev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-4B-Base, serving /mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52 at temperature 2.41",
+            "release_date": "2026-10-21",
+            "run": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+            "base": "Qwen/Qwen3.5-4B-Base",
+            "lora": 16,
+            "device": "cuda",
+            "backend": "torch",
+            "dtype": "bfloat16",
+            "temperature": 2.406050072164233,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          },
+          {
+            "name": "jev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-4B-Base, serving /mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52 at temperature 2.41",
+            "release_date": "2026-10-21",
+            "run": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-4b/snapshots/6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+            "base": "Qwen/Qwen3.5-4B-Base",
+            "lora": 16,
+            "device": "cuda",
+            "backend": "torch",
+            "dtype": "bfloat16",
+            "temperature": 2.406050072164233,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          }
+        ]
+      },
+      "startup_seconds": 12.03874536299918,
+      "run_seconds": 15.248014417000377,
+      "ok": 119,
+      "errors": 0,
+      "request_seconds": 15.147593,
+      "server_lifetime_seconds": 27.70575755400023
+    },
+    "kev-9b": {
+      "model": {
+        "repo": "jaredpalmer/kev-9b",
+        "revision": "db029f08b290afd9fee4aa4bbcd9ae48602d1eb0",
+        "path": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0",
+        "base": "Qwen/Qwen3.5-9B-Base",
+        "base_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+        "base_path": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--Qwen--Qwen3.5-9B-Base/snapshots/68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "server_command": [
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/kev-env/bin/python",
+        "-m",
+        "kev.serve",
+        "--run",
+        "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0",
+        "--device",
+        "cuda",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8010"
+      ],
+      "runner_command": [
+        "python3",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/run_development.py",
+        "--model",
+        "kev-9b",
+        "--execute",
+        "--revision",
+        "model=db029f08b290afd9fee4aa4bbcd9ae48602d1eb0; base=68c46c4b3498877f3ef123c856ecfde50c39f404; server=1f04cfa28e6a708485b28a9585010b9e436b776e",
+        "--output",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/kev-9b.jsonl"
+      ],
+      "environment": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "OMP_NUM_THREADS": "4",
+        "KEV_TRUNCATE_STATES": "0",
+        "KEV_FUSED": "0",
+        "KEV_CUDA_GRAPHS": "0"
+      },
+      "gpu_uuid": "GPU-232102f9-4532-ed4b-ea90-14f69694cf48",
+      "concurrency": 1,
+      "started_at": "2026-10-21T20:29:53.340903+00:00",
+      "server_models": {
+        "models": [
+          {
+            "name": "kev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-9B-Base, serving /mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0 at temperature 2.19",
+            "release_date": "2026-10-21",
+            "run": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0",
+            "base": "Qwen/Qwen3.5-9B-Base",
+            "lora": 16,
+            "device": "cuda",
+            "backend": "torch",
+            "dtype": "bfloat16",
+            "temperature": 2.193649959389252,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          },
+          {
+            "name": "jev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-9B-Base, serving /mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0 at temperature 2.19",
+            "release_date": "2026-10-21",
+            "run": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--jaredpalmer--kev-9b/snapshots/db029f08b290afd9fee4aa4bbcd9ae48602d1eb0",
+            "base": "Qwen/Qwen3.5-9B-Base",
+            "lora": 16,
+            "device": "cuda",
+            "backend": "torch",
+            "dtype": "bfloat16",
+            "temperature": 2.193649959389252,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          }
+        ]
+      },
+      "startup_seconds": 12.032989698000165,
+      "run_seconds": 15.602906587000689,
+      "ok": 119,
+      "errors": 0,
+      "request_seconds": 15.51975,
+      "server_lifetime_seconds": 28.01213388100041
+    },
+    "qwen": {
+      "model": {
+        "repo": "Qwen/Qwen3-8B",
+        "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+        "path": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218"
+      },
+      "server_command": [
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/qwen-env/bin/vllm",
+        "serve",
+        "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218",
+        "--served-model-name",
+        "Qwen/Qwen3-8B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "8192",
+        "--max-num-seqs",
+        "1",
+        "--gpu-memory-utilization",
+        "0.70"
+      ],
+      "runner_command": [
+        "python3",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/run_development.py",
+        "--model",
+        "qwen",
+        "--execute",
+        "--revision",
+        "model=b968826d9c46dd6066d109eabc6255188de91218; vllm=0.10.2; transformers=4.55.2; torch=2.8.0+cu128",
+        "--output",
+        "/mnt/disk/home/lsrosa/hpc-screening-benchmark/local-development-20261021/qwen.jsonl"
+      ],
+      "environment": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "OMP_NUM_THREADS": "4",
+        "KEV_TRUNCATE_STATES": "0",
+        "KEV_FUSED": "0",
+        "KEV_CUDA_GRAPHS": "0"
+      },
+      "gpu_uuid": "GPU-232102f9-4532-ed4b-ea90-14f69694cf48",
+      "concurrency": 1,
+      "started_at": "2026-10-21T20:30:21.354064+00:00",
+      "server_models": {
+        "object": "list",
+        "data": [
+          {
+            "id": "Qwen/Qwen3-8B",
+            "object": "model",
+            "created": 1792614661,
+            "owned_by": "vllm",
+            "root": "/mnt/disk/home/lsrosa/.cache/huggingface/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218",
+            "parent": null,
+            "max_model_len": 8192,
+            "permission": [
+              {
+                "id": "modelperm-1e0752a1326d4b1aa13550e7ae36983f",
+                "object": "model_permission",
+                "created": 1792614661,
+                "allow_create_engine": false,
+                "allow_sampling": true,
+                "allow_logprobs": true,
+                "allow_search_indices": false,
+                "allow_view": true,
+                "allow_fine_tuning": false,
+                "organization": "*",
+                "group": null,
+                "is_blocking": false
+              }
+            ]
+          }
+        ]
+      },
+      "startup_seconds": 40.050673338000706,
+      "run_seconds": 8.424381187000108,
+      "ok": 119,
+      "errors": 0,
+      "request_seconds": 8.324048,
+      "server_lifetime_seconds": 49.294861182001114
+    }
+  },
+  "inputs": {
+    "count": 119,
+    "record_ids": [
+      "5",
+      "10",
+      "13",
+      "14",
+      "18",
+      "25",
+      "37",
+      "44",
+      "49",
+      "71",
+      "77",
+      "101",
+      "103",
+      "107",
+      "169",
+      "189",
+      "213",
+      "224",
+      "240",
+      "250",
+      "251",
+      "311",
+      "320",
+      "328",
+      "338",
+      "368",
+      "383",
+      "412",
+      "466",
+      "493",
+      "501",
+      "511",
+      "553",
+      "554",
+      "587",
+      "599",
+      "675",
+      "738",
+      "836",
+      "838",
+      "924",
+      "940",
+      "962",
+      "984",
+      "1027",
+      "1039",
+      "1077",
+      "1188",
+      "1227",
+      "1270",
+      "1388",
+      "1456",
+      "1483",
+      "1500",
+      "1535",
+      "1549",
+      "1571",
+      "1586",
+      "1694",
+      "1751",
+      "1754",
+      "1755",
+      "1756",
+      "1766",
+      "1815",
+      "1826",
+      "1871",
+      "2074",
+      "2076",
+      "2080",
+      "2082",
+      "2129",
+      "2135",
+      "2136",
+      "2256",
+      "2326",
+      "2337",
+      "2347",
+      "2359",
+      "2361",
+      "2379",
+      "2404",
+      "2450",
+      "2534",
+      "2569",
+      "2595",
+      "2624",
+      "2673",
+      "2698",
+      "2735",
+      "2750",
+      "2778",
+      "2844",
+      "2866",
+      "2935",
+      "2936",
+      "2937",
+      "2960",
+      "3035",
+      "3053",
+      "3060",
+      "3088",
+      "3122",
+      "3149",
+      "3176",
+      "3221",
+      "3229",
+      "3236",
+      "3368",
+      "3373",
+      "3403",
+      "3407",
+      "3423",
+      "3428",
+      "3448",
+      "3585",
+      "3632",
+      "3667",
+      "3692"
+    ],
+    "prompt_sha256": "760f0697c375b94bccb58ea0d3435cf66c5cff4681026aff7b47179824a784e3",
+    "files_sha256": {
+      "run_development.py": "04d23227be2d59f658e6d5708d1f645cbf0ef4c6c898e8f136cc5b59e41a781c",
+      "prompt.txt": "2ee80a36cb76375905646ea33ec9f781123402f9e9d7f1cdd0ac2343b7d29c25",
+      "benchmark.jsonl": "b30ae9b5ed9b545ad2a0ace0e2dd5feb4bae59fdcfd44b74d0699beebdd0e549"
+    }
+  }
+}

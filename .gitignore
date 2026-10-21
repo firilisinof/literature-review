@@ -9,6 +9,7 @@ wheels/
 .uv-cache
 .venv
 .DS_Store
+._*
 .claude
 .codex
 2_screening/payloads/

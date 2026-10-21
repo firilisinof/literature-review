@@ -10,6 +10,9 @@ Keep the published criteria fixed. No paid model requests are authorized yet.
 - `README.md`: the evaluation plan and source notes.
 - `prompt.txt`: the shared screening instructions.
 - `run_development.py`: prepares or sends development requests.
+- `run_local.py`: starts the pinned local servers and runs development requests.
+- `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
+- `results/`: dated response files and the local run summary.
 
 Each record has `record_id`, `title`, `abstract`, `label`, `split`, `cohort`,
 `label_source`, and `abstract_source`. Use the `split` field to select records.
@@ -76,9 +79,11 @@ cannot verify the weights loaded by the server.
 Serve Qwen with a compatible vLLM installation, using the chosen model commit:
 
 ```sh
-vllm serve Qwen/Qwen3-8B --revision MODEL_COMMIT --port 8000
+CUDA_VISIBLE_DEVICES=0 vllm serve Qwen/Qwen3-8B --revision MODEL_COMMIT --port 8000
 ```
 
+Select the approved GPU index before starting. vLLM 0.10.2 requires a numeric
+index in `CUDA_VISIBLE_DEVICES`. It rejects GPU UUIDs in that variable.
 Replace `MODEL_COMMIT` with the selected commit hash. Qwen requests disable
 thinking with `chat_template_kwargs`, use temperature 0, and allow 16 output
 tokens for a single label. Truncated or malformed answers are technical errors.
@@ -110,7 +115,33 @@ before joining them to the human labels for the agreed metrics.
 Request formats follow the [TypeSafe API](https://docs.typesafe.ai/api),
 [OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions),
 and [Qwen model card](https://huggingface.co/Qwen/Qwen3-8B).
-Live API access and GPU inference have not been tested.
+
+## Server setup
+
+Use the [server setup notes](/Users/lucas/Pessoal/ai-wiki/memory/literature-review/hpc-server-setup.md)
+for the approved access rules, installed environments, fixed revisions, and
+serving commands.
+
+On the approved GPU server, keep the benchmark scripts, `prompt.txt`, and a
+development-only copy of `benchmark.jsonl` together. The local runner uses
+the existing environments, pinned source, and `model-downloads.json` under
+`~/hpc-screening-benchmark`. It runs one server at a time on GPU 0 and stops
+each server after the requests finish:
+
+```sh
+python run_local.py --execute --date YYYYMMDD
+```
+
+Use the run date in place of `YYYYMMDD`. Use `--server-home` if the installation
+is elsewhere. The script refuses to overwrite an existing run. Model files
+must already be cached. It does not download weights or change the prompt.
+
+All model responses use `results/<model>-development-<date>.jsonl`, including
+the hosted models. Each file contains the requests, raw responses, revisions,
+prompt hash, decisions, errors, and per-request times. Local startup timing
+and server settings are kept in `local-development-<date>-summary.json`.
+The 20261021 summary also contains the development comparison. Successful
+runs do not keep extra logs or duplicate input files.
 
 ## Split and evaluation
 
@@ -193,69 +224,7 @@ The baseline therefore includes all records in that group.
 | Kev-9B | `jaredpalmer/kev-9b`, `v1.0`, local |
 | Qwen3-8B | `Qwen/Qwen3-8B`, thinking disabled, local |
 
-Laya is excluded. Resolve local model tags to fixed revisions before running.
-The Qwen revision is not yet fixed.
+Use the fixed revisions recorded in the server setup notes.
 
-## Human labels and source notes
-
-The source collection has 609 human-screened records. The benchmark keeps 595:
-62 include and 533 exclude. The 14 approved removals are listed below.
-Original screening files remain unchanged.
-
-`2_screening/decisions/first.csv` provides 360 initial decisions and five
-snowball inclusions. The later 244 records have decisions in `lucas.csv` and
-`victor.csv` in the same folder. The reviewers agreed on 185 records.
-For the other 59, use the final decisions in `artifacts/conflicts.csv`.
-The script joins decisions by ID and checks adjudications against the votes.
-
-The historical file `6c32f22^:screening.csv` confirmed the titles and labels
-for all 365 initial records. Treat the old EC4 reason for record 3380 as EC3,
-as clarified by the author. The original reason stays in the source file.
-
-Commit `cd60158` introduced two incorrect canonical IDs. Keep the original IDs:
-
-| Record | Incorrect target | Evidence |
-| --- | --- | --- |
-| 3794 | 2042 | Different chapters: `10.1021/bk-2021-1388.ch001` and `10.1021/bk-2021-1388.ch009`. Source: `1_search/scopus.bib#Penchoff20213`. |
-| 3795 | 299 | Different papers: `10.1109/tpds.2015.2485980` and `10.1145/2980765.2980768`. Source: `1_search/ieee.bib#7289462`. |
-
-The historical screening file confirms both human exclusions by title.
-No label is transferred to the incorrect target.
-
-The active dataset contains 577 original abstracts and 18 recovered abstracts.
-Nine came from `artifacts/unanimous_include.csv`, three from
-`artifacts/metadata.csv`, and six from `1_search/scopus.bib`.
-The script requires a matching title before it uses a recovered abstract.
-
-The user approved removal of all three `[Title page i]` records:
-1330, 1461, and 1504. They are noise and already have human exclusion labels.
-
-The user also approved removal of the following 11 human exclusions after
-reviewing the online sources. The search date was 2026-10-20.
-No formal abstract was verified for these records.
-
-| ID | Finding | Source |
-| --- | --- | --- |
-| 230 | Not found. Contents and local IEEE metadata indicate a title-page item. Full item unavailable. | [Proceedings contents](https://www.proceedings.com/content/017/017846webtoc.pdf) |
-| 271 | Official keynote summary found. Its equivalence to the proceedings abstract is unverified. | [HPDC 2009](https://hpdc.sci.utah.edu/2009/keynoteGENTZSCH.php) |
-| 582 | No abstract in the inspected two-page author-hosted paper. It starts with Introduction. | [GE Vernova paper](https://www.gevernova.com/gev/sites/default/files/2024-07/paper_optimizing-emissions-for-machine-learning-training.pdf) |
-| 2118 | No separate abstract in the publisher news feature. A short standfirst is available. | [Nature](https://www.nature.com/articles/d41586-017-07523-y) |
-| 2405 | No abstract in the publisher full text. | [PLOS](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013481) |
-| 2570 | No separate abstract in the indexed publisher preview. This is a special-issue introduction. | [ScienceDirect](https://www.sciencedirect.com/science/article/abs/pii/S2210537918303901) |
-| 2696 | Exact magazine item not retrieved. A related company press release is available. | [Verne Global release](https://www.prnewswire.com/news-releases/verne-global-helps-the-bmw-group-to-cut-carbon-emissions-by-3570-metric-tons-per-year-with-switch-to-icelandic-data-centre-173440011.html) |
-| 3173 | No abstract in the institutional record. Full foreword not retrieved. | [ORNL](https://impact.ornl.gov/en/publications/foreword-sustainable-project-pathways-for-hpc-software-2024-works/) |
-| 3241 | Abstract not found for the exact 2025 front-matter item. | [ACM proceedings, retrieval failed](https://dl.acm.org/doi/proceedings/10.1145/3731599) |
-| 3242 | Same search result as 3241. Separate Scopus entry, same title/year/page. | [ACM proceedings, retrieval failed](https://dl.acm.org/doi/proceedings/10.1145/3731599) |
-| 3642 | Exact workshop editorial not retrieved. Page 1859 also starts a different paper. | [2023 proceedings index](https://dblp.org/db/conf/sc/sc2023w.html) |
-
-For 582, 2118, 2405, and 2570, no abstract was present in the inspected version.
-For the other seven, the abstract was not found. This does not prove that no
-abstract exists. Summaries, introductions, and related press releases were not
-used as replacement abstracts. Record 230's title-page description was also
-not treated as an abstract.
-
-The later records were selected by historical models. Records without human
-labels and the 14 approved removals are outside this benchmark. Scores apply to
-this selected sample, not to all search results. Some human decisions used
-information beyond the title and abstract. Possible model training exposure to
-these public papers remains unknown.
+Dataset provenance, recovered abstracts, and approved exclusions are in the
+[dataset notes](/Users/lucas/Pessoal/ai-wiki/memory/literature-review/benchmark-dataset-provenance.md).

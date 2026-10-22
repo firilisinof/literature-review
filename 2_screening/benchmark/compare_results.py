@@ -1,7 +1,6 @@
 """Score the complete benchmark and historical baseline without making requests."""
 
 import argparse
-import csv
 import hashlib
 import itertools
 import json
@@ -10,6 +9,12 @@ import statistics
 from collections import Counter
 from pathlib import Path
 
+from historical_screening import (
+    HISTORICAL_MODELS,
+    HistoricalRun,
+    historical_binary_choices,
+    historical_runs,
+)
 from merge_results import collect_predictions
 from run_screening import FOLDER
 from screening_api import JSON, MODELS
@@ -20,6 +25,7 @@ NAMES = {
     "kev-4b": "Kev-4B",
     "kev-9b": "Kev-9B",
     "qwen": "Qwen3-8B",
+    **{key: title for key, (_, title, _) in HISTORICAL_MODELS.items()},
 }
 
 
@@ -40,7 +46,7 @@ def score_predictions(
     """Withhold metrics for incomplete runs, e.g. score_predictions(labels, votes)."""
     result: dict[str, JSON] = {
         "valid": len(votes),
-        "errors": len(labels) - len(votes),
+        "missing_binary_decisions": len(labels) - len(votes),
         "coverage": len(votes) / len(labels),
         "complete": set(votes) == set(labels),
     }
@@ -83,41 +89,39 @@ def false_exclusion_ids(
     ]
 
 
-def historical_baseline(labels: dict[str, dict[str, str]]) -> dict[str, JSON]:
-    """Apply unanimous inclusion with explicit invalid coverage, e.g. historical_baseline(labels)."""
-    source = FOLDER.parents[1] / "artifacts/processed.csv"
-    votes = historical_votes(source, set(labels))
-    valid = {
-        rid: ("include" if set(answers.values()) == {"include"} else "exclude")
-        for rid, answers in votes.items()
-        if len(answers) == 3 and set(answers.values()) <= {"include", "exclude"}
-    }
-    result = score_predictions(labels, valid)
+def historical_model_metrics(
+    run: HistoricalRun, labels: dict[str, dict[str, str]]
+) -> dict[str, JSON]:
+    """Score historical choices with doubt included, e.g. historical_model_metrics(run, labels)."""
+    votes = historical_binary_choices(run)
+    result = score_predictions(labels, votes)
+    result.update(run.metadata)
     result.update(
-        invalid_ids=[rid for rid in labels if rid not in valid],
-        source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+        attempted=len(run.choices), technical_errors=0, cost=None, request_seconds=None
     )
+    result["choice_counts"] = dict(Counter(votes.values()))
+    result["recorded_choice_counts"] = dict(Counter(run.choices.values()))
+    result["doubt_inclusion_ids"] = [
+        rid for rid, choice in run.choices.items() if choice == "doubt"
+    ]
     return result
 
 
-def historical_votes(source: Path, ids: set[str]) -> dict[str, dict[str, str]]:
-    """Validate the original provider rows, e.g. historical_votes(source, ids)."""
-    votes: dict[str, dict[str, str]] = {rid: {} for rid in ids}
-    with source.open() as stream:
-        for row in csv.DictReader(stream):
-            rid, provider = row["paper_id"], row["provider"]
-            if rid not in ids:
-                continue
-            if provider in votes[rid] or provider not in {
-                "anthropic",
-                "openai",
-                "gemini",
-            }:
-                raise ValueError(
-                    f"Historical {rid}/{provider}: expected three unique providers"
-                )
-            votes[rid][provider] = row["decision"]
-    return votes
+def historical_baseline(
+    labels: dict[str, dict[str, str]], runs: dict[str, HistoricalRun]
+) -> dict[str, JSON]:
+    """Keep the original unanimous-include rule, e.g. historical_baseline(labels, runs)."""
+    normalized = [historical_binary_choices(run) for run in runs.values()]
+    choices = {rid: {votes[rid] for votes in normalized} for rid in labels}
+    votes = {
+        rid: ("include" if answers == {"include"} else "exclude")
+        for rid, answers in choices.items()
+    }
+    result = score_predictions(labels, votes)
+    result.update(
+        invalid_ids=[rid for rid in labels if rid not in votes], technical_errors=0
+    )
+    return result
 
 
 def model_metrics(
@@ -166,44 +170,78 @@ def prediction_maps(rows: list[dict[str, JSON]]) -> dict[str, dict[str, str]]:
 def comparison_summary(
     rows: list[dict[str, JSON]], labels: dict[str, dict[str, str]]
 ) -> dict[str, JSON]:
-    """Summarize all 595 records, e.g. comparison_summary(rows, labels)."""
+    """Compare current and verified historical choices, e.g. comparison_summary(rows, labels)."""
+    runs = historical_runs(FOLDER.parents[1], set(labels))
     metrics = {model: model_metrics(rows, labels, model) for model in MODELS}
+    metrics.update(
+        {key: historical_model_metrics(run, labels) for key, run in runs.items()}
+    )
+    comparison = comparison_header(labels, metrics, runs)
+    if not all(metrics[model]["complete"] for model in MODELS):
+        return comparison
+    predictions = prediction_maps(rows) | {
+        key: historical_binary_choices(run) for key, run in runs.items()
+    }
+    comparison.update(agreement_summary(predictions, labels))
+    return comparison
+
+
+def comparison_header(
+    labels: dict[str, dict[str, str]],
+    metrics: dict[str, dict[str, JSON]],
+    runs: dict[str, HistoricalRun],
+) -> dict[str, JSON]:
+    """State which settings belong to the new runs, e.g. comparison_header(labels, metrics, runs)."""
     prompt = (FOLDER / "prompt.txt").read_text().strip()
-    comparison: dict[str, JSON] = {
+    return {
         "records": len(labels),
         "human_includes": 62,
         "human_excludes": 533,
         "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
         "metrics": metrics,
-        "historical_baseline": historical_baseline(labels),
-        "concurrency_per_model": 1,
-        "retries": 0,
+        "historical_baseline": historical_baseline(labels, runs),
+        "current_run_settings": {
+            "models": list(MODELS),
+            "concurrency_per_model": 1,
+            "retries": 0,
+        },
     }
-    if not all(metric["complete"] for metric in metrics.values()):
-        return comparison
-    comparison.update(agreement_summary(prediction_maps(rows), labels))
-    return comparison
 
 
 def agreement_summary(
     predictions: dict[str, dict[str, str]], labels: dict[str, dict[str, str]]
 ) -> dict[str, JSON]:
     """Compare raters on exactly the same IDs, e.g. agreement_summary(votes, labels)."""
-    comparison: dict[str, JSON] = {}
-    comparison["pairwise_disagreements"] = {
-        f"{a} / {b}": sum(predictions[a][rid] != predictions[b][rid] for rid in labels)
-        for a, b in itertools.combinations(MODELS, 2)
-    }
-    comparison["all_five_agree"] = sum(
-        len({predictions[model][rid] for model in MODELS}) == 1 for rid in labels
+    comparison = pairwise_summary(predictions, labels)
+    comparison["all_models_agree"] = sum(
+        len({predictions[model][rid] for model in predictions}) == 1 for rid in labels
     )
-    comparison["all_five_wrong_ids"] = [
+    comparison["all_models_wrong_ids"] = [
         rid
         for rid in labels
-        if all(predictions[model][rid] != labels[rid]["label"] for model in MODELS)
+        if all(predictions[model][rid] != labels[rid]["label"] for model in predictions)
     ]
     comparison["disagreements"] = disagreement_rows(predictions, labels)
     return comparison
+
+
+def pairwise_summary(
+    predictions: dict[str, dict[str, str]], labels: dict[str, dict[str, str]]
+) -> dict[str, JSON]:
+    """Compare decisions after historical doubt inclusion, e.g. pairwise_summary(votes, labels)."""
+    return {
+        "human_disagreements": {
+            model: sum(votes[rid] != labels[rid]["label"] for rid in labels)
+            for model, votes in predictions.items()
+        },
+        "pairwise_disagreements": {
+            f"{a} / {b}": sum(
+                predictions[a][rid] != predictions[b][rid] for rid in labels
+            )
+            for a, b in itertools.combinations(predictions, 2)
+        },
+        "pairwise_choice_policy": "Historical doubt is counted as include.",
+    }
 
 
 def disagreement_rows(
@@ -215,10 +253,10 @@ def disagreement_rows(
             "record_id": rid,
             "title": labels[rid]["title"],
             "human": labels[rid]["label"],
-            "models": {model: predictions[model][rid] for model in MODELS},
+            "models": {model: predictions[model][rid] for model in predictions},
         }
         for rid in labels
-        if any(predictions[model][rid] != labels[rid]["label"] for model in MODELS)
+        if any(predictions[model][rid] != labels[rid]["label"] for model in predictions)
     ]
 
 
@@ -255,7 +293,7 @@ def save_comparison(comparison: dict[str, JSON], path: Path) -> None:
     (path.parent / "comparison.json").write_text(
         json.dumps(comparison, indent=2, ensure_ascii=False) + "\n"
     )
-    if not all(metric["complete"] for metric in comparison["metrics"].values()):
+    if not all(comparison["metrics"][model]["complete"] for model in MODELS):
         raise SystemExit(
             "Incomplete predictions: coverage saved to comparison.json, full comparison withheld"
         )

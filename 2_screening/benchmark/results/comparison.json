@@ -6,7 +6,7 @@
   "metrics": {
     "jev": {
       "valid": 595,
-      "errors": 0,
+      "missing_binary_decisions": 0,
       "coverage": 1.0,
       "complete": true,
       "true_inclusions": 59,
@@ -37,7 +37,7 @@
     },
     "decisions": {
       "valid": 595,
-      "errors": 0,
+      "missing_binary_decisions": 0,
       "coverage": 1.0,
       "complete": true,
       "true_inclusions": 58,
@@ -69,7 +69,7 @@
     },
     "kev-4b": {
       "valid": 595,
-      "errors": 0,
+      "missing_binary_decisions": 0,
       "coverage": 1.0,
       "complete": true,
       "true_inclusions": 62,
@@ -98,7 +98,7 @@
     },
     "kev-9b": {
       "valid": 595,
-      "errors": 0,
+      "missing_binary_decisions": 0,
       "coverage": 1.0,
       "complete": true,
       "true_inclusions": 60,
@@ -130,7 +130,7 @@
     },
     "qwen": {
       "valid": 595,
-      "errors": 0,
+      "missing_binary_decisions": 0,
       "coverage": 1.0,
       "complete": true,
       "true_inclusions": 58,
@@ -161,34 +161,228 @@
       "revisions": [
         "model=b968826d9c46dd6066d109eabc6255188de91218; vllm=0.10.2; transformers=4.55.2; torch=2.8.0+cu128"
       ]
+    },
+    "historical-openai": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 62,
+      "false_exclusions": 0,
+      "false_inclusions": 253,
+      "true_exclusions": 280,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "precision": 0.19682539682539682,
+      "retained": 315,
+      "retained_fraction": 0.5294117647058824,
+      "human_disagreements": 253,
+      "false_exclusion_ids": [],
+      "model": "gpt-5.4-2026-03-05",
+      "finish_reasons": {
+        "completed": 595
+      },
+      "truncated_responses": 0,
+      "decision_field_recovery_ids": [],
+      "source_sha256": {
+        "artifacts/processed.csv": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58",
+        "2_screening/results/openai-batch-001.jsonl": "2afc5dbe2964e029ec88652f44c0a3fd28501d4ddbccbc1a10ddc683a8c15689",
+        "2_screening/results/openai-batch-002.jsonl": "f0a37d646361c639ca04b380b8e19a8d41f3d8eac797298bfe197dc7849efb12",
+        "2_screening/results/openai-batch-003.jsonl": "e082a5c18fe3e199a83a4f85fab4b2e749ade424d159bc9c5174f0f5965b73da",
+        "2_screening/results/openai-batch-004.jsonl": "5da8c6e785cf12b947bbc66bbcb52821c6885e29792bd522c8f6ecd823b66b8d"
+      },
+      "attempted": 595,
+      "technical_errors": 0,
+      "cost": null,
+      "request_seconds": null,
+      "choice_counts": {
+        "include": 315,
+        "exclude": 280
+      },
+      "recorded_choice_counts": {
+        "include": 315,
+        "exclude": 280
+      },
+      "doubt_inclusion_ids": []
+    },
+    "historical-anthropic": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 62,
+      "false_exclusions": 0,
+      "false_inclusions": 282,
+      "true_exclusions": 251,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "precision": 0.18023255813953487,
+      "retained": 344,
+      "retained_fraction": 0.5781512605042017,
+      "human_disagreements": 282,
+      "false_exclusion_ids": [],
+      "model": "claude-sonnet-4-5-20250929",
+      "finish_reasons": {
+        "end_turn": 76,
+        "max_tokens": 519
+      },
+      "truncated_responses": 519,
+      "decision_field_recovery_ids": [
+        "3128"
+      ],
+      "source_sha256": {
+        "artifacts/processed.csv": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58",
+        "2_screening/results/anthropic-batch-001.jsonl": "35a9a99d78cc675955ff0f81ecc2d8a51b235ea0445a63f97f167dbf93365ff0",
+        "2_screening/results/anthropic-batch-002.jsonl": "1cc113e907f35799c0ecf57abecd97cf7c3df50013439dbd213f232951218e02",
+        "2_screening/results/anthropic-batch-003.jsonl": "99b98801cd938b13f0cb9742162448443f41ebe36eedab370f78b66f82c1777a",
+        "2_screening/results/anthropic-batch-004.jsonl": "d957d92a5d7d1bcd3350c001c4fa69febbdc64bb1f632d6fdcb6cc7b00e073ab"
+      },
+      "attempted": 595,
+      "technical_errors": 0,
+      "cost": null,
+      "request_seconds": null,
+      "choice_counts": {
+        "include": 344,
+        "exclude": 251
+      },
+      "recorded_choice_counts": {
+        "include": 344,
+        "exclude": 251
+      },
+      "doubt_inclusion_ids": []
+    },
+    "historical-gemini": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 62,
+      "false_exclusions": 0,
+      "false_inclusions": 267,
+      "true_exclusions": 266,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "precision": 0.1884498480243161,
+      "retained": 329,
+      "retained_fraction": 0.5529411764705883,
+      "human_disagreements": 267,
+      "false_exclusion_ids": [],
+      "model": "gemini-2.5-pro",
+      "finish_reasons": {
+        "STOP": 595
+      },
+      "truncated_responses": 0,
+      "decision_field_recovery_ids": [],
+      "source_sha256": {
+        "artifacts/processed.csv": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58",
+        "2_screening/results/gemini-batch-001.jsonl": "889fb15a18374c0f530a875cac96bf9a5f6ac245567d4587d24cbc48ccd2e0af",
+        "2_screening/results/gemini-batch-002.jsonl": "d72321db556037af292821d7f7dfaffe13377e4917e5b3448f40014cc2641089",
+        "2_screening/results/gemini-batch-003.jsonl": "52cd536fca6b87b5ecf27df667a15371b5e022486ef9ec47c2c13f16d9ec4555",
+        "2_screening/results/gemini-batch-004.jsonl": "782bfa067728c94fec1e1422b65d3cf06ca1bf018aa62a401711ca9a44025b93"
+      },
+      "attempted": 595,
+      "technical_errors": 0,
+      "cost": null,
+      "request_seconds": null,
+      "choice_counts": {
+        "include": 329,
+        "exclude": 266
+      },
+      "recorded_choice_counts": {
+        "include": 328,
+        "exclude": 266,
+        "doubt": 1
+      },
+      "doubt_inclusion_ids": [
+        "2429"
+      ]
     }
   },
   "historical_baseline": {
-    "valid": 594,
-    "errors": 1,
-    "coverage": 0.9983193277310924,
-    "complete": false,
-    "invalid_ids": [
-      "2429"
+    "valid": 595,
+    "missing_binary_decisions": 0,
+    "coverage": 1.0,
+    "complete": true,
+    "true_inclusions": 62,
+    "false_exclusions": 0,
+    "false_inclusions": 231,
+    "true_exclusions": 302,
+    "recall": 1.0,
+    "recall_wilson_95": [
+      0.9416559278986275,
+      0.9999999999999999
     ],
-    "source_sha256": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58"
+    "precision": 0.21160409556313994,
+    "retained": 293,
+    "retained_fraction": 0.492436974789916,
+    "human_disagreements": 231,
+    "false_exclusion_ids": [],
+    "invalid_ids": [],
+    "technical_errors": 0
   },
-  "concurrency_per_model": 1,
-  "retries": 0,
+  "current_run_settings": {
+    "models": [
+      "jev",
+      "decisions",
+      "kev-4b",
+      "kev-9b",
+      "qwen"
+    ],
+    "concurrency_per_model": 1,
+    "retries": 0
+  },
+  "human_disagreements": {
+    "jev": 162,
+    "decisions": 103,
+    "kev-4b": 258,
+    "kev-9b": 177,
+    "qwen": 208,
+    "historical-openai": 253,
+    "historical-anthropic": 282,
+    "historical-gemini": 267
+  },
   "pairwise_disagreements": {
     "jev / decisions": 75,
     "jev / kev-4b": 104,
     "jev / kev-9b": 75,
     "jev / qwen": 106,
+    "jev / historical-openai": 111,
+    "jev / historical-anthropic": 126,
+    "jev / historical-gemini": 115,
     "decisions / kev-4b": 163,
     "decisions / kev-9b": 98,
     "decisions / qwen": 131,
+    "decisions / historical-openai": 164,
+    "decisions / historical-anthropic": 189,
+    "decisions / historical-gemini": 172,
     "kev-4b / kev-9b": 91,
     "kev-4b / qwen": 86,
-    "kev-9b / qwen": 87
+    "kev-4b / historical-openai": 117,
+    "kev-4b / historical-anthropic": 78,
+    "kev-4b / historical-gemini": 91,
+    "kev-9b / qwen": 87,
+    "kev-9b / historical-openai": 136,
+    "kev-9b / historical-anthropic": 129,
+    "kev-9b / historical-gemini": 128,
+    "qwen / historical-openai": 149,
+    "qwen / historical-anthropic": 122,
+    "qwen / historical-gemini": 119,
+    "historical-openai / historical-anthropic": 65,
+    "historical-openai / historical-gemini": 40,
+    "historical-anthropic / historical-gemini": 47
   },
-  "all_five_agree": 394,
-  "all_five_wrong_ids": [
+  "pairwise_choice_policy": "Historical doubt is counted as include.",
+  "all_models_agree": 333,
+  "all_models_wrong_ids": [
     "49",
     "52",
     "187",
@@ -279,7 +473,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -291,7 +488,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -303,7 +503,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -315,7 +518,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -327,7 +533,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -339,7 +548,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -351,7 +563,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -363,7 +578,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -375,7 +593,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -387,7 +608,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -399,7 +623,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "101",
+      "title": "DEISA--Distributed European Infrastructure for Supercomputing Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -411,7 +653,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -423,7 +668,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -435,7 +683,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -447,7 +698,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "127",
+      "title": "CYBELE – Fostering precision agriculture \\&amp; livestock farming through secure access to large-scale HPC enabled virtual industrial experimentation environments fostering scalable big data analytics",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -459,7 +728,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "130",
+      "title": "A modularized parallel distributed High–Performance computing framework for simulating seasonal frost dynamics in Canadian croplands",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -471,7 +758,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -483,7 +773,55 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "144",
+      "title": "Optimizing the performance of optimization in the cloud environment–An intelligent auto-scaling approach",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "145",
+      "title": "Comparing workflow application designs for high resolution satellite image analysis",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "147",
+      "title": "Replay with Feedback: How does the performance of HPC system impact user submission behavior?",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -495,7 +833,55 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "160",
+      "title": "Toward balanced and sustainable job scheduling for production supercomputers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "163",
+      "title": "Hazel Hen – leading HPC technology and its impact on science in Germany and Europe",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "165",
+      "title": "High Performance Computing applied to Dynamic Traffic Assignment",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -507,7 +893,40 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "167",
+      "title": "Towards a European HPC/AI ecosystem: a community-driven report",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "168",
+      "title": "Neuro-inspired hardware solutions for high-performance computing: A TiO2-based nano-synaptic device approach with backpropagation",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -519,7 +938,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -531,7 +953,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "182",
+      "title": "Using Mitrion-C to Implement Floating-Point Arithmetic on a Cray XD1",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -543,7 +983,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -555,7 +998,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -567,7 +1013,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -579,7 +1028,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -591,7 +1043,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -603,7 +1058,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -615,7 +1073,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -627,7 +1088,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -639,7 +1103,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -651,7 +1118,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -663,7 +1133,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "245",
+      "title": "Banking on Decoupling: Budget-Driven Sustainability for HPC Applications on EC2 Spot Instances",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -675,7 +1163,40 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "263",
+      "title": "Mitigating Uncertainty in Developing and Applying Scientific Applications in an Integrated Computing Environment",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "273",
+      "title": "Exascale science: the next frontier in high performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -687,7 +1208,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -699,7 +1223,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -711,7 +1238,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -723,7 +1253,40 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "309",
+      "title": "Automating Job Monitoring System for an Ecosystem of High Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "311",
+      "title": "High performance computing and industry 4.0: experiences from the DISRUPT project",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -735,7 +1298,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "319",
+      "title": "The Global AI Supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -747,7 +1328,40 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "328",
+      "title": "DCDB Wintermute: Enabling Online and Holistic Operational Data Analytics on HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "353",
+      "title": "A Quantitative Approach for Adopting Disaggregated Memory in HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -759,7 +1373,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -771,7 +1388,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -783,7 +1403,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -795,7 +1418,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "374",
+      "title": "Ten Years of the HPC Ecosystems Project - Transforming HPC in Africa for the past decade",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -807,7 +1448,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -819,7 +1463,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -831,7 +1478,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -843,7 +1493,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -855,7 +1508,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "414",
+      "title": "BanditWare: A Contextual Bandit-based Framework for Hardware Prediction",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -867,7 +1538,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -879,7 +1553,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -891,7 +1568,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -903,7 +1583,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "430",
+      "title": "What is RISC-V and why should we care?",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -915,7 +1613,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -927,7 +1628,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -939,7 +1643,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -951,7 +1658,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -963,7 +1673,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -975,7 +1688,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -987,7 +1703,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -999,7 +1718,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1011,7 +1733,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "515",
+      "title": "Service Orientation in Holonic and Multi-Agent Manufacturing: Proceedings of SOHOMA 2016",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1023,7 +1763,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1035,7 +1778,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1047,7 +1793,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1059,7 +1808,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "554",
+      "title": "RADICAL-Pilot and Parsl: Executing Heterogeneous Workflows on HPC Platforms",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1071,7 +1838,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1083,7 +1853,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1095,7 +1868,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1107,7 +1883,40 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "646",
+      "title": "A Federated Learning Approach for Anomaly Detection in High Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "656",
+      "title": "An Architecture for Heterogeneous High-Performance Computing Systems: Motivation and Requirements",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1119,7 +1928,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1131,7 +1943,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "698",
+      "title": "A Data Center in a Shoebox: IMEC's Plan to use Superconductors to Shrink Computers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1143,7 +1973,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1155,7 +1988,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1167,7 +2003,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1179,7 +2018,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "732",
+      "title": "Leveraging Green Supply Chain Practices to Enhance Resource Management and Load Balancing through High-Performance Computing for Sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1191,7 +2048,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1203,7 +2063,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1215,7 +2078,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "748",
+      "title": "Towards Improving Resource Allocation for Multi-Tenant HPC Systems: An Exploratory HPC Cluster Utilization Case Study",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1227,7 +2108,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1239,7 +2123,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1251,7 +2138,40 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "787",
+      "title": "On Optimizing Hyperparameters for Quantum Neural Networks",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "789",
+      "title": "LSTM-Based Unsupervised Anomaly Detection in High-Performance Computing: A Federated Learning Approach",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1263,7 +2183,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1275,7 +2198,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "832",
+      "title": "The Future of HPC and AI",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1287,7 +2228,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "845",
+      "title": "Transforming Energy Through Computational Excellence: A View From NREL",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1299,7 +2258,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1311,7 +2273,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1323,7 +2288,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1335,7 +2303,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1347,7 +2318,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1359,7 +2333,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1371,7 +2348,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1383,7 +2363,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1395,7 +2378,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1407,7 +2393,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1419,7 +2408,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1431,7 +2423,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1443,7 +2438,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1455,7 +2453,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1467,7 +2468,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1479,7 +2483,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1491,7 +2498,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1503,7 +2513,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1515,7 +2528,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1527,7 +2543,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1188",
+      "title": "Sustainability and the Office of CyberInfrastructure",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1539,7 +2573,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1551,7 +2588,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1563,7 +2603,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1575,7 +2618,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1587,7 +2633,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1599,7 +2648,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1611,7 +2663,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1623,7 +2678,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1635,7 +2693,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1647,7 +2708,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1659,7 +2723,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1671,7 +2738,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1683,7 +2753,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1695,7 +2768,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1707,7 +2783,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1719,7 +2798,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1731,7 +2813,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1743,7 +2828,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1755,7 +2843,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1767,7 +2858,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1779,7 +2873,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1791,7 +2888,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1459",
+      "title": "Cloud elasticity for HPC applications: Observing energy, performance and cost",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1803,7 +2918,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1815,7 +2933,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1827,7 +2948,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1839,7 +2963,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1851,7 +2978,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1863,7 +2993,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1507",
+      "title": "The ExaNeSt Project: Interconnects, Storage, and Packaging for Exascale Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1875,7 +3023,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1887,7 +3038,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1899,7 +3053,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1911,7 +3068,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1923,7 +3083,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1935,7 +3098,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -1947,7 +3113,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1959,7 +3128,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1971,7 +3143,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1983,7 +3158,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -1995,7 +3173,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2007,7 +3188,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2019,7 +3203,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2031,7 +3218,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2043,7 +3233,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2055,7 +3248,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2067,7 +3263,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2079,7 +3278,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2091,7 +3293,40 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1795",
+      "title": "Software Sustainability: Beyond the Tower of Babel",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1797",
+      "title": "Heterogeneous Computing Systems for Complex Scientific Discovery Workflows",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2103,7 +3338,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "1815",
+      "title": "Leveraging million-scale Non von Neumann computations for accelerated Machine Learning and High Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2115,7 +3368,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2127,7 +3383,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2139,7 +3398,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2151,7 +3413,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2163,7 +3428,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2175,7 +3443,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2187,7 +3458,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2199,7 +3473,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2211,7 +3488,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2223,7 +3503,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2235,7 +3518,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2247,7 +3533,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2259,7 +3548,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2271,7 +3563,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2283,7 +3578,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2295,7 +3593,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2307,7 +3608,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2319,7 +3623,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2331,7 +3638,40 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2074",
+      "title": "Electrical Grid and Supercomputing Centers: An Investigative Analysis of Emerging Opportunities and Challenges",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2076",
+      "title": "The digital revolution of Earth-system science",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2343,7 +3683,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2355,7 +3698,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2367,7 +3713,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2379,7 +3728,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2391,7 +3743,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2403,7 +3758,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2415,7 +3773,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2427,7 +3788,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2439,7 +3803,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2451,7 +3818,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2463,7 +3833,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2475,7 +3848,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2487,7 +3863,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2499,7 +3878,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2511,7 +3893,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2523,7 +3908,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2201",
+      "title": "The Ecology of High-Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2535,7 +3938,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2547,7 +3953,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2559,7 +3968,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2571,7 +3983,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2583,7 +3998,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2595,7 +4013,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2607,7 +4028,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2619,7 +4043,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2631,7 +4058,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2643,7 +4073,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "2376",
+      "title": "ARGUS: Supercomputing in 1/10 cubic meter",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2655,7 +4103,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2667,7 +4118,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2429",
+      "title": "DEISA, the distributed european infrastructure for supercomputing applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2679,7 +4148,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2691,7 +4163,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2507",
+      "title": "Quantum computing future-proofing what lies beyond SuperComputing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2703,7 +4193,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2715,7 +4208,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2727,7 +4223,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2739,7 +4238,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2751,7 +4253,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2763,7 +4268,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2775,7 +4283,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2787,7 +4298,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2799,7 +4313,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2811,7 +4328,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2823,7 +4343,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2835,7 +4358,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2847,7 +4373,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2859,7 +4388,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2871,7 +4403,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2883,7 +4418,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2895,7 +4433,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2907,7 +4448,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "2793",
+      "title": "Review on Current Chinese Supercomputing Industry",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2919,7 +4478,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2931,7 +4493,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2943,7 +4508,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2955,7 +4523,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2967,7 +4538,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -2979,7 +4553,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -2991,7 +4568,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3003,7 +4583,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3015,7 +4598,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3027,7 +4613,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3039,7 +4628,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3051,7 +4643,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3063,7 +4658,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3075,7 +4673,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3087,7 +4688,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3099,7 +4703,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "3093",
+      "title": "Assessing the HPC performance of CODA for the NASA Common Research Model",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3111,7 +4733,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
+      }
+    },
+    {
+      "record_id": "3128",
+      "title": "Correction to: Sustainable edge computing with mobile crowd computing: a proof-of-concept with a smart HVAC use case (The Journal of Supercomputing, (2024), 80, 16, (23911-23994), 10.1007/s11227-024-06364-7)",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3123,7 +4763,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3135,7 +4778,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3147,7 +4793,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3193",
+      "title": "19th IEEE International Symposium on High Performance Computer Architecture, HPCA 2013",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3159,7 +4823,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3171,7 +4838,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3218",
+      "title": "ICPE 2022 - Proceedings of the 2022 ACM/SPEC International Conference on Performance Engineering",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3183,7 +4868,55 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3226",
+      "title": "Proceedings - 2023 31st International Symposium on Modeling, Analysis, and Simulation of Computer and Telecommunication Systems, MASCOTS 2023",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3228",
+      "title": "International workshops held at the 29th International Conference on Parallel and Distributed Computing, Euro-Par 2023",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3229",
+      "title": "Proceedings of SC 2024-W: Workshops of the International Conference for High Performance Computing, Networking, Storage and Analysis",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3195,7 +4928,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3207,7 +4943,70 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3237",
+      "title": "Proceedings of the 22nd ACM International Conference on Computing Frontiers 2025 Workshops and Special Sessions, CF 2025 Companion",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3238",
+      "title": "WoSC11 2025 - Proceedings of the 11th International Workshop on Serverless Computing, Part of Middleware Conference",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3245",
+      "title": "7th International Conference on Blockchain, Artificial Intelligence, and Trustworthy Systems, BlockSys 2025",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3264",
+      "title": "Low-Scalability Distributed Systems for Artificial Intelligence: A Comparative Study of Distributed Deep Learning Frameworks for Image Classification",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3219,7 +5018,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3231,7 +5033,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3243,7 +5048,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3255,7 +5063,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3267,7 +5078,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3279,7 +5093,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3328",
+      "title": "HPC, Cloud and Big-Data Convergent Architectures: The LEXIS Approach",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3291,7 +5123,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3303,7 +5138,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3315,7 +5153,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3327,7 +5168,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3339,7 +5183,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3351,7 +5198,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3363,7 +5213,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3375,7 +5228,25 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3407",
+      "title": "Briefing: High-performance computing for city-scale modelling and simulations",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3387,7 +5258,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3399,7 +5273,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3411,7 +5288,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3423,7 +5303,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3435,7 +5318,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3447,7 +5333,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3459,7 +5348,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3471,7 +5363,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3483,7 +5378,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3495,7 +5393,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3507,7 +5408,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3519,7 +5423,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3531,7 +5438,10 @@
         "decisions": "exclude",
         "kev-4b": "exclude",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3543,7 +5453,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3555,7 +5468,10 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3567,7 +5483,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3579,7 +5498,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3591,7 +5513,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "exclude"
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude"
       }
     },
     {
@@ -3603,7 +5528,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "exclude",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3615,7 +5543,10 @@
         "decisions": "exclude",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
       }
     },
     {
@@ -3627,7 +5558,25 @@
         "decisions": "include",
         "kev-4b": "include",
         "kev-9b": "include",
-        "qwen": "include"
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include"
+      }
+    },
+    {
+      "record_id": "3791",
+      "title": "Main memory in HPC: Do we need more or could we live with less?",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "include",
+        "historical-gemini": "exclude"
       }
     }
   ],

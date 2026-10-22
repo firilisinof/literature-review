@@ -1,13 +1,15 @@
 # HPC screening benchmark
 
-Compare five screening models with the existing human decisions for 595 records
-from the published HPC review: 62 include and 533 exclude. Evaluate the entire
-collection together. The initial 119-record run checked execution and required
-no changes. Its predictions are reused alongside the remaining 476 records.
+Compare five benchmark models and three historical screeners with the existing
+human decisions for 595 records from the published HPC review: 62 include and
+533 exclude. Evaluate the entire collection together. The initial 119-record
+benchmark run checked execution and required no changes. Its predictions are
+reused alongside the remaining 476 records.
 
 The published criteria, prompt, model revisions, request settings, output parser,
-and no-retry policy are fixed across both runs. This is a descriptive comparison
-on the reviewed collection, not a separate held-out evaluation.
+and no-retry policy are fixed across both benchmark runs. The historical runs
+retain their original settings and choices. This is a descriptive comparison on
+the reviewed collection, not a separate held-out evaluation.
 
 ## Files
 
@@ -19,10 +21,12 @@ on the reviewed collection, not a separate held-out evaluation.
 - `run_local.py`, `local_server.py`: run pinned local models sequentially.
 - `merge_results.py`: validates and merges response chunks.
 - `compare_results.py`, `plot_comparison.py`: score predictions and generate plots.
+- `historical_screening.py`: checks historical choices against raw batch outputs.
+- `test_historical_screening.py`: offline regression checks for the historical import.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
-- `results/predictions.jsonl`: all 2,975 requests, responses, decisions, and timings.
+- `results/predictions.jsonl`: the 2,975 benchmark requests, responses, decisions, and timings.
 - `results/local-runs.json`: local server settings and startup/run timings for both dates.
-- `results/comparison.json`: metrics, coverage, recall intervals, and disagreements.
+- `results/comparison.json`: eight-model metrics, coverage, recall intervals, and disagreements.
 - `figures/metrics.png`, `figures/disagreements.png`: full-collection figures.
 
 Each dataset record has `record_id`, `title`, `abstract`, `label`, `cohort`,
@@ -66,9 +70,17 @@ Plots use the comparison's scored counts and are saved in `figures/` beside the
 
 Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
 as a user font before plotting. These commands check dataset construction,
-request preparation, and saved-result integrity. There is no separate test suite.
+request preparation, and saved-result integrity.
 The comparison verifies record IDs, exact request bodies, prompt hashes, parsed
-responses, and complete coverage. It makes no model requests.
+responses, and complete coverage for the five benchmark models. It also checks
+historical model versions and cached choices against the raw batch outputs.
+It makes no model requests.
+
+Run the offline regression checks:
+
+```sh
+python -m unittest discover -s 2_screening/benchmark -p 'test_*.py'
+```
 
 ## Run screening
 
@@ -179,14 +191,18 @@ Local startup and server lifetime are recorded separately from request times in
 runs. Billing totals and GPU hourly rates are unavailable, so costs are reported
 as unknown. No API billing for local models does not imply zero compute cost.
 
-The historical baseline uses unanimous inclusion by the original three models
-on the same 595 IDs. Missing or invalid historical decisions count as technical
-errors. Its saved `doubt` response prevents complete coverage, so the comparison
-reports its coverage and invalid ID without full-set metrics. Historical models
-used original abstracts, and the later cohort was selected through unanimous
-historical inclusion. These selection effects limit interpretation of both the
-baseline and the full-collection comparison. Wilson intervals do not correct
-selection bias.
+## Historical screening
+
+The three historical models cover the same 595 IDs. Their choices in
+`artifacts/processed.csv` are checked against the raw batches in
+`2_screening/results/`. Count `doubt` as `include` for metrics, disagreements,
+and the unanimous-include baseline. Original responses remain unchanged.
+
+Historical choices retain the original parser, including Sonnet's truncated
+responses with recoverable decisions. Versions, source hashes, and recoveries
+are recorded in `comparison.json`. Earlier prompts, 18 recovered benchmark
+abstracts, and selection of the later cohort through historical inclusion limit
+this descriptive comparison. Historical costs and request times are unknown.
 
 ## Criteria and models
 
@@ -205,6 +221,9 @@ selection bias.
 | Kev-4B | `jaredpalmer/kev-4b`, `v1.0`, local |
 | Kev-9B | `jaredpalmer/kev-9b`, `v1.0`, local |
 | Qwen3-8B | `Qwen/Qwen3-8B`, thinking disabled, local |
+| GPT-5.4 (historical) | `gpt-5.4-2026-03-05`, original OpenAI batch |
+| Sonnet 4.5 (historical) | `claude-sonnet-4-5-20250929`, original Anthropic batch |
+| Gemini 2.5 Pro (historical) | `gemini-2.5-pro`, original Gemini batch |
 
 Request formats follow the [TypeSafe API](https://docs.typesafe.ai/api),
 [OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions),

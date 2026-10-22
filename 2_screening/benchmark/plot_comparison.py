@@ -15,7 +15,16 @@ from numpy.typing import NDArray
 
 from screening_api import JSON
 
-COLORS = ["#0072B2", "#009E73", "#E69F00", "#CC79A7", "#D55E00"]
+COLORS = [
+    "#0072B2",
+    "#009E73",
+    "#E69F00",
+    "#CC79A7",
+    "#D55E00",
+    "#56B4E9",
+    "#000000",
+    "#F0E442",
+]
 FIELDS = {
     "recall": "Recall",
     "false_exclusions": "False exclusions",
@@ -54,8 +63,8 @@ def metric_count(metric: dict[str, JSON], field: str) -> str:
 def decorate_metric_axis(axis: Axes, field: str, titles: list[str]) -> None:
     """Keep scales comparable across models, e.g. decorate_metric_axis(axis, 'recall', names)."""
     counts = field == "false_exclusions"
-    axis.set_yticks(range(5), titles)
-    axis.set_ylim(4.6, -0.6)
+    axis.set_yticks(range(len(titles)), titles)
+    axis.set_ylim(len(titles) - 0.4, -0.6)
     axis.set_title(FIELDS[field], loc="left", fontsize=13, weight="bold", pad=12)
     axis.set_axisbelow(True)
     axis.grid(axis="x", alpha=0.17)
@@ -70,6 +79,9 @@ def annotate_metric(
     axis: Axes, metric: dict[str, JSON], field: str, index: int
 ) -> None:
     """Keep count labels outside bars, e.g. annotate_metric(axis, metric, 'recall', 0)."""
+    if not metric["complete"]:
+        annotate_incomplete(axis, metric, index)
+        return
     count = metric_count(metric, field)
     text = count if field == "false_exclusions" else f"({count})"
     annotate_rate(axis, metric[field], field, index)
@@ -77,6 +89,21 @@ def annotate_metric(
         1.02,
         index,
         text,
+        transform=axis.get_yaxis_transform(),
+        va="center",
+        fontsize=10,
+        clip_on=False,
+    )
+
+
+def annotate_incomplete(axis: Axes, metric: dict[str, JSON], index: int) -> None:
+    """Show coverage instead of inventing a metric, e.g. annotate_incomplete(axis, metric, 7)."""
+    total = metric["valid"] + metric["missing_binary_decisions"]
+    axis.text(1, index, "incomplete", va="center", fontsize=10, color="#555555")
+    axis.text(
+        1.02,
+        index,
+        f"({metric['valid']}/{total} binary)",
         transform=axis.get_yaxis_transform(),
         va="center",
         fontsize=10,
@@ -102,11 +129,17 @@ def draw_metric(
     axis: Axes, field: str, metrics: dict[str, dict[str, JSON]], names: dict[str, str]
 ) -> None:
     """Sort each measure independently, e.g. draw_metric(axis, 'recall', metrics, names)."""
-    ordered = sorted(names, key=lambda key: metrics[key][field] or 0, reverse=True)
+    ordered = sorted(
+        names,
+        key=lambda key: (metrics[key]["complete"], metrics[key].get(field) or 0),
+        reverse=True,
+    )
     colors = dict(zip(names, COLORS))
     scale = 1 if field == "false_exclusions" else 100
-    values = [(metrics[key][field] or 0) * scale for key in ordered]
-    axis.barh(range(5), values, color=[colors[key] for key in ordered], height=0.55)
+    values = [(metrics[key].get(field) or 0) * scale for key in ordered]
+    axis.barh(
+        range(len(names)), values, color=[colors[key] for key in ordered], height=0.55
+    )
     decorate_metric_axis(axis, field, [names[key] for key in ordered])
     for index, key in enumerate(ordered):
         annotate_metric(axis, metrics[key], field, index)
@@ -114,20 +147,20 @@ def draw_metric(
 
 def metric_figure(metrics: dict[str, dict[str, JSON]], names: dict[str, str]) -> Figure:
     """Build the four-panel comparison, e.g. metric_figure(metrics, names)."""
-    figure, axes = plt.subplots(2, 2, figsize=(14, 8.5))
+    figure, axes = plt.subplots(2, 2, figsize=(16, 11))
     figure.subplots_adjust(
-        left=0.16, right=0.95, bottom=0.12, top=0.84, wspace=0.55, hspace=0.48
+        left=0.20, right=0.95, bottom=0.10, top=0.86, wspace=0.75, hspace=0.40
     )
-    metric_heading(figure)
+    metric_heading(figure, len(names))
     for axis, field in zip(axes.flat, FIELDS):
         draw_metric(axis, field, metrics, names)
     return figure
 
 
-def metric_heading(figure: Figure) -> None:
-    """State the collection size beside the charts, e.g. metric_heading(figure)."""
+def metric_heading(figure: Figure, model_count: int) -> None:
+    """State the collection size beside the charts, e.g. metric_heading(figure, len(names))."""
     figure.suptitle(
-        "Five models on 595 records",
+        f"{model_count} models on 595 records",
         fontsize=20,
         x=0.08,
         ha="left",
@@ -149,9 +182,7 @@ def disagreement_matrix(
     """Use the scored disagreement counts, e.g. disagreement_matrix(summary, names)."""
     matrix = np.zeros((len(names) + 1, len(names) + 1), dtype=np.int64)
     for index, model in enumerate(names, 1):
-        matrix[0, index] = matrix[index, 0] = comparison["metrics"][model][
-            "human_disagreements"
-        ]
+        matrix[0, index] = matrix[index, 0] = comparison["human_disagreements"][model]
     pairs = {
         frozenset(pair.split(" / ")): count
         for pair, count in comparison["pairwise_disagreements"].items()
@@ -175,13 +206,16 @@ def annotate_matrix(axis: Axes, matrix: NDArray[np.int64]) -> None:
 def disagreement_figure(comparison: dict[str, JSON], names: dict[str, str]) -> Figure:
     """Render the scored lower triangle, e.g. disagreement_figure(summary, names)."""
     matrix = disagreement_matrix(comparison, names)
-    figure, axis = plt.subplots(figsize=(9, 7.2))
+    figure, axis = plt.subplots(figsize=(12, 10))
     masked = np.ma.masked_where(np.triu(np.ones_like(matrix, dtype=bool)), matrix)
     heat = axis.imshow(masked, cmap="Blues", vmin=0, vmax=max(1, matrix.max()))
     decorate_disagreements(axis, list(names.values()))
     annotate_matrix(axis, matrix)
     figure.colorbar(
-        heat, ax=axis, shrink=0.8, label="Number of different include/exclude decisions"
+        heat,
+        ax=axis,
+        shrink=0.8,
+        label="Different include/exclude decisions",
     )
     figure.tight_layout()
     return figure
@@ -189,16 +223,16 @@ def disagreement_figure(comparison: dict[str, JSON], names: dict[str, str]) -> F
 
 def decorate_disagreements(axis: Axes, names: list[str]) -> None:
     """Align the triangular matrix labels, e.g. decorate_disagreements(axis, names)."""
-    axis.set_xticks(
-        range(5), ["Human", "Jev\n1.14.0", "OpenAI\nDecisions", "Kev-4B", "Kev-9B"]
-    )
+    labels = ["Human", *names]
+    ticks = [label.replace(" (historical)", "\n(historical)") for label in labels[:-1]]
+    axis.set_xticks(range(len(names)), ticks, rotation=35, ha="right")
     axis.spines[["left", "bottom"]].set_visible(False)
     axis.tick_params(length=0)
-    axis.set_yticks(range(1, 6), names)
-    axis.set_xlim(-0.5, 4.5)
-    axis.set_ylim(5.5, 0.5)
+    axis.set_yticks(range(1, len(names) + 1), names)
+    axis.set_xlim(-0.5, len(names) - 0.5)
+    axis.set_ylim(len(names) + 0.5, 0.5)
     axis.set_title(
-        "Decision disagreements on 595 records", fontsize=15, weight="bold", pad=22
+        "Choice disagreements on 595 records", fontsize=15, weight="bold", pad=22
     )
 
 

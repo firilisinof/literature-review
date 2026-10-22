@@ -1,0 +1,3636 @@
+{
+  "records": 595,
+  "human_includes": 62,
+  "human_excludes": 533,
+  "prompt_sha256": "760f0697c375b94bccb58ea0d3435cf66c5cff4681026aff7b47179824a784e3",
+  "metrics": {
+    "jev": {
+      "valid": 595,
+      "errors": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 59,
+      "false_exclusions": 3,
+      "false_inclusions": 159,
+      "true_exclusions": 374,
+      "recall": 0.9516129032258065,
+      "recall_wilson_95": [
+        0.8671196207267605,
+        0.9834083141494193
+      ],
+      "precision": 0.2706422018348624,
+      "retained": 218,
+      "retained_fraction": 0.3663865546218487,
+      "human_disagreements": 162,
+      "false_exclusion_ids": [
+        "3",
+        "4",
+        "5"
+      ],
+      "request_seconds": 193.446799,
+      "cost": null,
+      "mean_request_seconds": 0.3251206705882353,
+      "median_request_seconds": 0.291395,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": []
+    },
+    "decisions": {
+      "valid": 595,
+      "errors": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 58,
+      "false_exclusions": 4,
+      "false_inclusions": 99,
+      "true_exclusions": 434,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "precision": 0.36942675159235666,
+      "retained": 157,
+      "retained_fraction": 0.2638655462184874,
+      "human_disagreements": 103,
+      "false_exclusion_ids": [
+        "3",
+        "4",
+        "5",
+        "419"
+      ],
+      "request_seconds": 219.002439,
+      "cost": null,
+      "mean_request_seconds": 0.36807132605042014,
+      "median_request_seconds": 0.326546,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": []
+    },
+    "kev-4b": {
+      "valid": 595,
+      "errors": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 62,
+      "false_exclusions": 0,
+      "false_inclusions": 258,
+      "true_exclusions": 275,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "precision": 0.19375,
+      "retained": 320,
+      "retained_fraction": 0.5378151260504201,
+      "human_disagreements": 258,
+      "false_exclusion_ids": [],
+      "request_seconds": 75.655308,
+      "cost": null,
+      "mean_request_seconds": 0.1271517781512605,
+      "median_request_seconds": 0.124184,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "model=6cfce5c2fa4b4bd64026336ab649c5ca78857d52; base=1001bb4d826a52d1f399e183466143f4da7b741b; server=1f04cfa28e6a708485b28a9585010b9e436b776e"
+      ]
+    },
+    "kev-9b": {
+      "valid": 595,
+      "errors": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 60,
+      "false_exclusions": 2,
+      "false_inclusions": 175,
+      "true_exclusions": 358,
+      "recall": 0.967741935483871,
+      "recall_wilson_95": [
+        0.8897953040501456,
+        0.9911086285001833
+      ],
+      "precision": 0.2553191489361702,
+      "retained": 235,
+      "retained_fraction": 0.3949579831932773,
+      "human_disagreements": 177,
+      "false_exclusion_ids": [
+        "5",
+        "419"
+      ],
+      "request_seconds": 77.12156,
+      "cost": null,
+      "mean_request_seconds": 0.12961606722689076,
+      "median_request_seconds": 0.127066,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "model=db029f08b290afd9fee4aa4bbcd9ae48602d1eb0; base=68c46c4b3498877f3ef123c856ecfde50c39f404; server=1f04cfa28e6a708485b28a9585010b9e436b776e"
+      ]
+    },
+    "qwen": {
+      "valid": 595,
+      "errors": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 58,
+      "false_exclusions": 4,
+      "false_inclusions": 204,
+      "true_exclusions": 329,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "precision": 0.22137404580152673,
+      "retained": 262,
+      "retained_fraction": 0.4403361344537815,
+      "human_disagreements": 208,
+      "false_exclusion_ids": [
+        "7",
+        "28",
+        "223",
+        "419"
+      ],
+      "request_seconds": 41.653629,
+      "cost": null,
+      "mean_request_seconds": 0.07000609915966387,
+      "median_request_seconds": 0.069631,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "model=b968826d9c46dd6066d109eabc6255188de91218; vllm=0.10.2; transformers=4.55.2; torch=2.8.0+cu128"
+      ]
+    }
+  },
+  "historical_baseline": {
+    "valid": 594,
+    "errors": 1,
+    "coverage": 0.9983193277310924,
+    "complete": false,
+    "invalid_ids": [
+      "2429"
+    ],
+    "source_sha256": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58"
+  },
+  "concurrency_per_model": 1,
+  "retries": 0,
+  "pairwise_disagreements": {
+    "jev / decisions": 75,
+    "jev / kev-4b": 104,
+    "jev / kev-9b": 75,
+    "jev / qwen": 106,
+    "decisions / kev-4b": 163,
+    "decisions / kev-9b": 98,
+    "decisions / qwen": 131,
+    "kev-4b / kev-9b": 91,
+    "kev-4b / qwen": 86,
+    "kev-9b / qwen": 87
+  },
+  "all_five_agree": 394,
+  "all_five_wrong_ids": [
+    "49",
+    "52",
+    "187",
+    "237",
+    "359",
+    "473",
+    "474",
+    "525",
+    "553",
+    "599",
+    "642",
+    "675",
+    "769",
+    "778",
+    "820",
+    "836",
+    "850",
+    "908",
+    "924",
+    "946",
+    "984",
+    "994",
+    "1023",
+    "1054",
+    "1058",
+    "1205",
+    "1223",
+    "1235",
+    "1270",
+    "1332",
+    "1334",
+    "1341",
+    "1444",
+    "1456",
+    "1571",
+    "1574",
+    "1754",
+    "1788",
+    "1909",
+    "1975",
+    "1980",
+    "2107",
+    "2123",
+    "2129",
+    "2156",
+    "2166",
+    "2192",
+    "2194",
+    "2197",
+    "2205",
+    "2222",
+    "2234",
+    "2321",
+    "2592",
+    "2636",
+    "2644",
+    "2673",
+    "2682",
+    "2754",
+    "2755",
+    "2778",
+    "2937",
+    "2997",
+    "3036",
+    "3053",
+    "3185",
+    "3221",
+    "3233",
+    "3274",
+    "3287",
+    "3322",
+    "3353",
+    "3355",
+    "3373",
+    "3380",
+    "3426",
+    "3437",
+    "3486",
+    "3758"
+  ],
+  "disagreements": [
+    {
+      "record_id": "3",
+      "title": "A Digital Twin Framework for Liquid-cooled Supercomputers as Demonstrated at Exascale",
+      "human": "include",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "4",
+      "title": "Toward Sustainable HPC: In-Production Deployment of Incentive-Based Power Efficiency Mechanism on the Fugaku Supercomputer",
+      "human": "include",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "5",
+      "title": "Designing an Energy-Efficient HPC Supercomputing Center",
+      "human": "include",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "7",
+      "title": "Sustainability in HPC: Vision and Opportunities",
+      "human": "include",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "28",
+      "title": "The huge carbon footprint of large-scale computing",
+      "human": "include",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "38",
+      "title": "Analysis and Visualization of the Dynamic Behavior of HPC Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "44",
+      "title": "Energy Efficient Frequency Scaling on\\&nbsp;GPUs in\\&nbsp;Heterogeneous HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "49",
+      "title": "perun: Benchmarking Energy Consumption of\\&nbsp;High-Performance Computing Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "52",
+      "title": "The Power of\\&nbsp;Training: How Different Neural Network Setups Influence the\\&nbsp;Energy Demand",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "85",
+      "title": "Reducing the HPC-datastorage footprint with MAFISC--Multidimensional Adaptive Filtering Improved Scientific data Compression",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "95",
+      "title": "3D-TTN: a power efficient cost effective high performance hierarchical interconnection network for next generation green supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "107",
+      "title": "RE-UPS: an adaptive distributed energy storage system for dynamically managing solar energy in green datacenters",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "110",
+      "title": "Evaluation of pre-training large language models on leadership-class supercomputers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "113",
+      "title": "Sustainable edge computing with mobile crowd computing: a proof-of-concept with a smart HVAC use case",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "122",
+      "title": "Artificial intelligence-enabled predictive energy saving planning of liquid cooling system for data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "128",
+      "title": "Application note: HPC-EPIC for high resolution simulations of environmental and sustainability assessment",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "140",
+      "title": "On the energy footprint of I/O management in Exascale HPC systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "143",
+      "title": "SoC-based computing infrastructures for scientific applications and commercial services: Performance and economic evaluations",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "149",
+      "title": "Towards safe and sustainable reinforcement learning for real-time strategy games",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "166",
+      "title": "A Hybrid Deep Learning Approach for Modelling and Optimising Data Centre Energy Efficiency",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "169",
+      "title": "A HPC based cloud model for real-time energy optimisation",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "174",
+      "title": "Toward a Flexible, Environmentally Conscious, on Demand High Performance Computing Service",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "187",
+      "title": "Improving EECluster to optimize the carbon footprint and operating costs of HPC clusters",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "189",
+      "title": "A Power-Aware Based Storage Architecture for High Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "196",
+      "title": "Energy-Aware High Performance Computing: A Taxonomy Study",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "199",
+      "title": "On Performance and Energy Management in High Performance Computing Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "204",
+      "title": "Green flash: Designing an energy efficient climate supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "214",
+      "title": "The Green500 List: Encouraging Sustainable Supercomputing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "223",
+      "title": "Data Center Operators Face Energy Irony",
+      "human": "include",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "231",
+      "title": "Accurate and Convenient Energy Measurements for GPUs: A Detailed Study of NVIDIA GPU's Built-In Power Sensor",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "237",
+      "title": "Sustainable AI: Experiences, Challenges \\&amp; Recommendations",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "240",
+      "title": "AIOps and Sustainability: Transforming Data Centers for a Greener Future",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "241",
+      "title": "EE-HPC a Framework for Energy Efficient HPC System Management",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "261",
+      "title": "Energy-cost-aware scheduling of HPC workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "278",
+      "title": "Poster: high performance computing reservoir simulation in the oil industry",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "290",
+      "title": "Building Fuel Powered Supercomputing Data Center at Low Cost",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "292",
+      "title": "ARMv8 micro-architectural design space exploration for high performance computing using fractional factorial",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "300",
+      "title": "Simulation-Based Performance Evaluation of an Energy-Aware Heuristic for the Scheduling of HPC Applications in Large-Scale Distributed Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "313",
+      "title": "Uncore power scavenger: a runtime for uncore power conservation on HPC systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "320",
+      "title": "From BigDog to BigDawg: Transitioning an HPC Cluster for Sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "359",
+      "title": "Sustainable Supercomputing for AI: GPU Power Capping at HPC Scale",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "367",
+      "title": "Energy consumption comparison of parallel linear systems solver algorithms on HPC infrastructure",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "368",
+      "title": "Reducing HPC energy footprint for large scale GPU accelerated workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "371",
+      "title": "Understanding Energy Performance of Containers Deployment on HPC-Based post-Moore Platforms",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "394",
+      "title": "The World is Not Enough: Growing Waste in HPC-enabled Academic Practice",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "396",
+      "title": "Neural Network Inference in High-Performance Computing: Closing the Gap for FINN based Reconfigurable Accelerators",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "407",
+      "title": "Reproducibility Report for SC25 Paper ThirstyFLOPS: Water Footprint Modeling and Analysis Toward Sustainable HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "408",
+      "title": "Empowering Generative AI in Enterprises: Sustainable, High-Performance Storage Solutions with Global Data Fabric and Data Lakehouse",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "412",
+      "title": "Energy-Optimized Supercomputer Networks Using Wind Energy",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "417",
+      "title": "HPC Digital Twins for Evaluating Scheduling Policies, Incentive Structures and their Impact on Power and Cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "419",
+      "title": "Improving Supercomputer Usage with Aging Awareness",
+      "human": "include",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "422",
+      "title": "Session Summary Podcast: Session 29: SSW: Sustainable Supercomputing Workshop",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "429",
+      "title": "Co-design, deployment and operation of a Modular Data Centre (MDC) with air and direct-liquid cooled supercomputers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "445",
+      "title": "A deep dive into sustainable generative AI and HPC systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "450",
+      "title": "Pricing schemes for energy-efficient HPC systems: Design and exploration",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "466",
+      "title": "Acceleration of MPI Mechanisms for Sustainable HPC Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "473",
+      "title": "Direct-to-chip liquid cooling for reducing power consumption in a subarctic supercomputer centre",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "474",
+      "title": "Sustainability of data center digital twins with reinforcement learning",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "492",
+      "title": "SolarCore: Solar energy driven multi-core architecture power management",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "501",
+      "title": "Design Technologies for Green and Sustainable Computing Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "507",
+      "title": "High-performance computing tools for the integrated assessment and modelling of social-ecological systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "510",
+      "title": "Heat Management in Integrated Circuits: On-chip and System-level Monitoring and Cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "516",
+      "title": "Advanced Concepts for Renewable Energy Supply of Data Centres",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "525",
+      "title": "Sustainable computing and simulation: a literature survey",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "548",
+      "title": "Eliminating the Capacity Variation Penalty for Cloud Resource Management",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "553",
+      "title": "CO2 Emission Aware Scheduling for Deep Neural Network Training Workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "559",
+      "title": "PMT: Power Measurement Toolkit",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "599",
+      "title": "Data Center Energy Reduction by Lowering Chip-to-Supply Thermal Resistance",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "612",
+      "title": "The Graph-Massivizer Approach Toward a European Sustainable Data Center Digital Twin",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "642",
+      "title": "Reducing the Carbon Footprint of Ensemble Weather Forecasting with GPUs",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "660",
+      "title": "Potential for Waste Heat Recovery in a Digital Currency Mining Facility: A Building Infrastructure Case Study",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "675",
+      "title": "Clover: Toward Sustainable AI with Carbon-Aware Machine Learning Inference Service",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "704",
+      "title": "An Energy-efficient Si-integrated Micro-cooler for High Power and Power-density Computing Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "718",
+      "title": "Power Profile Monitoring and Tracking Evolution of System-Wide HPC Workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "728",
+      "title": "ResNet50V1.5 Evaluation for GPU Disaggregation",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "731",
+      "title": "Digital Twins for Data Centers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "734",
+      "title": "Towards Green HPC Job Outsourcing: Energy Models for Molecular Dynamics Simulations on Three Clusters",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "738",
+      "title": "Thermal Performance Characteristic of Single-phase Immersion Cooling on Servers with Optimized Heatsink Design",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "742",
+      "title": "Low-Cost Green Computing-as-a-Service Testbed for SMEs: Leveraging AI and 6G for Enhanced Productivity",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "769",
+      "title": "EcoLife: Carbon-Aware Serverless Function Scheduling for Sustainable Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "776",
+      "title": "Digital Sufficiency Behaviors to Deal with Intermittent Energy Sources in a Data Center",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "778",
+      "title": "Advancing Sustainability in Data Centers: Evaluation of Hybrid Air/Liquid Cooling Schemes for IT Payload Using Sea Water",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "795",
+      "title": "A Comprehensive Monitoring, Visualization, and Management System for Green Data Centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "820",
+      "title": "Integrating Energy-Efficient Computing With Computational Research to Accelerate Energy Technology",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "836",
+      "title": "A Green Cloud-Based Framework for Energy-Efficient Task Scheduling Using Carbon Intensity Data for Heterogeneous Cloud Servers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "848",
+      "title": "Job Scheduler-Driven Power Gateway for High Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "850",
+      "title": "Assessing Processor Sustainability Using the First-Order FOCAL Carbon Model",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "851",
+      "title": "Sustainable Grid through Distributed Data Centers : Spinning AI Demand for Grid Stabilization and Optimization",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "908",
+      "title": "Reducing Digital $\\textCO_2$ Footprint in IT Systems Using Temporal Difference Learning for Energy-Aware Scheduling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "924",
+      "title": "ROA: Energy and Environment Aware Task Scheduling in Cloud Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "929",
+      "title": "Sustainability Framework for Computing Element Design",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "935",
+      "title": "Design of an Immersion Cooling Data Centers System Based on Deep Hashing Networks",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "940",
+      "title": "ColonyOS: A Meta-OS for Computing Continuums",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "946",
+      "title": "Multi-Objective Low-Carbon Scheduling Method for Data Centers Based on Ensemble Reinforcement Learning",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "969",
+      "title": "Advancing Sustainable Semiconductor Innovations Through Simulation, Modeling, and Mentorship: Toward Energy-Efficient and Inclusive Semiconductor Futures",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "983",
+      "title": "Efficient Filtering with BERT Embeddings for Researcher–Topic Affinity Prediction in HPC Pipelines",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "984",
+      "title": "Efficient Multi-Workload Execution for Sustainable GPU Performance",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "994",
+      "title": "A Synergistic Deep Learning Optimization Framework for Energy-Efficient HPC Clusters",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "997",
+      "title": "Energy Consumption in Computing over the Decades: Trends, Efficiency, and Measurement Challenges",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1023",
+      "title": "Strategic Job Allocation Through Sensor Behavior Analysis Using Random Forest and XGBoost",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1027",
+      "title": "Energy-Aware HPC Scheduling with LLM-Based Power Prediction",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1039",
+      "title": "Enhanced Reliability of Large BGA Assemblies for AI Server and HPC Application",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1049",
+      "title": "Microgrid Architecture for AI Computing Facilities",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1054",
+      "title": "Innovative Thermal Design: How Nature is Redefining Heat Management in Supercomputing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1058",
+      "title": "Extending the Service Life and Enhancing Efficiency of Panel Boards in High-Demand Environments",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1205",
+      "title": "Thermal management in high performance computers by use of heat Pipes and vapor chambers, and the challenges of global warming and environment",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1217",
+      "title": "A sustainable data center with heat-activated cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1223",
+      "title": "Environmentally Opportunistic Computing transforming the data center for economic and environmental sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1227",
+      "title": "Money for Research, Not Energy Bills: Finding Energy and Cost Savings in High-Performance Computer Facility Designs",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1235",
+      "title": "Enabling Sustainable Clouds via Environmentally Opportunistic Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1264",
+      "title": "Approach towards an energy-aware and energy-efficient high performance computing environment",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1270",
+      "title": "System-level thermal-aware design of 3D multiprocessors with inter-tier liquid cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1284",
+      "title": "Sustainability in silicon and systems development",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1292",
+      "title": "Green HPC: MPI vs. OpenMP on a shared memory system",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1318",
+      "title": "Green-aware workload scheduling in geographically distributed data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1332",
+      "title": "The costs of HPC-based science in the exascale era",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1334",
+      "title": "A Comprehensive Approach for a Power Efficient General Purpose Supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1341",
+      "title": "Energy efficient computing- Green cloud computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1342",
+      "title": "Green Cloud Computing and Environmental Sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1353",
+      "title": "Providing green SLAs in High Performance Computing clouds",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1371",
+      "title": "Energy and Heat-Aware Metrics for Data Centers: Metrics Analysis in the Framework of CoolEmAll Project",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1372",
+      "title": "Energy- and Heat-Aware HPC Benchmarks",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1388",
+      "title": "A sustainable approach to large ICT science based infrastructures; the case for radio astronomy",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1400",
+      "title": "Building Green Cloud Services at Low Cost",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1401",
+      "title": "Application of energy reduction techniques using niched pareto GA of energy analzyer for HPC applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1444",
+      "title": "CO2-Aware Adaptation Strategies for Cloud Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1456",
+      "title": "Towards greener services in cloud computing: Research and future directives",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1462",
+      "title": "Zero-Carbon Cloud: A Volatile Resource for High-Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1467",
+      "title": "Optimizing parallel HPC applications for green energy sources",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1483",
+      "title": "Workshop: Sustainable and energy efficient data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1489",
+      "title": "ZCCloud: Exploring Wasted Green Power for High-Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1490",
+      "title": "Hybrid warm water cooled supercomputing system",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1503",
+      "title": "An analysis of the feasibility of energy harvesting with thermoelectric generators on petascale and exascale systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1508",
+      "title": "A practical approach to overcome glitches in achieving high performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1535",
+      "title": "How Much Energy Can Green HPC Cloud Users Save?",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1549",
+      "title": "Embedded Accelerators for Scientific High-Performance Computing: An Energy Study of OpenCL Gaussian Elimination Workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1571",
+      "title": "Benchmarking Energy Efficiency, Power Costs and Carbon Emissions on Heterogeneous Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1574",
+      "title": "Large-Scale and Extreme-Scale Computing with Stranded Green Power: Opportunities and Costs",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1580",
+      "title": "HPC Cooling: A Flexible Modeling Tool for Effective Design and Management",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1581",
+      "title": "Adapting Computer Arithmetic Structures to Sustainable Supercomputing in Low-Power, Majority-Logic Nanotechnologies",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1583",
+      "title": "Thermal aware scheduling on distributed computing water heaters",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1586",
+      "title": "SIM-Cumulus: An Academic Cloud for the Provisioning of Network-Simulation-as-a-Service (NSaaS)",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1594",
+      "title": "Design of a Two-Phase Gravity-Driven Micro-Scale Thermosyphon Cooling System for High-Performance Computing Data Centers",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1669",
+      "title": "Identification of Resource Utilisation Patterns in Data Centers Using Tensor Decomposition",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1689",
+      "title": "Can Photonic Computing be the Answer to Green and Sustainable Computing?",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1694",
+      "title": "Energy\\&\\#x2010;Aware Approaches for HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1698",
+      "title": "Towards Exascale: Measuring the Energy Footprint of Astrophysics HPC Simulations",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1701",
+      "title": "Green Power Constrained Scheduling for Sequential Independent Tasks on Identical Parallel Machines",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1725",
+      "title": "Energy-Optimal Configurations for Single-Node HPC Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1754",
+      "title": "Efficiency Near the Edge: Increasing the Energy Efficiency of FFTs on GPUs for Real-Time Edge Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1756",
+      "title": "Autonomic Runtime Adaptation Framework for Power Management in Large-Scale High-Performance Computing Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1788",
+      "title": "Harmonization between Renewable Energy and Cloud Computing towards Green Computing A Case Study: Data Center at The University Of Jordan",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1804",
+      "title": "Low-Pressure Heat Transfer Fluids for Pumped Two-Phase Cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1826",
+      "title": "Energy Measurement Laboratory for Heterogeneous Hardware Evaluation",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1844",
+      "title": "Ren\\'ee: New Life for Old Phones",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1849",
+      "title": "Green Cloud Computing-To Build A Sustainable Tomorrow",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1858",
+      "title": "Predicting Technologies That Advance Humanity",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1871",
+      "title": "Peachy Parallel Assignments (EduPar 2022)",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "1872",
+      "title": "Modeling Power Consumption of Lossy Compressed I/O for Exascale HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1885",
+      "title": "Scalable Architectures to Support Sustainable Advanced Information Technologies",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1899",
+      "title": "Trends in Energy Estimates for Computing in AI/Machine Learning Accelerators, Supercomputers, and Compute-Intensive Applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1909",
+      "title": "Towards Extreme and Sustainable Graph Processing for Urgent Societal Challenges in Europe",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1937",
+      "title": "Sizing renewable energy microgrids for supercomputing centers using particle swarm optimization",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1975",
+      "title": "Sustainable Swarm Intelligence: Assessing Carbon-Aware Optimization in High-Performance AI Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "1980",
+      "title": "AI-driven cooling technologies for high-performance data centres: state-of-the-art review and future directions",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2006",
+      "title": "Large-scale HPC approaches and applications on highly distributed platforms",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2009",
+      "title": "PM100: A Job Power Consumption Dataset of a Large-scale Production HPC System",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2010",
+      "title": "F-DATA: A Fugaku Workload Dataset for Job-centric Predictive Modelling in HPC Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2017",
+      "title": "Basin landscape approach to organization of ecological monitoring of hydraulic power complexes (HPC) on the basis of geoinformation technologies",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2041",
+      "title": "Computing Challenges for the Einstein Telescope project",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2043",
+      "title": "A comparative study of calcium hydroxide, calcium oxide, calcined dolomite, and metasilicate as activators for slag-based HPC",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2067",
+      "title": "Power monitoring and control for large scale projects: SKA, a case study",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2080",
+      "title": "Mathematical Modeling of Sustainable Coastal Systems Development Scenarios Based on Game-Theoretic Concepts of Hierarchical Management Using Supercomputer Technologies",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2082",
+      "title": "The Emerging Challenge of variable Capacity Scheduling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2107",
+      "title": "CommC: A Multi-Purpose COMModity Hardware Cluster",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2123",
+      "title": "Optimizing the Impact of Upgrading Computer Equipment",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2129",
+      "title": "Environmentally opportunistic computing: Computation as catalyst for sustainable design",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2132",
+      "title": "Prediction and characterization of application power use in a high-performance computing environment",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2136",
+      "title": "itwinai: Enabling Scalable AI Workflows on HPC for Digital Twins in Science",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2156",
+      "title": "Societal Impacts of Scheduling in HPC and Datacenters",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2158",
+      "title": "Field-programmable gate arrays and quantum Monte Carlo: Power efficient coprocessing for scalable high-performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2159",
+      "title": "Truly heterogeneous HPC: Co-design to achieve what science needs from HPC",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2166",
+      "title": "Air-Cooled Chillers For Sustainable, High-Density Data Centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2192",
+      "title": "GAS-MARL: Green-Aware job Scheduling algorithm for HPC clusters based on Multi-Action Deep Reinforcement Learning",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2194",
+      "title": "Sustainability challenges in high-performance computing manufacturing addressing CO2emissions and energy consumption issues",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2197",
+      "title": "Energy Efficiency of a New Parallel PIC Code for Numerical Simulation of Plasma Dynamics in Open Trap",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2199",
+      "title": "QoS-aware energy-efficient task scheduling on HPC cloud infrastructures using swarm-intelligence meta-heuristics",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2200",
+      "title": "Performance-aware energy-efficient parallel job scheduling in HPC grid using nature-inspired hybrid meta-heuristics",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2203",
+      "title": "From HPC Datacenters to Grid-integrated AI Datacenters",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2205",
+      "title": "Blockchain Digital Twin To Modeling Data Center",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2222",
+      "title": "Improving the eco-efficiency of high performance computing clusters using EECluster",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2234",
+      "title": "Scaling up to problem sizes: an environmental life cycle assessment of quantum computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2256",
+      "title": "Optimizing Kubernetes Performance, Efficiency And Energy Footprint In Heterogenous Hpc Environments",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2260",
+      "title": "Development of a sustainable binder made of recycled high-performance concrete (HPC)",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2321",
+      "title": "Computility Planning for~Sustainable Supercomputing Centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2329",
+      "title": "Energy-aware scheduling of malleable HPC applications using a Particle Swarm optimised greedy algorithm",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2337",
+      "title": "The role of environmental ethics and sustainability in research ethics for linguistics: What is currently available in terms of guidance and how might that be improved?",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2347",
+      "title": "Evalix: Classification and prediction of job resource consumption on HPC platforms",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2379",
+      "title": "Potentials for reduction of environmental impacts of construction using hpc",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2422",
+      "title": "Data Science Approach To Modelling And Optimising Data Center Energy Efficiency",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2462",
+      "title": "Performance and energy footprint assessment of FPGAs and GPUs on HPC systems using astrophysics application",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2492",
+      "title": "Chasing Carbon: The Elusive Environmental Footprint of Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2509",
+      "title": "Thin-Walled Slab Elements Made of FRP-Reinforced HPC and UHPC: Development, Experimental Investigation and LCA",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2510",
+      "title": "Subsurface multiphase flow and multicomponent reactive transport modeling using high-performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2526",
+      "title": "Optimizing Wind Energy Production: Leveraging Deep Learning Models Informed with On-Site Data and Assessing Scalability through HPC",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2569",
+      "title": "Modern methods of energy consumption optimization in FPGA-based heterogeneous HPC systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2592",
+      "title": "Thermal Management Innovations for Energy-Efficient A.I. Data Centres",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2636",
+      "title": "Preventing the Immense Increase in the Life-Cycle Energy and Carbon Footprints of LLM-Powered Intelligent Chatbots",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2644",
+      "title": "HiPPO-KAN-GNN: A Novel Graph Neural Networks-Based Extension to~Temporal Kolmogorov-Arnold Networks for~Multivariate Time Series Forecasting",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2645",
+      "title": "TPU v4: An Optically Reconfigurable Supercomputer for Machine Learning with Hardware Support for Embeddings",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2669",
+      "title": "Comparison of flame propagation statistics extracted from direct numerical simulation based on simple and detailed chemistry--part 1: Fundamental flame turbulence interaction",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2673",
+      "title": "Exploratory data analysis for data center energy management",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2682",
+      "title": "Data Centers and Water: Challenges and Solutions for Sustainable Cooling",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2687",
+      "title": "Energy-optimized operation of a distributed data center infrastructure located in wind farms: a multi-agent system approach",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2735",
+      "title": "Advances in Numerical Modeling for Heat Transfer and Thermal Management: A Review of Computational Approaches and Environmental Impacts",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2748",
+      "title": "SONAR: Automated communication characterization for HPC applications",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2754",
+      "title": "Green Algorithms: Quantifying the Carbon Footprint of Computation",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2755",
+      "title": "Carbon footprint: the (not so) hidden cost of high performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2769",
+      "title": "Modeling Microreactor Requirements for High-Performance Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2778",
+      "title": "Scalable Deep Learning for~Industry 4.0: Speedup with~Distributed Deep Learning and~Environmental Sustainability Considerations",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2860",
+      "title": "Environmental and economic costs behind LLMs",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2884",
+      "title": "End-edge-cloud collaborative-driven waste-heat prediction of liquid cooling system for high-performance computing data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2885",
+      "title": "The REGALE Library: A DDS Interoperability Layer for the HPC PowerStack",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2914",
+      "title": "High-performance computing applied in project UBEST",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2937",
+      "title": "Toward a GPU-enabled billionaire SVD in pyLOM",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2973",
+      "title": "A novel development of HPC without cement: Mechanical properties and sustainability evaluation",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2975",
+      "title": "Development of sustainable HPC using rubber powder and waste wire: carbon footprint analysis, mechanical and microstructural properties",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "2996",
+      "title": "AI applications for business, medical, and agricultural sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "2997",
+      "title": "Harnessing high-performance computing and AI for environmental sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3000",
+      "title": "Power Consumption in~HPC-AI Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3033",
+      "title": "Modeling of production and destruction processes in coastal systems on a supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3035",
+      "title": "Greening Digital",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3036",
+      "title": "Immersion Cooling in Data Centers: A Comprehensive Review of Benefits, Challenges, and Future Directions",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3053",
+      "title": "Cloud-computing approach for an environmental, social, and corporate governance focus in universities and businesses",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3065",
+      "title": "Best practices in energy-efficient high performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3088",
+      "title": "Thermodynamic characterization of a direct water cooled server rack running synthetic and real high performance computing work loads",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3107",
+      "title": "UKCropDiversity-HPC: A collaborative high-performance computing resource approach for sustainable agriculture and biodiversity conservation",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3136",
+      "title": "Eco-friendly HPC that helps to agriculture by minimizing the pollution from industrial wastes",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3149",
+      "title": "PAAS: Power aware algorithm for scheduling in high performance computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3185",
+      "title": "EE-HPC-WG'11 - Proceedings of the 2011 Energy Efficient High Performance Computing Working Group Workshop, Co-located with SC'11",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3198",
+      "title": "2014 International Green Computing Conference, IGCC 2014",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3213",
+      "title": "Proceedings of the 32nd International DAAAM Symposium \"Intelligent Manufacturing and Automation\", DAAAM 2021",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3221",
+      "title": "Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, SC 2023",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3233",
+      "title": "Proceedings - 2024 IEEE International Conference on Cluster Computing Workshops, CLUSTER Workshops 2024",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3236",
+      "title": "Proceedings of 2025 Supercomputing Asia Conference, SCA 2025",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3273",
+      "title": "Efficient high performance computing with the ALICE event processing nodes GPU-based farm",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3274",
+      "title": "Optimizing energy consumption for data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3281",
+      "title": "Learning anomalies from graph: predicting compute node failures on HPC clusters",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3285",
+      "title": "Leveraging high-performance computing and artificial intelligence in climate modeling and prediction",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3287",
+      "title": "The Double- Edged Sword: Evaluating the Climate Impact of Speech Processing Technologies",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3322",
+      "title": "Advanced climate model evaluation with ESMValTool v2.11.0 using parallel, out-of-core, and distributed computing",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3340",
+      "title": "Thermal, Hydraulic and Reliability Analysis of Single-Phase Liquid Coolants for Direct-to-Chip Cold Plate Cooling in High-Performance Computing Systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3353",
+      "title": "Distributed solar powered supercomputer satellite",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3354",
+      "title": "Revising resource management and scheduling systems",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3355",
+      "title": "Groundwater cooling of a supercomputer in Perth, Western Australia: hydrogeological simulations and thermal sustainability; [Refroidissement par eaux souterraines d'un superordinateur \\`a Perth, Australie Occidentale: simulations hydrog\\'eologiques et durabilit\\'e thermique]; [Resfriamento por \\'aguas subterr\\^aneas em Perth, Austr\\'alia Ocidental: simula\\cc\\~oes hidrogeol\\'ogicas e sustentabilidade termal]; [Enfriamiento por agua subterr\\'anea de una supercomputadora en Perth, Australia Occidental: simulaciones hidrogeol\\'ogicas y sustentabilidad t\\'ermica]",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3372",
+      "title": "Monitoring Power Data: A first step towards a unified energy efficiency evaluation toolset for HPC data centers",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3373",
+      "title": "Forecasting power-efficiency related key performance indicators for modern data centers using LSTMs",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3380",
+      "title": "Is HPC going green?",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3383",
+      "title": "Energy Analysis Of Rear Door Heat Exchangers In Data Centers With Spatial Workload Distribution",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3426",
+      "title": "Performance of a high-order MPI-Kokkos accelerated fluid solver",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3437",
+      "title": "The imperative to reduce carbon emissions in astronomy",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3447",
+      "title": "Supercomputer modeling of hydrochemical condition of shallow waters in summer taking into account the influence of the environment",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3448",
+      "title": "Supercomputer simulation of oil spills in the azov sea",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3449",
+      "title": "Application of High-Performance Computing for Modeling the Hydrobiological Processes in Shallow Water",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3450",
+      "title": "The Use of Supercomputer Technologies for Predictive Modeling of Pollutant Transport in Boundary Layers of the Atmosphere and Water Bodies",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3462",
+      "title": "Power prediction for sustainable hpc",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3486",
+      "title": "Time To Develop A Digital Twin For The Hpc Data Center",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3499",
+      "title": "Maturation Of Pumped Two-phase Liquid Cooling To Commercial Scale-up Deployment",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3516",
+      "title": "Energy-Efficient Integrated Photonics for Next-Generation Computing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3535",
+      "title": "Data Locality in High Performance Computing, Big Data, and Converged Systems: An Analysis of the Cutting Edge and a Future System Architecture",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3557",
+      "title": "Towards Energy Efficiency of HPC Data Centers: A Data-Driven Analytical Visualization Dashboard Prototype Approach",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3558",
+      "title": "An in-depth study of GPU frequency-scaling latency and its optimization on modern architectures",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3585",
+      "title": "Energy wall for exascale supercomputing",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3611",
+      "title": "Green AI: Balancing Innovation With Environmental Sustainability",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3657",
+      "title": "Using Clean Energy Satellites to Interpret Imagery: A Satellite IoT Oriented Lightweight Object Detection Framework for SAR Ship Detection",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3667",
+      "title": "Numerical simulation of long-term fate of CO2 stored in deep reservoir rocks on massively parallel vector supercomputer",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3692",
+      "title": "Mechanical and rheological properties of High-Performance concrete (HPC) incorporating waste glass as cementitious material and fine aggregate",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "exclude"
+      }
+    },
+    {
+      "record_id": "3711",
+      "title": "Early experiences with saving energy in direct interconnection networks",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "exclude",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3713",
+      "title": "Ubiquitous green computing techniques for high demand applications in smart environments",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    },
+    {
+      "record_id": "3758",
+      "title": "TopADDPi: An Affordable and Sustainable Raspberry Pi Cluster for Parallel-Computing Topology Optimization",
+      "human": "exclude",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include"
+      }
+    }
+  ],
+  "predictions_sha256": "7ad5fd6e3cce5e6559ad3b92e6ae767e52d8c5e1fdbeafd9a0c7d910be0317f4",
+  "local_runs_sha256": "cabad5ebc6a0f1e86aba50ebc8a0e1a87c7a195a157f269788ca7b5abcd70a52"
+}

@@ -1,7 +1,6 @@
 """Rebuild benchmark.jsonl from the original screening files. No model requests."""
 
 import csv
-import hashlib
 import html
 import json
 import re
@@ -11,8 +10,7 @@ from pathlib import Path
 import bibtexparser
 
 Row = dict[str, str]
-SEED = 20261020
-# User-approved removals. Sources and reasons are in README.md.
+# User-approved removals. Sources and reasons are in the wiki dataset notes.
 NO_ABSTRACT = {
     "230",
     "271",
@@ -29,13 +27,13 @@ NO_ABSTRACT = {
 TITLE_PAGES = {"1330", "1461", "1504"}
 # cd60158 introduced these incorrect aliases. Keep the original screening IDs.
 BAD_ALIASES = {"3794": "2042", "3795": "299"}
-# (source group, human label): (available records, development records).
+# Preserve the reviewed collection without dividing it into evaluation subsets.
 STRATA = {
-    ("initial", "include"): (25, 5),
-    ("initial", "exclude"): (335, 67),
-    ("snowball", "include"): (5, 1),
-    ("later", "include"): (32, 6),
-    ("later", "exclude"): (198, 40),
+    ("initial", "include"): 25,
+    ("initial", "exclude"): 335,
+    ("snowball", "include"): 5,
+    ("later", "include"): 32,
+    ("later", "exclude"): 198,
 }
 
 
@@ -193,50 +191,25 @@ def collect_records(root: Path) -> list[Row]:
     return records
 
 
-def assign_split(records: list[Row]) -> None:
-    """Keep the agreed seed and assignments, e.g. assign_split(records)."""
-    counts = Counter((row["cohort"], row["label"]) for row in records)
-    if counts != {key: size for key, (size, _) in STRATA.items()}:
-        raise ValueError(f"{counts}: expected the agreed label/source counts")
-    for (cohort, label), (_, quota) in STRATA.items():
-        group = [
-            row for row in records if (row["cohort"], row["label"]) == (cohort, label)
-        ]
-        group.sort(
-            key=lambda row: hashlib.sha256(
-                f"{SEED}:{row['record_id']}".encode()
-            ).digest()
-        )
-        for position, row in enumerate(group):
-            row["split"] = "development" if position < quota else "held_out"
-
-
 def check_dataset(records: list[Row]) -> None:
-    """Check coverage and split totals before writing, e.g. check_dataset(records)."""
+    """Check coverage and cohort totals before writing, e.g. check_dataset(records)."""
     if len({row["record_id"] for row in records}) != 595:
         raise ValueError("Record IDs: expected 595 unique active records")
     if len({title_key(row["title"]) for row in records}) != 595:
         raise ValueError("Titles: expected no repeated normalized titles")
-    counts = Counter((row["split"], row["label"]) for row in records)
-    expected = {
-        ("development", "include"): 12,
-        ("development", "exclude"): 107,
-        ("held_out", "include"): 50,
-        ("held_out", "exclude"): 426,
-    }
-    if counts != expected:
-        raise ValueError(f"{counts}: expected split counts {expected}")
+    counts = Counter((row["cohort"], row["label"]) for row in records)
+    if counts != STRATA:
+        raise ValueError(f"{counts}: expected cohort counts {STRATA}")
 
 
 def main() -> None:
     """Rebuild and check the single dataset, e.g. python build_dataset.py."""
     folder = Path(__file__).resolve().parent
     records = collect_records(folder.parents[1])
-    assign_split(records)
     check_dataset(records)
     rendered = "\n".join(json.dumps(row, ensure_ascii=False) for row in records)
     (folder / "benchmark.jsonl").write_text(rendered + "\n", encoding="utf-8")
-    print("Saved 595 records: development 119 (12 include), held-out 476 (50 include).")
+    print("Saved 595 records: 62 include, 533 exclude.")
 
 
 if __name__ == "__main__":

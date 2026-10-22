@@ -1,225 +1,192 @@
 # HPC screening benchmark
 
-Compare the agreed models with human decisions from the published HPC review.
-Keep the published criteria fixed. No paid model requests are authorized yet.
+Compare five screening models with the existing human decisions for 595 records
+from the published HPC review: 62 include and 533 exclude. Evaluate the entire
+collection together. The initial 119-record run checked execution and required
+no changes. Its predictions are reused alongside the remaining 476 records.
 
-## Files and use
+The published criteria, prompt, model revisions, request settings, output parser,
+and no-retry policy are fixed across both runs. This is a descriptive comparison
+on the reviewed collection, not a separate held-out evaluation.
 
-- `benchmark.jsonl`: all 595 records, one JSON object per line.
-- `build_dataset.py`: rebuilds the dataset from the original screening files.
-- `README.md`: the evaluation plan and source notes.
-- `prompt.txt`: the shared screening instructions.
-- `run_development.py`: prepares or sends development requests.
-- `run_local.py`: starts the pinned local servers and runs development requests.
-- `compare_development.py`: scores saved development runs and plots the comparison.
+## Files
+
+- `benchmark.jsonl`: the single dataset, without an evaluation split.
+- `build_dataset.py`: rebuilds the dataset from original screening files.
+- `prompt.txt`: shared screening instructions.
+- `run_screening.py`: previews requests or runs one selected model.
+- `screening_api.py`: provider request formats and response parsing.
+- `run_local.py`, `local_server.py`: run pinned local models sequentially.
+- `merge_results.py`: validates and merges response chunks.
+- `compare_results.py`, `plot_comparison.py`: score predictions and generate plots.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
-- `results/`: dated response files and the local run summary.
+- `results/predictions.jsonl`: all 2,975 requests, responses, decisions, and timings.
+- `results/local-runs.json`: local server settings and startup/run timings for both dates.
+- `results/comparison.json`: metrics, coverage, recall intervals, and disagreements.
+- `figures/metrics.png`, `figures/disagreements.png`: full-collection figures.
 
-Each record has `record_id`, `title`, `abstract`, `label`, `split`, `cohort`,
-`label_source`, and `abstract_source`. Use the `split` field to select records.
-The source fields point to the original evidence. Use `record_id` to find the
-human decision in its source file.
+Each dataset record has `record_id`, `title`, `abstract`, `label`, `cohort`,
+`label_source`, and `abstract_source`. Source fields point to original evidence.
+Use `record_id` to locate the human decision in its source file.
 
-Send only `title` and `abstract` to a model. Keep `record_id` as a request key.
-Do not send the full row, human label, source notes, or historical model answers.
+Send only `title` and `abstract` to models. Keep `record_id` as a request key.
+The runner never sends human labels, provenance, or historical model answers.
 
-To rebuild from the repository root:
+## Rebuild and check
+
+Run commands from the repository root. Rebuild the dataset without model requests:
 
 ```sh
 uv run --no-project --with bibtexparser==1.4.4 python 2_screening/benchmark/build_dataset.py
 ```
 
-The script checks IDs, human decisions, abstract matches, and split counts before
-writing the dataset. It makes no model requests. `uv` can download the parser
-package if it is not cached. There is no separate test command or audit file.
+The script checks unique IDs and titles, human decisions, recovered abstracts,
+and cohort counts before writing all 595 records.
 
-## Run development screening
-
-The runner uses Python's standard library. It reads only the 119 development
-records. It never selects held-out records. Dry-run is the default and needs
-no API key, model download, or running server.
-
-Preview one record for each model:
+Preview one request per model without network access:
 
 ```sh
-python 2_screening/benchmark/run_development.py --dry-run --limit 1
+python 2_screening/benchmark/run_screening.py --dry-run --limit 1
 ```
 
-Prepare all 119 requests for each of the five models in one file:
+Validate and score the saved results without requests or plotting dependencies:
 
 ```sh
-python 2_screening/benchmark/run_development.py --dry-run --output preview.jsonl
+python 2_screening/benchmark/compare_results.py --no-plots
 ```
 
-Use `--model jev`, `decisions`, `kev-4b`, `kev-9b`, or `qwen` to select one model.
-The prompt and paper text are the same across models. The request format differs
-by API. Each model must return `include` or `exclude` under the published criteria.
-
-Live runs require `--execute` and a new `--output` path. Hosted runs also require
-`TYPESAFE_API_KEY` for Jev or `OPENAI_API_KEY` for OpenAI Decisions. Do not run a
-paid service until paid requests are approved. A later approved Jev run would use:
+Regenerate the comparison and figures:
 
 ```sh
-python 2_screening/benchmark/run_development.py --model jev --execute --limit 1 --output jev-development.jsonl
+uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/compare_results.py
 ```
 
-Local models need a running server. The runner does not install or load weights.
-Start Kev from [its source repository](https://github.com/jaredpalmer/kev),
-using a local checkpoint downloaded from the selected `v1.0` revision:
+Plots use the comparison's scored counts and are saved in `figures/` beside the
+`results/` folder. The figure directory is created automatically.
+
+Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
+as a user font before plotting. These commands check dataset construction,
+request preparation, and saved-result integrity. There is no separate test suite.
+The comparison verifies record IDs, exact request bodies, prompt hashes, parsed
+responses, and complete coverage. It makes no model requests.
+
+## Run screening
+
+Dry-run is the default. `--model` accepts `jev`, `decisions`, `kev-4b`, `kev-9b`,
+`qwen`, or `all`. Live runs require one selected model, `--execute`, and a new
+`--output` file. Hosted requests use `TYPESAFE_API_KEY` or `OPENAI_API_KEY` from
+the environment. For example, a complete new hosted run uses:
 
 ```sh
-uv run --extra serve python -m kev.serve --run /path/to/kev-4b-checkpoint --port 8009
+python 2_screening/benchmark/run_screening.py --model jev --execute --output jev-new.jsonl
 ```
 
-Use port 8010 for Kev-9B. Both Kev servers accept the request model name
-`kev-latest`. The checkpoint loaded by each server determines the actual model.
-Verify that it matches the selected model and record the checkpoint and server
-commit hashes with `--revision`. The runner records this supplied value but
-cannot verify the weights loaded by the server.
+Use `--completed SAVED.jsonl` to send only records absent for that model.
+The file may contain multiple models. Saved requests must match current inputs
+and settings. Duplicate or incompatible saved records stop the run. Both valid
+responses and technical errors count as already attempted, so this option does
+not retry errors. `--limit N` selects the first N missing records in ID order.
 
-Serve Qwen with a compatible vLLM installation, using the chosen model commit:
+For example, preview missing records without making requests:
 
 ```sh
-CUDA_VISIBLE_DEVICES=0 vllm serve Qwen/Qwen3-8B --revision MODEL_COMMIT --port 8000
+python 2_screening/benchmark/run_screening.py --model jev --completed 2_screening/benchmark/results/predictions.jsonl --dry-run
 ```
 
-Select the approved GPU index before starting. vLLM 0.10.2 requires a numeric
-index in `CUDA_VISIBLE_DEVICES`. It rejects GPU UUIDs in that variable.
-Replace `MODEL_COMMIT` with the selected commit hash. Qwen requests disable
-thinking with `chat_template_kwargs`, use temperature 0, and allow 16 output
-tokens for a single label. Truncated or malformed answers are technical errors.
-No input text is truncated by the runner. The server must reject oversized
-inputs rather than silently truncate them.
+The committed file is complete, so this prepares zero requests. Omit
+`--completed` to prepare a fresh full run. Output files are never overwritten.
+Each response is flushed immediately, preserving completed work if interrupted.
 
-For example, after starting the Kev-4B server:
-
-```sh
-python 2_screening/benchmark/run_development.py --model kev-4b --execute --revision 'MODEL_COMMIT; SERVER_COMMIT' --limit 1 --output kev4-development.jsonl
-```
-
-Replace the revision placeholders with the actual hashes. Use `--url` to set the
-full endpoint URL of a local server on another machine or port. The defaults are
-`http://localhost:8009/v1/systemone` for Kev-4B,
-`http://localhost:8010/v1/systemone` for Kev-9B, and
-`http://localhost:8000/v1/chat/completions` for Qwen.
-
-Each output line records the paper ID, model, request, prompt hash, and run time.
-Live results also contain the raw response, elapsed seconds, decision, and status. Raw responses preserve probabilities and token usage when supplied.
-The runner makes one request at a time, waits at most 60 seconds per request,
-and does not retry. A failed request has `status: error` and `decision: null`.
-An error is not an inclusion or exclusion decision. HTTP errors also record the status code. Existing output files are never
-overwritten. A dry-run file contains requests only, not simulated predictions.
-
-The runner does not score results or calculate billing. Keep predictions fixed
-before joining them to the human labels for the agreed metrics.
-
-Request formats follow the [TypeSafe API](https://docs.typesafe.ai/api),
-[OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions),
-and [Qwen model card](https://huggingface.co/Qwen/Qwen3-8B).
+The runner sends one request at a time per model, waits at most 60 seconds per
+request, and does not retry. Failed requests and malformed or truncated answers
+have `status: error` and `decision: null`. Live commands exit unsuccessfully if
+any request fails. HTTP errors record their status code. Raw responses preserve
+probabilities and token usage when provided.
 
 ## Server setup
 
 Use the [server setup notes](/Users/lucas/Pessoal/ai-wiki/memory/literature-review/hpc-server-setup.md)
-for the approved access rules, installed environments, fixed revisions, and
-serving commands.
+for access rules, installed environments, and fixed revisions. Run within the
+approved schedule. The user environments, pinned Kev source, cached model
+weights, and `model-downloads.json` live under `~/hpc-screening-benchmark`.
+No system package changes or weight downloads are performed by the runner.
 
-On the approved GPU server, keep the benchmark scripts, `prompt.txt`, and a
-development-only copy of `benchmark.jsonl` together. The local runner uses
-the existing environments, pinned source, and `model-downloads.json` under
-`~/hpc-screening-benchmark`. It runs one server at a time on GPU 0 and stops
-each server after the requests finish:
-
-```sh
-python run_local.py --execute --date YYYYMMDD
-```
-
-Use the run date in place of `YYYYMMDD`. Use `--server-home` if the installation
-is elsewhere. The script refuses to overwrite an existing run. Model files
-must already be cached. It does not download weights or change the prompt.
-
-All model responses use `results/<model>-development-<date>.jsonl`, including
-the hosted models. Each file contains the requests, raw responses, revisions,
-prompt hash, decisions, errors, and per-request times. Local startup timing
-and server settings are kept in `local-development-<date>-summary.json`.
-The 20261021 summary also contains the development comparison. Successful
-runs do not keep extra logs or duplicate input files.
-
-## Split and evaluation
-
-Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
-as a user font before generating plots. The script requires this font.
-
-Compare all five saved development runs for one date without making requests:
+Copy the Python modules, `prompt.txt`, and `benchmark.jsonl` into one directory
+on the approved server. Copy saved predictions too when continuing a run. From
+that directory, run:
 
 ```sh
-uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/compare_development.py --date 20261021
+python3 run_local.py --execute --date YYYYMMDD --completed results/predictions.jsonl
 ```
 
-The script checks the development IDs, prompt hash, response decisions, and
-complete coverage before scoring. It writes a comparison JSON and two PNG
-plots under `results/`. It uses only development labels. Raw responses stay
-unchanged. The comparison JSON includes two-sided 95% Wilson recall intervals.
+Use `--server-home` for a different installation path, or `--model kev-4b`,
+`kev-9b`, or `qwen` for one model. Omit `--completed` for a fresh full run.
+Outputs are `results/<model>-<date>.jsonl` and `results/local-<date>-summary.json`.
+The runner refuses existing destinations, skips models without missing records,
+starts one server at a time on GPU 0, and stops each server after inference.
 
-| Set | Include | Exclude | Total |
-| --- | ---: | ---: | ---: |
-| Development | 12 | 107 | 119 |
-| Held-out | 50 | 426 | 476 |
+The same settings used for the initial 119 records apply to the remaining 476:
+BF16, concurrency 1, cached weights, no input truncation, and no retries. Kev
+uses the pinned checkpoint and base revisions. Qwen uses vLLM 0.10.2, context
+length 8192, maximum one sequence, GPU memory utilization 0.70, temperature 0,
+thinking disabled, and 16 output tokens. A malformed or truncated answer is a
+technical error. `CUDA_VISIBLE_DEVICES=0` selects a GPU but does not reserve it.
 
-The seed is `20261020`. The split preserves the agreed assignments.
-Within each label and source group, sort by the SHA-256 hash of
-`20261020:<record_id>` and take the first records for development.
-The development quotas are 5 initial includes, 67 initial excludes,
-1 snowball include, 6 later includes, and 40 later excludes.
-All remaining records belong to the held-out set.
+To use an already running server, call `run_screening.py` with `--model`,
+`--execute`, `--revision`, and `--output`. Supply actual checkpoint, base, and
+server revisions. `--url` overrides a local endpoint. Defaults are
+`http://localhost:8009/v1/systemone`, `http://localhost:8010/v1/systemone`, and
+`http://localhost:8000/v1/chat/completions` for Kev-4B, Kev-9B, and Qwen.
+The common runner records supplied revisions. It cannot inspect server weights.
 
-Use development records to check prompts, output formats, and error handling.
-Keep the criteria fixed. Do not fine-tune models for this comparison.
-Before the final run, fix the prompt, model revisions, inference settings,
-output parser, and retry policy. Use the same titles and abstracts for all models.
+## Merge and evaluate
 
-Use the held-out set once for the final comparison. Do not use its labels or
-results to adjust the setup. Save predictions before scoring them.
+Merge saved predictions and new chunks after all five models have complete
+coverage:
 
-Each model makes a binary decision: `include` or `exclude`. Use its best-supported
-choice without a confidence threshold or human intervention. Score decisions
-against the existing human labels. Do not ask a person to resolve model uncertainty.
+```sh
+python 2_screening/benchmark/merge_results.py saved.jsonl jev-new.jsonl decisions-new.jsonl kev4-new.jsonl kev9-new.jsonl qwen-new.jsonl --output merged.jsonl
+python 2_screening/benchmark/compare_results.py --predictions merged.jsonl --no-plots
+```
 
-Record failed requests and invalid answers as technical errors without a decision.
-Report the failure count and decision coverage: valid decisions divided by 476.
-A run with missing decisions is incomplete. Do not assign labels to errors or
-silently remove those records from the denominator. Report the full-set metrics
-below only when all 476 records have valid decisions.
+The merger rejects duplicate model/record pairs, unknown IDs, changed requests,
+and incompatible responses. It requires exactly 595 attempts per model and
+atomically replaces the output after validation. It preserves response evidence,
+revisions, timestamps, and timings. Technical errors remain errors.
 
-Let `R` be the number of records the model includes. Let `E` be the number
-of eligible papers among those records.
+The comparison reports technical failures and valid-decision coverage separately.
+It withholds full metrics for any model without 595 valid decisions. Errors do
+not receive screening labels and are never removed from the denominator.
+
+Let `R` be the number of model inclusions and `E` the number matching human
+inclusions. Metrics for a complete model are:
 
 | Metric | Calculation |
 | --- | --- |
-| Eligible-paper recall | `E / 50` |
-| False exclusions | `50 - E` |
-| Retained fraction | `R / 476` |
-| Inclusion precision | `E / R`, or undefined when `R = 0` |
-| Cost | Total cost and cost per record, including retries |
-| Processing time | Total elapsed time and time per record |
+| Eligible-paper recall | `E / 62` |
+| False exclusions | `62 - E` |
+| Retained fraction | `R / 595` |
+| Inclusion precision | `E / R`, undefined when `R = 0` |
+| Processing time | Sum of request times and time per record |
 
-The retained fraction measures how much of the collection remains after screening.
-This benchmark has no human review step. Inclusion precision measures the fraction
-of included records that match a human inclusion label.
+Report counts beside rates. Prioritize recall and false exclusions, and report
+the two-sided 95% Wilson recall interval. Retained fraction measures how much of
+the collection remains after screening. There is no human intervention or
+confidence threshold in model decisions.
 
-Report counts beside rates and report technical failures separately.
-Prioritize recall and false exclusions. Each false exclusion reduces recall
-by two percentage points. Report a two-sided 95% Wilson interval for recall.
-The interval does not correct the selection bias described below.
+Local startup and server lifetime are recorded separately from request times in
+`results/local-runs.json`. Request times do not include the overnight gap between
+runs. Billing totals and GPU hourly rates are unavailable, so costs are reported
+as unknown. No API billing for local models does not imply zero compute cost.
 
-Record concurrency and hardware. Report local GPU time and model load time.
-State any local cost assumptions. Absence of API billing does not mean zero cost.
-
-Use the historical three-model unanimous-include rule as the baseline on the
-same held-out IDs. Treat missing or invalid historical responses as technical
-errors and report baseline coverage. The same complete-run rule applies.
-This is a descriptive comparison: historical runs used original abstracts,
-and the later group was selected by unanimous historical inclusion.
-The baseline therefore includes all records in that group.
+The historical baseline uses unanimous inclusion by the original three models
+on the same 595 IDs. Missing or invalid historical decisions count as technical
+errors. Its saved `doubt` response prevents complete coverage, so the comparison
+reports its coverage and invalid ID without full-set metrics. Historical models
+used original abstracts, and the later cohort was selected through unanimous
+historical inclusion. These selection effects limit interpretation of both the
+baseline and the full-collection comparison. Wilson intervals do not correct
+selection bias.
 
 ## Criteria and models
 
@@ -239,7 +206,8 @@ The baseline therefore includes all records in that group.
 | Kev-9B | `jaredpalmer/kev-9b`, `v1.0`, local |
 | Qwen3-8B | `Qwen/Qwen3-8B`, thinking disabled, local |
 
-Use the fixed revisions recorded in the server setup notes.
-
+Request formats follow the [TypeSafe API](https://docs.typesafe.ai/api),
+[OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions),
+and [Qwen model card](https://huggingface.co/Qwen/Qwen3-8B).
 Dataset provenance, recovered abstracts, and approved exclusions are in the
 [dataset notes](/Users/lucas/Pessoal/ai-wiki/memory/literature-review/benchmark-dataset-provenance.md).

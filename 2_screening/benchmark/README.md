@@ -146,6 +146,9 @@ runs do not keep extra logs or duplicate input files.
 
 ## Split and evaluation
 
+Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
+as a user font before generating plots. The script requires this font.
+
 Compare all five saved development runs for one date without making requests:
 
 ```sh

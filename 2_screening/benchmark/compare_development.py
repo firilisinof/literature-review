@@ -12,6 +12,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 
 from run_development import decision_from
@@ -132,19 +133,25 @@ for rid in sorted(labels, key=int):
     json.dumps(comparison, indent=2, ensure_ascii=False) + "\n"
 )
 
+# Refresh installed fonts so a newly installed font does not require a cache reset.
+for font_path in font_manager.findSystemFonts():
+    if "robotocondensed" in Path(font_path).name.lower().replace("-", ""):
+        font_manager.fontManager.addfont(font_path)
+font_manager.findfont("Roboto Condensed", fallback_to_default=False)
+
 plt.rcParams.update(
     {
-        "font.family": "DejaVu Sans",
+        "font.family": "Roboto Condensed",
         "font.size": 11,
         "axes.spines.top": False,
         "axes.spines.right": False,
     }
 )
-colors = ["#0072B2", "#009E73", "#E69F00", "#CC79A7", "#6B5BA6"]
+colors = dict(zip(names, ["#0072B2", "#009E73", "#E69F00", "#CC79A7", "#D55E00"]))
 y = np.arange(5)
 fig, axes = plt.subplots(2, 2, figsize=(14, 8.5))
 fig.subplots_adjust(
-    left=0.16, right=0.95, bottom=0.12, top=0.84, wspace=1.05, hspace=0.48
+    left=0.16, right=0.95, bottom=0.12, top=0.84, wspace=0.55, hspace=0.48
 )
 fig.suptitle(
     "Five models on 119 development records",
@@ -166,24 +173,27 @@ for ax, field, title in zip(
     ["recall", "false_exclusions", "precision", "retained_fraction"],
     ["Recall", "False exclusions", "Inclusion precision", "Retained fraction"],
 ):
-    values = [metrics[key][field] for key in names]
+    ordered = sorted(names, key=lambda key: metrics[key][field], reverse=True)
+    values = [metrics[key][field] for key in ordered]
     scale = 1 if field == "false_exclusions" else 100
-    ax.barh(y, np.array(values) * scale, color=colors, height=0.55, alpha=0.88)
-    ax.set_yticks(y, names.values())
-    ax.invert_yaxis()
+    ax.barh(
+        y, np.array(values) * scale, color=[colors[key] for key in ordered], height=0.55
+    )
+    ax.set_yticks(y, [names[key] for key in ordered])
+    ax.set_ylim(4.6, -0.6)
     ax.set_title(title, loc="left", fontsize=13, weight="bold", pad=12)
     ax.set_axisbelow(True)
     ax.grid(axis="x", alpha=0.17)
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
-    ax.set_xlim(0, 12 if field == "false_exclusions" else 100)
+    ax.set_xlim(0, 12 if field == "false_exclusions" else 115)
     ax.set_xticks(
         [0, 3, 6, 9, 12] if field == "false_exclusions" else [0, 25, 50, 75, 100]
     )
     ax.set_xlabel(
         "Count out of 12 human inclusions" if field == "false_exclusions" else "Percent"
     )
-    for index, key in enumerate(names):
+    for index, key in enumerate(ordered):
         m = metrics[key]
         count = {
             "recall": f"{m['true_inclusions']}/12",
@@ -191,9 +201,16 @@ for ax, field, title in zip(
             "precision": f"{m['true_inclusions']}/{m['retained']}",
             "retained_fraction": f"{m['retained']}/119",
         }[field]
-        text = (
-            count if field == "false_exclusions" else f"{m[field]*100:.1f}% ({count})"
-        )
+        text = count if field == "false_exclusions" else f"({count})"
+        if field != "false_exclusions":
+            ax.annotate(
+                f"{m[field]*100:.1f}%",
+                (m[field] * 100, index),
+                xytext=(4, 0),
+                textcoords="offset points",
+                va="center",
+                fontsize=10,
+            )
         ax.text(
             1.02,
             index,
@@ -224,9 +241,17 @@ assert all(
     for index, key in enumerate(names)
 )
 fig, ax = plt.subplots(figsize=(9, 7.2))
-heat = ax.imshow(matrix, cmap="Blues", vmin=0, vmax=60)
-ax.set_xticks(range(6), raters.keys(), rotation=35, ha="right")
-ax.set_yticks(range(6), raters.keys())
+masked = np.ma.masked_where(np.triu(np.ones_like(matrix, dtype=bool)), matrix)
+heat = ax.imshow(masked, cmap="Blues", vmin=0, vmax=60)
+ax.set_xticks(
+    range(5),
+    ["Human", "Jev\n1.14.0", "OpenAI\nDecisions", "Kev-4B", "Kev-9B"],
+)
+ax.spines[["left", "bottom"]].set_visible(False)
+ax.tick_params(length=0)
+ax.set_yticks(range(1, 6), list(raters)[1:])
+ax.set_xlim(-0.5, 4.5)
+ax.set_ylim(5.5, 0.5)
 ax.set_title(
     "Decision disagreements on 119 development records",
     fontsize=15,
@@ -234,10 +259,12 @@ ax.set_title(
     pad=22,
 )
 for i, j in np.ndindex(matrix.shape):
+    if j >= i:
+        continue
     ax.text(
         j,
         i,
-        "-" if i == j else str(matrix[i, j]),
+        str(matrix[i, j]),
         ha="center",
         va="center",
         fontsize=14,

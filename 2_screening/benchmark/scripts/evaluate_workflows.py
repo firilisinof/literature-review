@@ -5,8 +5,6 @@ import hashlib
 import json
 from pathlib import Path
 
-from compare_extensions import NAMES as EXTENSION_NAMES
-from compare_extensions import collect_predictions as collect_extensions
 from compare_results import NAMES, benchmark_labels, prediction_maps, score_predictions
 from historical_screening import historical_binary_choices, historical_runs
 from merge_results import collect_predictions
@@ -22,10 +20,6 @@ GROUPS = {
     "closed-weight-decisions": ("Closed-weight decision models", ("jev", "decisions")),
     "open-weight-decisions": ("Open-weight decision models", ("kev-9b", "pplx-flash")),
 }
-EXTENSIONS = [
-    FOLDER / f"results/{model}-20261023.jsonl"
-    for model in ("llama", "gemma", "pplx-flash")
-]
 
 
 def workflow_metrics(
@@ -42,7 +36,9 @@ def workflow_metrics(
     for model in models:
         votes = predictions[model]
         if set(votes) != set(labels) or set(votes.values()) - {"include", "exclude"}:
-            raise ValueError(f"{model}: expected one binary vote for every labeled record")
+            raise ValueError(
+                f"{model}: expected one binary vote for every labeled record"
+            )
     routes = {
         rid: (
             "include"
@@ -66,7 +62,9 @@ def workflow_metrics(
         "recall": metrics["recall"],
         "recall_wilson_95": metrics["recall_wilson_95"],
         "inclusion_precision": metrics["precision"],
-        "exclusion_precision": metrics["true_exclusions"] / excluded if excluded else None,
+        "exclusion_precision": (
+            metrics["true_exclusions"] / excluded if excluded else None
+        ),
         "true_exclusions": metrics["true_exclusions"],
         "human_exclusions_to_review": metrics["false_inclusions"],
         "human_disagreements": metrics["human_disagreements"],
@@ -74,21 +72,10 @@ def workflow_metrics(
     }
 
 
-def evaluate_workflows(
-    predictions_path: Path, extension_paths: list[Path] | None = None
-) -> dict[str, JSON]:
+def evaluate_workflows(predictions_path: Path) -> dict[str, JSON]:
     """Compare category members and unanimous inclusion without ranking on labels."""
     labels = benchmark_labels()
     predictions = prediction_maps(collect_predictions([predictions_path]))
-    extension_paths = EXTENSIONS if extension_paths is None else extension_paths
-    extension_rows = collect_extensions(extension_paths)
-    predictions.update({
-        model: {
-            row["record_id"]: row["decision"] for row in extension_rows
-            if row["model"] == model and row["status"] == "ok"
-        }
-        for model in EXTENSION_NAMES
-    })
     runs = historical_runs(FOLDER.parents[1], set(labels))
     predictions.update(
         {model: historical_binary_choices(run) for model, run in runs.items()}
@@ -96,18 +83,26 @@ def evaluate_workflows(
     workflows, groups = {}, {}
     for key, (title, models) in GROUPS.items():
         for model in models:
-            workflows[f"single/{model}"] = workflow_metrics(labels, predictions, (model,), 1)
+            workflows[f"single/{model}"] = workflow_metrics(
+                labels, predictions, (model,), 1
+            )
         combination = f"{key}/unanimous"
-        workflows[combination] = workflow_metrics(labels, predictions, models, len(models))
+        workflows[combination] = workflow_metrics(
+            labels, predictions, models, len(models)
+        )
         groups[key] = {
-            "title": title, "models": list(models),
+            "title": title,
+            "models": list(models),
             "workflow_keys": [*(f"single/{model}" for model in models), combination],
         }
     sources = {
-        "benchmark.jsonl": hashlib.sha256((FOLDER / "benchmark.jsonl").read_bytes()).hexdigest(),
+        "benchmark.jsonl": hashlib.sha256(
+            (FOLDER / "benchmark.jsonl").read_bytes()
+        ).hexdigest(),
         "prompt.txt": hashlib.sha256((FOLDER / "prompt.txt").read_bytes()).hexdigest(),
-        **{str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-           for path in [predictions_path, *extension_paths]},
+        str(predictions_path): hashlib.sha256(
+            predictions_path.read_bytes()
+        ).hexdigest(),
     }
     for run in runs.values():
         sources.update(run.metadata["source_sha256"])
@@ -115,8 +110,9 @@ def evaluate_workflows(
         "records": len(labels),
         "human_inclusions": sum(row["label"] == "include" for row in labels.values()),
         "model_names": {
-            model: (NAMES | EXTENSION_NAMES)[model].removesuffix(" (historical)")
-            for _, models in GROUPS.values() for model in models
+            model: NAMES[model].removesuffix(" (historical)")
+            for _, models in GROUPS.values()
+            for model in models
         },
         "selection": {
             "rule": (
@@ -201,8 +197,14 @@ def plot_workflows(summary: dict[str, JSON], figures_folder: Path) -> None:
     heading_transform = blended_transform_factory(figure.transFigure, axes[0].transData)
     for row, title in headings:
         axes[0].text(
-            0.035, row, title, transform=heading_transform,
-            va="center", fontsize=14, weight=800, color="#243746",
+            0.035,
+            row,
+            title,
+            transform=heading_transform,
+            va="center",
+            fontsize=14,
+            weight=800,
+            color="#243746",
         )
     for row, _, key, metric in rows:
         combined = key.endswith("/unanimous")
@@ -212,31 +214,56 @@ def plot_workflows(summary: dict[str, JSON], figures_folder: Path) -> None:
                 axis.axhspan(row - 0.4, row + 0.4, color="#EFF3F6", zorder=0)
         saved = metric["human_workload_reduction"] * 100
         axes[0].scatter(
-            saved, row, color=COLORS[0], s=65 if combined else 35,
-            marker="D" if combined else "o", edgecolor="white", linewidth=0.5,
+            saved,
+            row,
+            color=COLORS[0],
+            s=65 if combined else 35,
+            marker="D" if combined else "o",
+            edgecolor="white",
+            linewidth=0.5,
             zorder=3,
         )
         axes[0].text(
-            1.02, row, f"{saved:.1f}%", transform=axes[0].get_yaxis_transform(),
-            va="center", fontsize=11, weight=weight, color="#333333",
+            1.02,
+            row,
+            f"{saved:.1f}%",
+            transform=axes[0].get_yaxis_transform(),
+            va="center",
+            fontsize=11,
+            weight=weight,
+            color="#333333",
         )
         false_inclusions = metric["human_exclusions_to_review"]
         false_exclusions = metric["known_inclusions_missed"]
         height = 0.5 if combined else 0.4
         axes[1].barh(
-            row, false_inclusions, height=height, color=false_inclusion_color, zorder=2,
+            row,
+            false_inclusions,
+            height=height,
+            color=false_inclusion_color,
+            zorder=2,
         )
         axes[1].barh(
-            row, false_exclusions, left=false_inclusions, height=height,
-            color=false_exclusion_color, zorder=2,
+            row,
+            false_exclusions,
+            left=false_inclusions,
+            height=height,
+            color=false_exclusion_color,
+            zorder=2,
         )
         axes[1].annotate(
             f"{false_inclusions} + {false_exclusions}",
             (metric["human_disagreements"], row),
-            xytext=(5, 0), textcoords="offset points", va="center", fontsize=11,
-            weight=weight, color="#333333",
+            xytext=(5, 0),
+            textcoords="offset points",
+            va="center",
+            fontsize=11,
+            weight=weight,
+            color="#333333",
         )
-    axes[0].set_yticks([row for row, _, _, _ in rows], [label for _, label, _, _ in rows])
+    axes[0].set_yticks(
+        [row for row, _, _, _ in rows], [label for _, label, _, _ in rows]
+    )
     axes[0].tick_params(axis="y", labelsize=11)
     axes[1].tick_params(axis="y", labelleft=False)
     for tick, (_, _, key, _) in zip(axes[0].get_yticklabels(), rows):
@@ -249,22 +276,35 @@ def plot_workflows(summary: dict[str, JSON], figures_folder: Path) -> None:
     maximum = max(m["human_disagreements"] for m in summary["workflows"].values())
     axes[1].set_xlim(0, max(10, maximum * 1.27))
     axes[1].xaxis.set_major_locator(MaxNLocator(nbins=5, integer=True))
-    axes[1].set_xlabel("False inclusions + false exclusions (records)", fontsize=11, labelpad=10)
+    axes[1].set_xlabel(
+        "False inclusions + false exclusions (records)", fontsize=11, labelpad=10
+    )
     figure.suptitle(
-        "Screening workflows", x=0.035, y=0.98, ha="left", fontsize=24, weight=800,
+        "Screening workflows",
+        x=0.035,
+        y=0.98,
+        ha="left",
+        fontsize=24,
+        weight=800,
     )
     figure.legend(
         handles=[
             Patch(color=false_inclusion_color, label="False inclusions"),
             Patch(color=false_exclusion_color, label="False exclusions"),
         ],
-        loc="upper right", bbox_to_anchor=(0.98, 0.98), frameon=False,
-        ncol=2, fontsize=11,
+        loc="upper right",
+        bbox_to_anchor=(0.98, 0.98),
+        frameon=False,
+        ncol=2,
+        fontsize=11,
     )
     figures_folder.mkdir(parents=True, exist_ok=True)
     figure.savefig(figures_folder / "workflows.png", dpi=180, bbox_inches="tight")
     plt.close(figure)
-    for obsolete in ("workflows-closed-weight-llms.png", "workflows-decision-models.png"):
+    for obsolete in (
+        "workflows-closed-weight-llms.png",
+        "workflows-decision-models.png",
+    ):
         (figures_folder / obsolete).unlink(missing_ok=True)
 
 
@@ -274,15 +314,16 @@ def main() -> None:
     parser.add_argument(
         "--predictions", type=Path, default=FOLDER / "results/predictions.jsonl"
     )
-    parser.add_argument("--extensions", nargs="+", type=Path, default=EXTENSIONS)
     parser.add_argument("--no-plots", action="store_true")
     args = parser.parse_args()
-    summary = evaluate_workflows(args.predictions, args.extensions)
+    summary = evaluate_workflows(args.predictions)
     destination = args.predictions.parent / "workflows.json"
     destination.write_text(json.dumps(summary, indent=2) + "\n")
     if not args.no_plots:
         plot_workflows(summary, FOLDER / "figures")
-    print("Policy                           Review    Work saved    Disagreements    False inclusions    False exclusions")
+    print(
+        "Policy                           Review    Work saved    Disagreements    False inclusions    False exclusions"
+    )
     for key, metric in summary["workflows"].items():
         print(
             f"{key:32} {metric['records_for_human_review']:>4}"

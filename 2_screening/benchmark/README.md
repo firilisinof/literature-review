@@ -1,12 +1,8 @@
 # HPC screening benchmark
 
-Compare five benchmark models and three historical screeners with the existing
-human decisions for 595 records from the published HPC review: 62 include and
-533 exclude. Evaluate the entire collection together. The initial 119-record
-benchmark run checked execution and required no changes. Its predictions are
-reused alongside the remaining 476 records.
+Compare eight benchmark models and three historical screeners with the existing human decisions for 595 records from the published HPC review: 62 include and 533 exclude. Evaluate the entire collection together. The original five-model run covered an initial 119 records and the remaining 476 records. Llama-3.1-8B-Instruct, Gemma 4 12B, and Perplexity Decider Flash v1.2 each screened the same 595 records afterward.
 
-Three additional open-weight models extend the individual and workflow comparisons: Llama-3.1-8B-Instruct, Gemma 4 12B, and Perplexity Decider Flash v1.2. Their results are stored separately from the original five-model predictions. The individual figures include all eleven models. The workflow figure compares four fixed groups of models and their unanimous-inclusion rules.
+All eight benchmark models use the same screening, validation, merging, and comparison commands. Their saved requests and responses live in one `results/predictions.jsonl`. The individual figures include all eleven models. The workflow figure compares four fixed groups of models and their unanimous-inclusion rules.
 
 The published criteria, prompt, model revisions, request settings, output parser,
 and no-retry policy are fixed across both benchmark runs. The historical runs
@@ -21,22 +17,18 @@ Python scripts and their tests live in `scripts/`. Dataset, prompt, and dependen
 - `scripts/build_dataset.py`: rebuilds the dataset from original screening files.
 - `prompt.txt`: shared screening instructions.
 - `scripts/run_screening.py`: previews requests or runs one selected model.
-- `scripts/screening_api.py`: provider request formats and response parsing.
-- `scripts/run_local.py`, `scripts/local_server.py`: run pinned local models sequentially.
-- `scripts/run_extensions.py`: native inference for the additional Llama, Gemma, and Perplexity models.
-- `scripts/compare_extensions.py`: validate and score those runs, reporting missing model coverage explicitly.
+- `scripts/screening_api.py`: model definitions, request formats, and response parsing.
+- `scripts/run_local.py`, `scripts/local_server.py`: manage pinned local servers and native model loading.
 - `scripts/merge_results.py`: validates and merges response chunks.
 - `scripts/compare_results.py`, `scripts/plot_comparison.py`: score predictions and generate plots.
 - `scripts/evaluate_workflows.py`: simulate model ensembles routing records to human screening.
 - `scripts/historical_screening.py`: checks historical choices against raw batch outputs.
-- `scripts/test_historical_screening.py`: offline regression checks for the historical import.
+- `scripts/test_screening.py`: offline regression checks for shared validation, inference, and historical import.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
-- `extensions-requirements.txt`: isolated dependencies for the additional models.
-- `results/predictions.jsonl`: the 2,975 benchmark requests, responses, decisions, and timings.
+- `requirements.txt`: shared dependencies for dataset preparation, plots, and native inference.
+- `results/predictions.jsonl`: the 4,760 benchmark requests, responses, decisions, and timings.
 - `results/local-runs.json`: local server settings and startup/run timings for both dates.
 - `results/comparison.json`: eleven-model metrics, coverage, recall intervals, and disagreements.
-- `results/*-20261023.jsonl`: separate Llama, Gemma, and Perplexity prediction chunks.
-- `results/extensions-comparison.json`: validated scores and coverage for the added models.
 - `figures/metrics.png`, `figures/disagreements.png`: full-collection figures.
 - `results/workflows.json`: metrics and fixed group definitions for fourteen workflows.
 - `figures/workflows.png`: one workflow figure with four model groups.
@@ -80,13 +72,13 @@ uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/scrip
 Plots use the comparison's scored counts and are saved in `figures/` beside the
 `results/` folder. The figure directory is created automatically.
 
-Both comparison commands validate and include the three dated extension chunks by default. Use `--extensions FILE ...` to select other extension chunks, or pass `--extensions` without paths to reproduce the original eight-model comparison.
+Both comparison commands read the combined predictions file. Use `--predictions FILE` to score another saved collection. The disagreement figure sorts models by descending disagreement with humans on both axes.
 
 Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
 as a user font before plotting. These commands check dataset construction,
 request preparation, and saved-result integrity.
 The comparison verifies record IDs, exact request bodies, prompt hashes, parsed
-responses, and complete coverage for the five benchmark models and three additions. It also checks
+responses, and complete coverage for all eight benchmark models. It also checks
 historical model versions and cached choices against the raw batch outputs.
 It makes no model requests.
 
@@ -99,7 +91,7 @@ python -m unittest discover -s 2_screening/benchmark/scripts -p 'test_*.py'
 ## Run screening
 
 Dry-run is the default. `--model` accepts `jev`, `decisions`, `kev-4b`, `kev-9b`,
-`qwen`, or `all`. Live runs require one selected model, `--execute`, and a new
+`qwen`, `llama`, `gemma`, `pplx-flash`, or `all`. Live runs require one selected model, `--execute`, and a new
 `--output` file. Hosted requests use `TYPESAFE_API_KEY` or `OPENAI_API_KEY` from
 the environment. For example, a complete new hosted run uses:
 
@@ -123,8 +115,7 @@ The committed file is complete, so this prepares zero requests. Omit
 `--completed` to prepare a fresh full run. Output files are never overwritten.
 Each response is flushed immediately, preserving completed work if interrupted.
 
-The runner sends one request at a time per model, waits at most 60 seconds per
-request, and does not retry. Failed requests and malformed or truncated answers
+The runner processes one request at a time per model and does not retry. HTTP requests time out after 60 seconds. Native models run directly in the selected GPU environment. Failed requests and malformed or truncated answers
 have `status: error` and `decision: null`. Live commands exit unsuccessfully if
 any request fails. HTTP errors record their status code. Raw responses preserve
 probabilities and token usage when provided.
@@ -163,9 +154,9 @@ server revisions. `--url` overrides a local endpoint. Defaults are
 `http://localhost:8000/v1/chat/completions` for Kev-4B, Kev-9B, and Qwen.
 The common runner records supplied revisions. It cannot inspect server weights.
 
-### Additional open-weight models
+### Native inference
 
-The extension runner uses a separate `extensions-env` under `~/hpc-screening-benchmark`. It leaves the Kev and Qwen environments intact. Create it with the existing `tools/bin/uv`, then install `extensions-requirements.txt` using `uv pip install --python extensions-env/bin/python --requirements extensions-requirements.txt`. The first six dependencies match Perplexity's published reference requirements. Accelerate supports Transformers device placement. These wheels include a CUDA 13.0 runtime, which requires a compatible NVIDIA driver.
+The shared `requirements.txt` covers dataset preparation, plots, and native inference for Llama, Gemma, and Perplexity. Its first six pins match Perplexity's published reference requirements. Accelerate supports Transformers device placement. The recorded native runs used the server's existing `extensions-env`. To reproduce that environment, install `requirements.txt` with `tools/bin/uv pip install --python extensions-env/bin/python --requirements requirements.txt`. The CUDA 13.0 wheels require a compatible NVIDIA driver. Kev and Qwen retain their separate environment snapshots because their original serving dependencies conflict with these versions.
 
 Download these exact snapshots before inference. Llama requires approved Hugging Face access and a terminal login with `hf auth login`. The Llama loader selects Safetensors and tokenizer/configuration files, excluding the duplicate legacy PyTorch weights. The same allowlist is applied during offline cache validation.
 
@@ -184,40 +175,31 @@ extensions-env/bin/hf download google/gemma-4-12B-it --revision 707f0a3b8a3c7ad5
 Copy the `scripts/` folder, `prompt.txt`, and `benchmark.jsonl` into a run directory, preserving the folder structure. Create its `results/` folder before running inference. Preview requests locally without importing ML libraries:
 
 ```sh
-python3 2_screening/benchmark/scripts/run_extensions.py --model gemma --dry-run --limit 1
+python3 2_screening/benchmark/scripts/run_screening.py --model gemma --dry-run --limit 1
 ```
 
 From the server run directory, check two synthetic inputs before screening the collection. Select an available GPU explicitly. Visibility selects a device without reserving it.
 
 ```sh
-CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_extensions.py --model gemma --execute --smoke-test --output results/gemma-smoke.jsonl
-CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_extensions.py --model gemma --execute --output results/gemma.jsonl
+CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_screening.py --model gemma --execute --smoke-test --output results/gemma-smoke.jsonl
+CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_screening.py --model gemma --execute --output results/gemma.jsonl
 ```
 
 Repeat for `llama` and `pplx-flash`, one model at a time. All models use BF16, batch size 1, an 8192-token context budget, four CPU threads, no retries, and no input truncation. All selected inputs are checked for length before screening starts. The LLMs use greedy generation with 16 output tokens. Llama constrains decoding to `include`, `exclude`, and their initial-capital variants, followed by EOS. This was fixed using synthetic inputs before screening the collection, since unconstrained Llama added explanations and hit the output limit. Gemma uses the instruction-tuned checkpoint, disables thinking through its chat template, and parses responses using its published response template. Only complete EOS-terminated binary answers are accepted. Perplexity uses the checkpoint's native decision source, noncausal attention, reference path (`fast=False`), and saved calibration temperature. It does not generate text.
 
-Outputs are created exclusively and flushed per record. Each preserves the exact title/abstract request, prompt and runner hashes, fixed model revision, inference settings, raw response, decision or explicit technical error, timing, and runtime versions. Startup and input-check time are recorded separately from per-record timings. `--completed FILE` validates and skips saved attempts, including errors. Keep these additional predictions separate from the original five-model `predictions.jsonl`, whose validator remains unchanged. The combined comparison validates extension chunks separately before combining their scores and pairwise disagreements.
-
-Validate and score saved extension chunks without ML libraries or model requests:
-
-```sh
-python3 2_screening/benchmark/scripts/compare_extensions.py 2_screening/benchmark/results/llama-20261023.jsonl 2_screening/benchmark/results/gemma-20261023.jsonl 2_screening/benchmark/results/pplx-flash-20261023.jsonl
-```
-
-This writes `results/extensions-comparison.json`, rejecting duplicate records, changed inputs or settings, and inconsistent decisions. A model without all 595 valid decisions receives coverage counts without accuracy metrics. The four-group workflow figure requires all three additional models to be complete.
+Each native result preserves the exact title/abstract request, prompt and runner hashes, fixed model revision, inference settings, raw response, decision or explicit technical error, timing, and runtime versions. Startup and input-check time are recorded separately from per-record timings. Use the common `--completed FILE` option to validate and skip saved attempts, including errors. Merge new chunks into `results/predictions.jsonl`, then score all models with `scripts/compare_results.py`.
 
 ## Merge and evaluate
 
-Merge saved predictions and new chunks after all five models have complete
-coverage:
+Merge saved predictions and new chunks after all eight models have complete coverage:
 
 ```sh
-python 2_screening/benchmark/scripts/merge_results.py saved.jsonl jev-new.jsonl decisions-new.jsonl kev4-new.jsonl kev9-new.jsonl qwen-new.jsonl --output merged.jsonl
+python 2_screening/benchmark/scripts/merge_results.py saved.jsonl new-chunk.jsonl --output merged.jsonl
 python 2_screening/benchmark/scripts/compare_results.py --predictions merged.jsonl --no-plots
 ```
 
 The merger rejects duplicate model/record pairs, unknown IDs, changed requests,
-and incompatible responses. It requires exactly 595 attempts per model and
+and incompatible responses. It requires exactly 595 attempts for each of the eight benchmark models and
 atomically replaces the output after validation. It preserves response evidence,
 revisions, timestamps, and timings. Technical errors remain errors.
 
@@ -268,7 +250,7 @@ python 2_screening/benchmark/scripts/evaluate_workflows.py --no-plots
 uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/scripts/evaluate_workflows.py
 ```
 
-The first command needs only the Python standard library. The second also writes `figures/workflows.png` using the same font as the model comparison. It replaces the two earlier workflow figures. `--predictions FILE` selects the original five-model predictions and writes `workflows.json` beside that file. `--extensions FILE ...` selects the additional-model chunks. Defaults are the three dated chunks listed above. Requests, prompt hashes, model revisions, responses, and complete decision coverage are validated before any workflow is scored.
+The first command needs only the Python standard library. The second also writes `figures/workflows.png` using the same font as the model comparison. It replaces the two earlier workflow figures. `--predictions FILE` selects the combined predictions file and writes `workflows.json` beside it. The default is `results/predictions.jsonl`. Requests, prompt hashes, model revisions, responses, and complete decision coverage are validated before any workflow is scored.
 
 Compare four fixed groups on the same 595 labeled records. Each group shows its individual models and the rule that sends a record to humans only when every model in that group includes it. This produces fourteen workflows:
 

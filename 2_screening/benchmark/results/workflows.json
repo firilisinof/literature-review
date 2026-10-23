@@ -82,10 +82,7 @@
   "source_sha256": {
     "benchmark.jsonl": "ba7ef1f17e2361bc655b9a9defd62be58ad1cdde599778e764f1faa904393392",
     "prompt.txt": "2ee80a36cb76375905646ea33ec9f781123402f9e9d7f1cdd0ac2343b7d29c25",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/predictions.jsonl": "7ad5fd6e3cce5e6559ad3b92e6ae767e52d8c5e1fdbeafd9a0c7d910be0317f4",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/llama-20261023.jsonl": "fe23592b59b55de96e623749fd6ba58ea790a13fbeff01dd578479338d4c592d",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/gemma-20261023.jsonl": "0e56e431b99963af45bae2b5f5dfaa30800786f67fb8e66436b042e4ef796a1b",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/pplx-flash-20261023.jsonl": "34a31acc8a506952a9b6595d2cd37b5a28429d004a8322abbeca44151e65a0ab",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/predictions.jsonl": "a4063cd78e16941b33d31885f5c9a9e2c946547904f7c6bfb4162516d389672f",
     "artifacts/processed.csv": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58",
     "2_screening/results/openai-batch-001.jsonl": "2afc5dbe2964e029ec88652f44c0a3fd28501d4ddbccbc1a10ddc683a8c15689",
     "2_screening/results/openai-batch-002.jsonl": "f0a37d646361c639ca04b380b8e19a8d41f3d8eac797298bfe197dc7849efb12",

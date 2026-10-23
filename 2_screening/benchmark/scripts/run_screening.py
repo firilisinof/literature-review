@@ -1,15 +1,29 @@
-"""Run screening on missing records or print requests offline. Uses only the standard library."""
+"""Preview requests offline or run one screening model through HTTP or native inference."""
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
+import platform
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import TextIO
+from typing import TYPE_CHECKING, TextIO
 
-from screening_api import JSON, MODELS, decision_from, request_body, run_one
+from screening_api import (
+    JSON,
+    MODELS,
+    NATIVE_REVISIONS,
+    decision_from,
+    native_settings,
+    request_body,
+    run_one,
+)
+
+if TYPE_CHECKING:
+    from local_server import NativeModel
 
 FOLDER = Path(__file__).resolve().parents[1]
 
@@ -27,6 +41,11 @@ def request_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--limit", type=int, help="First N missing records, in ID order"
+    )
+    parser.add_argument(
+        "--smoke-test",
+        action="store_true",
+        help="Use two synthetic inputs for one native model",
     )
     add_output_options(parser)
     return parser
@@ -52,8 +71,8 @@ def arguments() -> argparse.Namespace:
         parser.error(f"--limit={args.limit}: expected a positive integer")
     if args.model == "all" and (args.execute or args.url):
         parser.error(f"--model={args.model}: select one model for --execute or --url")
-    if args.url and args.model in {"jev", "decisions"}:
-        parser.error(f"--model={args.model}: --url requires a local model")
+    if args.url and args.model not in {"kev-4b", "kev-9b", "qwen"}:
+        parser.error(f"--model={args.model}: --url requires a Kev or Qwen server")
     if args.execute and not args.output:
         parser.error("--output=None: live runs require a new output path")
     local = args.model in {"kev-4b", "kev-9b", "qwen"}
@@ -61,6 +80,15 @@ def arguments() -> argparse.Namespace:
         parser.error(
             f"--revision={args.revision}: expected local model and server revisions"
         )
+    if args.model in NATIVE_REVISIONS and args.revision not in {
+        None,
+        NATIVE_REVISIONS[args.model],
+    }:
+        parser.error(
+            f"--revision: expected pinned revision {NATIVE_REVISIONS[args.model]}"
+        )
+    if args.smoke_test and (args.model not in NATIVE_REVISIONS or args.completed):
+        parser.error("--smoke-test requires one native model without --completed")
     return args
 
 
@@ -78,6 +106,22 @@ def screening_records() -> list[dict[str, str]]:
     return [
         {key: row[key] for key in ("record_id", "title", "abstract")}
         for row in sorted(selected, key=lambda row: int(row["record_id"]))
+    ]
+
+
+def synthetic_records() -> list[dict[str, str]]:
+    """Check native inference without benchmark records."""
+    return [
+        {
+            "record_id": "synthetic-hpc",
+            "title": "Measuring HPC carbon emissions",
+            "abstract": "We measure life-cycle greenhouse gas emissions of a high-performance computing system, including hardware manufacture and electricity generation, and compare carbon-aware scheduling strategies.",
+        },
+        {
+            "record_id": "synthetic-history",
+            "title": "Trade in medieval cities",
+            "abstract": "This historical study examines trade routes between European cities in the fourteenth century using archival tax records.",
+        },
     ]
 
 
@@ -113,6 +157,14 @@ def validate_saved(row: dict[str, JSON], paper: dict[str, str], prompt: str) -> 
         raise ValueError(
             f"{model}/{row['record_id']}: expected the unchanged screening request"
         )
+    if model in NATIVE_REVISIONS and (
+        row["revision"] != NATIVE_REVISIONS[model]
+        or row["repository"] != MODELS[model][0]
+        or row["settings"] != native_settings(model)
+    ):
+        raise ValueError(
+            f"{model}/{row['record_id']}: incompatible saved model settings"
+        )
     validate_response(row)
 
 
@@ -134,7 +186,7 @@ def main() -> None:
     """Preview requests by default, e.g. python run_screening.py --dry-run --limit 1."""
     args = arguments()
     prompt = (FOLDER / "prompt.txt").read_text().strip()
-    papers = screening_records()
+    papers = synthetic_records() if args.smoke_test else screening_records()
     models = list(MODELS) if args.model == "all" else [args.model]
     key_name = MODELS[models[0]][2]
     key = os.environ.get(key_name, "") if args.execute and key_name else ""
@@ -181,33 +233,95 @@ def write_model(
     selected = [paper for paper in papers if paper["record_id"] not in completed][
         : args.limit
     ]
+    native = None
+    runtime = None
+    if args.execute and selected and model in NATIVE_REVISIONS:
+        native, runtime = load_native_model(model, selected, prompt)
     failures = 0
     for paper in selected:
-        result = screening_result(args, model, paper, prompt, key)
+        result = screening_result(args, model, paper, prompt, key, native, runtime)
         output.write(json.dumps(result, ensure_ascii=False) + "\n")
         output.flush()
         failures += result.get("status") == "error"
     return len(selected), failures
 
 
+def load_native_model(
+    model: str, papers: list[dict[str, str]], prompt: str
+) -> tuple["NativeModel", dict[str, JSON]]:
+    """Check every selected input before running native inference."""
+    from local_server import NativeModel
+
+    started = time.perf_counter()
+    native = NativeModel(model)
+    lengths = [
+        native.token_count(request_body(model, paper, prompt)) for paper in papers
+    ]
+    runtime = {
+        "python": platform.python_version(),
+        "packages": {
+            name: importlib.metadata.version(name)
+            for name in ("torch", "transformers", "huggingface-hub", "accelerate")
+        },
+        "gpu": native.torch.cuda.get_device_name(0),
+        "checkpoint": str(native.checkpoint),
+        "startup_seconds": round(time.perf_counter() - started, 6),
+        "max_input_tokens": max(lengths),
+    }
+    print(json.dumps(runtime), file=sys.stderr, flush=True)
+    return native, runtime
+
+
 def screening_result(
-    args: argparse.Namespace, model: str, paper: dict[str, str], prompt: str, key: str
+    args: argparse.Namespace,
+    model: str,
+    paper: dict[str, str],
+    prompt: str,
+    key: str,
+    native: "NativeModel | None" = None,
+    runtime: dict[str, JSON] | None = None,
 ) -> dict[str, JSON]:
-    """Keep request evidence beside each response, e.g. screening_result(args, 'jev', paper, prompt, key)."""
-    url = args.url or MODELS[model][1]
+    """Keep exact requests and responses for every screening backend."""
     body = request_body(model, paper, prompt)
     result = {
         "record_id": paper["record_id"],
         "model": model,
-        "url": url,
         "revision": args.revision,
         "dry_run": not args.execute,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "request": body,
         "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
     }
-    if args.execute:
-        result.update(run_one(model, url, body, key))
+    if model in NATIVE_REVISIONS:
+        result.update(
+            repository=MODELS[model][0],
+            revision=NATIVE_REVISIONS[model],
+            settings=native_settings(model),
+            runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        )
+        if args.execute:
+            assert native is not None and runtime is not None
+            result.update(native_result(model, body, native, runtime))
+    else:
+        result["url"] = args.url or MODELS[model][1]
+        if args.execute:
+            result.update(run_one(model, result["url"], body, key))
+    return result
+
+
+def native_result(
+    model: str, body: dict[str, JSON], native: "NativeModel", runtime: dict[str, JSON]
+) -> dict[str, JSON]:
+    """Record native inference failures without retries or invented labels."""
+    started = time.perf_counter()
+    result = dict(status="error", decision=None, response=None, runtime=runtime)
+    try:
+        result["response"] = native.predict(body)
+        result["decision"] = decision_from(model, result["response"])
+        result["status"] = "ok"
+    except Exception as error:
+        result["error"] = f"{type(error).__name__}: {error}"
+    result["seconds"] = round(time.perf_counter() - started, 6)
     return result
 
 

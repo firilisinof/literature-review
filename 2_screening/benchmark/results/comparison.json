@@ -1,5 +1,6 @@
 {
   "records": 595,
+  "dataset_sha256": "ba7ef1f17e2361bc655b9a9defd62be58ad1cdde599778e764f1faa904393392",
   "human_includes": 62,
   "human_excludes": 533,
   "prompt_sha256": "760f0697c375b94bccb58ea0d3435cf66c5cff4681026aff7b47179824a784e3",
@@ -338,7 +339,10 @@
       "technical_errors": 0,
       "revisions": [
         "0e9e39f249a16976918f6564b8830bc894c89659"
-      ]
+      ],
+      "name": "Llama-3.1-8B-Instruct",
+      "repository": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659"
     },
     "gemma": {
       "valid": 595,
@@ -370,7 +374,10 @@
       "technical_errors": 0,
       "revisions": [
         "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
-      ]
+      ],
+      "name": "Gemma 4 12B",
+      "repository": "google/gemma-4-12B-it",
+      "revision": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
     },
     "pplx-flash": {
       "valid": 595,
@@ -401,7 +408,10 @@
       "technical_errors": 0,
       "revisions": [
         "9ff7cf9838e59df461c276b7699d56b244d2af58"
-      ]
+      ],
+      "name": "Perplexity Decider Flash v1.2",
+      "repository": "perplexity-ai/pplx-decider-flash-v1.2",
+      "revision": "9ff7cf9838e59df461c276b7699d56b244d2af58"
     }
   },
   "historical_baseline": {
@@ -6836,11 +6846,6 @@
       }
     }
   ],
-  "extensions_sha256": {
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/llama-20261023.jsonl": "fe23592b59b55de96e623749fd6ba58ea790a13fbeff01dd578479338d4c592d",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/gemma-20261023.jsonl": "0e56e431b99963af45bae2b5f5dfaa30800786f67fb8e66436b042e4ef796a1b",
-    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/pplx-flash-20261023.jsonl": "34a31acc8a506952a9b6595d2cd37b5a28429d004a8322abbeca44151e65a0ab"
-  },
-  "predictions_sha256": "7ad5fd6e3cce5e6559ad3b92e6ae767e52d8c5e1fdbeafd9a0c7d910be0317f4",
+  "predictions_sha256": "a4063cd78e16941b33d31885f5c9a9e2c946547904f7c6bfb4162516d389672f",
   "local_runs_sha256": "cabad5ebc6a0f1e86aba50ebc8a0e1a87c7a195a157f269788ca7b5abcd70a52"
 }

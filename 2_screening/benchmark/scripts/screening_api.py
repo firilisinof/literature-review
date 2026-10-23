@@ -17,7 +17,26 @@ MODELS = {
     "kev-4b": ("kev-latest", "http://localhost:8009/v1/systemone", ""),
     "kev-9b": ("kev-latest", "http://localhost:8010/v1/systemone", ""),
     "qwen": ("Qwen/Qwen3-8B", "http://localhost:8000/v1/chat/completions", ""),
+    "llama": ("meta-llama/Llama-3.1-8B-Instruct", "", ""),
+    "gemma": ("google/gemma-4-12B-it", "", ""),
+    "pplx-flash": ("perplexity-ai/pplx-decider-flash-v1.2", "", ""),
 }
+NATIVE_REVISIONS = {
+    "llama": "0e9e39f249a16976918f6564b8830bc894c89659",
+    "gemma": "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7",
+    "pplx-flash": "9ff7cf9838e59df461c276b7699d56b244d2af58",
+}
+MAX_CONTEXT = 8192
+MAX_OUTPUT = 16
+LLAMA_FILES = [
+    "*.json",
+    "*.safetensors",
+    "*.jinja",
+    "LICENSE",
+    "README.md",
+    "USE_POLICY.md",
+]
+LLAMA_ANSWERS = ["include", "exclude", "Include", "Exclude"]
 OPTIONS = {
     "include": "At least one inclusion criterion applies and no exclusion criterion applies.",
     "exclude": "An exclusion criterion applies or the paper does not meet either inclusion criterion.",
@@ -40,6 +59,8 @@ def request_body(model: str, paper: dict[str, str], prompt: str) -> dict[str, JS
     text = json.dumps(
         {"title": paper["title"], "abstract": paper["abstract"]}, ensure_ascii=False
     )
+    if model in NATIVE_REVISIONS:
+        return native_body(model, text, prompt)
     name = MODELS[model][0]
     if model == "decisions":
         return decisions_body(name, text, prompt)
@@ -47,6 +68,51 @@ def request_body(model: str, paper: dict[str, str], prompt: str) -> dict[str, JS
         return qwen_body(name, text, prompt)
     question = {"type": "choice", "instructions": prompt, "criteria": OPTIONS}
     return {"model": name, "state": text, "questions": {"screening": question}}
+
+
+def native_body(model: str, text: str, prompt: str) -> dict[str, JSON]:
+    """Preserve each native model's recorded request format."""
+    if model == "pplx-flash":
+        return {
+            "state": text,
+            "questions": {
+                "screening": {
+                    "type": "choice",
+                    "instructions": prompt,
+                    "criteria": OPTIONS,
+                }
+            },
+        }
+    return {
+        "messages": [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": text},
+        ],
+        "do_sample": False,
+        "max_new_tokens": MAX_OUTPUT,
+        **({"enable_thinking": False} if model == "gemma" else {}),
+        **({"allowed_answers": LLAMA_ANSWERS} if model == "llama" else {}),
+    }
+
+
+def native_settings(model: str) -> dict[str, JSON]:
+    """Preserve the native model's recorded inference settings."""
+    common = {
+        "dtype": "bfloat16",
+        "attention": "sdpa",
+        "batch_size": 1,
+        "max_context_tokens": MAX_CONTEXT,
+        "truncation": False,
+        "cpu_threads": 4,
+    }
+    if model == "pplx-flash":
+        return {**common, "fast": False, "temperature": "checkpoint"}
+    return {
+        **common,
+        "do_sample": False,
+        "max_new_tokens": MAX_OUTPUT,
+        **({"allowed_answers": LLAMA_ANSWERS} if model == "llama" else {}),
+    }
 
 
 def decisions_body(name: str, text: str, prompt: str) -> dict[str, JSON]:
@@ -78,7 +144,13 @@ def qwen_body(name: str, text: str, prompt: str) -> dict[str, JSON]:
 
 def decision_from(model: str, response: dict[str, JSON]) -> str:
     """Accept only complete documented answers, e.g. decision_from('jev', response)."""
-    if model == "qwen":
+    if model in {"llama", "gemma"}:
+        if response["finish_reason"] != "stop":
+            raise ValueError(
+                "Expected an EOS-terminated answer, got an output token limit"
+            )
+        choice = response["content"].strip().lower()
+    elif model == "qwen":
         answer = response["choices"][0]
         if answer["finish_reason"] != "stop":
             raise ValueError(

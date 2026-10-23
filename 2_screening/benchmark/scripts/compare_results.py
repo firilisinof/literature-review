@@ -16,9 +16,8 @@ from historical_screening import (
     historical_runs,
 )
 from merge_results import collect_predictions
-from run_extensions import MODELS as EXTENSION_MODELS
 from run_screening import FOLDER
-from screening_api import JSON, MODELS
+from screening_api import JSON, MODELS, NATIVE_REVISIONS
 
 NAMES = {
     "jev": "Jev 1.14.0",
@@ -27,6 +26,9 @@ NAMES = {
     "kev-9b": "Kev-9B",
     "qwen": "Qwen3-8B",
     **{key: title for key, (_, title, _) in HISTORICAL_MODELS.items()},
+    "llama": "Llama-3.1-8B-Instruct",
+    "gemma": "Gemma 4 12B",
+    "pplx-flash": "Perplexity Decider Flash v1.2",
 }
 
 
@@ -142,6 +144,12 @@ def model_metrics(
     result["revisions"] = sorted(
         {row["revision"] for row in selected if row["revision"]}
     )
+    if model in NATIVE_REVISIONS:
+        result.update(
+            name=NAMES[model],
+            repository=MODELS[model][0],
+            revision=NATIVE_REVISIONS[model],
+        )
     return result
 
 
@@ -169,39 +177,21 @@ def prediction_maps(rows: list[dict[str, JSON]]) -> dict[str, dict[str, str]]:
 
 
 def comparison_summary(
-    rows: list[dict[str, JSON]],
-    labels: dict[str, dict[str, str]],
-    extension_rows: list[dict[str, JSON]] | None = None,
+    rows: list[dict[str, JSON]], labels: dict[str, dict[str, str]]
 ) -> dict[str, JSON]:
-    """Compare current and verified historical choices, e.g. comparison_summary(rows, labels)."""
+    """Compare all benchmark models with verified historical choices."""
     runs = historical_runs(FOLDER.parents[1], set(labels))
     metrics = {model: model_metrics(rows, labels, model) for model in MODELS}
     metrics.update(
         {key: historical_model_metrics(run, labels) for key, run in runs.items()}
     )
-    if extension_rows is not None:
-        metrics.update(
-            {key: model_metrics(extension_rows, labels, key) for key in EXTENSION_MODELS}
-        )
     comparison = comparison_header(labels, metrics, runs)
-    if extension_rows is not None:
-        comparison["current_run_settings"]["models"].extend(EXTENSION_MODELS)
     if not all(metric["complete"] for metric in metrics.values()):
         return comparison
     predictions = prediction_maps(rows) | {
         key: historical_binary_choices(run) for key, run in runs.items()
     }
-    if extension_rows is not None:
-        predictions.update(
-            {
-                model: {
-                    row["record_id"]: row["decision"]
-                    for row in extension_rows
-                    if row["model"] == model and row["status"] == "ok"
-                }
-                for model in EXTENSION_MODELS
-            }
-        )
+    predictions = {model: predictions[model] for model in NAMES}
     comparison.update(agreement_summary(predictions, labels))
     return comparison
 
@@ -215,10 +205,13 @@ def comparison_header(
     prompt = (FOLDER / "prompt.txt").read_text().strip()
     return {
         "records": len(labels),
+        "dataset_sha256": hashlib.sha256(
+            (FOLDER / "benchmark.jsonl").read_bytes()
+        ).hexdigest(),
         "human_includes": 62,
         "human_excludes": 533,
         "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-        "metrics": metrics,
+        "metrics": {model: metrics[model] for model in NAMES},
         "historical_baseline": historical_baseline(labels, runs),
         "current_run_settings": {
             "models": list(MODELS),
@@ -287,15 +280,6 @@ def comparison_arguments() -> argparse.Namespace:
         "--predictions", type=Path, default=FOLDER / "results/predictions.jsonl"
     )
     parser.add_argument("--no-plots", action="store_true")
-    parser.add_argument(
-        "--extensions",
-        nargs="*",
-        type=Path,
-        default=[
-            FOLDER / f"results/{model}-20261023.jsonl" for model in EXTENSION_MODELS
-        ],
-        help="Additional prediction chunks. Pass without paths for the original eight models.",
-    )
     return parser.parse_args()
 
 
@@ -333,25 +317,12 @@ def main() -> None:
     args = comparison_arguments()
     labels = benchmark_labels()
     rows = collect_predictions([args.predictions])
-    names = NAMES.copy()
-    extension_rows = None
-    if args.extensions:
-        from compare_extensions import NAMES as EXTENSION_NAMES
-        from compare_extensions import collect_predictions as collect_extensions
-
-        extension_rows = collect_extensions(args.extensions)
-        names.update(EXTENSION_NAMES)
-    comparison = comparison_summary(rows, labels, extension_rows)
-    if args.extensions:
-        comparison["extensions_sha256"] = {
-            str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in args.extensions
-        }
+    comparison = comparison_summary(rows, labels)
     save_comparison(comparison, args.predictions)
     if not args.no_plots:
         from plot_comparison import plot_comparison
 
-        plot_comparison(comparison, names, FOLDER / "figures")
+        plot_comparison(comparison, NAMES, FOLDER / "figures")
     print(json.dumps(comparison["metrics"], indent=2))
 
 

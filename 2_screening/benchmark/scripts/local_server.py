@@ -1,9 +1,10 @@
-"""Start and stop pinned, offline model servers without changing their environments."""
+"""Load native models and manage pinned, offline model servers."""
 
 import json
 import os
 import signal
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -12,7 +13,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator, TextIO
 
-from screening_api import JSON
+from screening_api import (
+    JSON,
+    LLAMA_ANSWERS,
+    LLAMA_FILES,
+    MAX_CONTEXT,
+    MAX_OUTPUT,
+    MODELS,
+    NATIVE_REVISIONS,
+)
 
 KEV_COMMIT = "1f04cfa28e6a708485b28a9585010b9e436b776e"
 REVISIONS = [
@@ -169,3 +178,167 @@ def running_server(
         raise
     finally:
         stop_server(process)
+
+
+class NativeModel:
+    """Load pinned weights and preserve their native decision protocol."""
+
+    def __init__(self, model):
+        import torch
+        from huggingface_hub import snapshot_download
+        from transformers import AutoModelForCausalLM, AutoModelForMultimodalLM
+        from transformers import AutoProcessor, AutoTokenizer
+
+        self.torch = torch
+        self.name = model
+        torch.set_num_threads(4)
+        torch.manual_seed(0)
+        repo, revision = MODELS[model][0], NATIVE_REVISIONS[model]
+        checkpoint = Path(
+            snapshot_download(
+                repo,
+                revision=revision,
+                local_files_only=True,
+                allow_patterns=LLAMA_FILES if model == "llama" else None,
+            )
+        )
+        if checkpoint.name != revision:
+            raise ValueError(f"Expected cached snapshot {revision}, got {checkpoint}")
+        self.checkpoint = checkpoint
+        if model == "pplx-flash":
+            sys.path.insert(0, str(checkpoint / "source" / "src"))
+            from pplx_decider import Decider
+
+            self.model = Decider.from_pretrained(
+                checkpoint,
+                device="cuda:0",
+                fast=False,
+                max_length=MAX_CONTEXT,
+                cpu_threads=4,
+            )
+            return
+        if model == "gemma":
+            self.processor = AutoProcessor.from_pretrained(
+                checkpoint, local_files_only=True
+            )
+            self.tokenizer = self.processor.tokenizer
+            loader = AutoModelForMultimodalLM
+        else:
+            self.processor = AutoTokenizer.from_pretrained(
+                checkpoint, local_files_only=True
+            )
+            self.tokenizer = self.processor
+            loader = AutoModelForCausalLM
+        self.model = (
+            loader.from_pretrained(
+                checkpoint,
+                dtype=torch.bfloat16,
+                device_map={"": "cuda:0"},
+                attn_implementation="sdpa",
+                local_files_only=True,
+            )
+            .eval()
+            .requires_grad_(False)
+        )
+
+    def inputs(self, body):
+        kwargs = {"enable_thinking": False} if self.name == "gemma" else {}
+        return self.processor.apply_chat_template(
+            body["messages"],
+            tokenize=True,
+            add_generation_prompt=True,
+            return_dict=True,
+            return_tensors="pt",
+            **kwargs,
+        )
+
+    def token_count(self, body):
+        if self.name == "pplx-flash":
+            return sum(
+                chunk.length for chunk in self.model.encoder.plan(body, MAX_CONTEXT)
+            )
+        length = self.inputs(body)["input_ids"].shape[-1]
+        if length + MAX_OUTPUT > MAX_CONTEXT:
+            raise ValueError(
+                f"Request needs {length} input tokens plus {MAX_OUTPUT} output tokens"
+            )
+        return length
+
+    def predict(self, body):
+        with self.torch.inference_mode():
+            if self.name == "pplx-flash":
+                return self.model.decide(body)
+            inputs = {
+                key: value.to("cuda:0") for key, value in self.inputs(body).items()
+            }
+            pad_id = self.model.generation_config.pad_token_id
+            if pad_id is None:
+                pad_id = self.tokenizer.eos_token_id
+            constraints = {}
+            if self.name == "llama":
+                constraints["prefix_allowed_tokens_fn"] = self.answer_constraint(
+                    inputs["input_ids"].shape[-1]
+                )
+            output = self.model.generate(
+                **inputs,
+                do_sample=False,
+                max_new_tokens=MAX_OUTPUT,
+                temperature=None,
+                top_p=None,
+                top_k=None,
+                pad_token_id=pad_id,
+                **constraints,
+            )
+            tokens = output[0, inputs["input_ids"].shape[-1] :].tolist()
+            raw = self.tokenizer.decode(tokens, skip_special_tokens=False)
+            eos_ids = self.model.generation_config.eos_token_id
+            if isinstance(eos_ids, int):
+                eos_ids = [eos_ids]
+            response = {
+                "raw_text": raw,
+                "token_ids": tokens,
+                "finish_reason": (
+                    "stop" if tokens and tokens[-1] in eos_ids else "length"
+                ),
+                "usage": {
+                    "input_tokens": inputs["input_ids"].shape[-1],
+                    "output_tokens": len(tokens),
+                },
+            }
+            if self.name == "gemma":
+                prefix = self.tokenizer.decode(
+                    inputs["input_ids"][0], skip_special_tokens=False
+                )
+                response["parsed_message"] = self.processor.parse_response(
+                    raw, prefix=prefix
+                )
+                response["content"] = response["parsed_message"]["content"]
+            else:
+                response["content"] = self.tokenizer.decode(
+                    tokens, skip_special_tokens=True
+                )
+            return response
+
+    def answer_constraint(self, input_length):
+        answers = [
+            self.tokenizer.encode(text, add_special_tokens=False)
+            for text in LLAMA_ANSWERS
+        ]
+        eos_ids = self.model.generation_config.eos_token_id
+        if isinstance(eos_ids, int):
+            eos_ids = [eos_ids]
+
+        def allowed_tokens(batch_id, input_ids):
+            prefix = input_ids[input_length:].tolist()
+            allowed = set()
+            for answer in answers:
+                if answer[: len(prefix)] == prefix:
+                    if len(prefix) == len(answer):
+                        allowed.update(eos_ids)
+                    else:
+                        allowed.add(answer[len(prefix)])
+            if not allowed:
+                raise ValueError(f"Unexpected binary answer prefix {prefix}")
+            return sorted(allowed)
+
+        return allowed_tokens

@@ -1,0 +1,475 @@
+{
+  "records": 595,
+  "human_inclusions": 62,
+  "model_names": {
+    "historical-openai": "GPT-5.4",
+    "historical-anthropic": "Sonnet 4.5",
+    "historical-gemini": "Gemini 2.5 Pro",
+    "qwen": "Qwen3-8B",
+    "llama": "Llama-3.1-8B-Instruct",
+    "gemma": "Gemma 4 12B",
+    "jev": "Jev 1.14.0",
+    "decisions": "OpenAI Decisions",
+    "kev-9b": "Kev-9B",
+    "pplx-flash": "Perplexity Decider Flash v1.2"
+  },
+  "selection": {
+    "rule": "Fixed roster chosen by weight availability and model purpose before scoring the added models. No ranking or subset search on the human labels."
+  },
+  "groups": {
+    "closed-weight-llms": {
+      "title": "Closed-weight LLMs",
+      "models": [
+        "historical-openai",
+        "historical-anthropic",
+        "historical-gemini"
+      ],
+      "workflow_keys": [
+        "single/historical-openai",
+        "single/historical-anthropic",
+        "single/historical-gemini",
+        "closed-weight-llms/unanimous"
+      ]
+    },
+    "open-weight-llms": {
+      "title": "Open-weight LLMs",
+      "models": [
+        "qwen",
+        "llama",
+        "gemma"
+      ],
+      "workflow_keys": [
+        "single/qwen",
+        "single/llama",
+        "single/gemma",
+        "open-weight-llms/unanimous"
+      ]
+    },
+    "closed-weight-decisions": {
+      "title": "Closed-weight decision models",
+      "models": [
+        "jev",
+        "decisions"
+      ],
+      "workflow_keys": [
+        "single/jev",
+        "single/decisions",
+        "closed-weight-decisions/unanimous"
+      ]
+    },
+    "open-weight-decisions": {
+      "title": "Open-weight decision models",
+      "models": [
+        "kev-9b",
+        "pplx-flash"
+      ],
+      "workflow_keys": [
+        "single/kev-9b",
+        "single/pplx-flash",
+        "open-weight-decisions/unanimous"
+      ]
+    }
+  },
+  "routing_rule": "For each single model, review its included records. For each group combination, review only records every member includes. Automatically exclude other records. Historical doubt counts as include. No automatic inclusion.",
+  "human_decision_assumption": "Reviewed records receive their existing human label. Workload measures records, not screening time, reviewer errors, or disagreement resolution.",
+  "interpretation": "Descriptive results on 595 labeled records. The later cohort was selected by historical unanimous inclusion. Unlabeled search results and approved removals are outside these denominators. Closed-weight LLMs retain their original inputs. Two-model unanimity is less strict than three-model unanimity. Llama uses binary constrained decoding, while Qwen and Gemma use unconstrained greedy generation with strict response validation. Observed scores do not establish performance across the entire search or a new review.",
+  "metric_definitions": {
+    "human_disagreements": "False inclusions plus false exclusions: FP + FN. Compare model routing decisions with human labels before human review corrects extra inclusions.",
+    "inclusion_precision": "True inclusions among records sent to humans: TP / (TP + FP).",
+    "exclusion_precision": "True exclusions among automatically excluded records: TN / (TN + FN). Also called negative predictive value.",
+    "undefined_precision": "Undefined when no records receive that label."
+  },
+  "source_sha256": {
+    "benchmark.jsonl": "ba7ef1f17e2361bc655b9a9defd62be58ad1cdde599778e764f1faa904393392",
+    "prompt.txt": "2ee80a36cb76375905646ea33ec9f781123402f9e9d7f1cdd0ac2343b7d29c25",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/predictions.jsonl": "7ad5fd6e3cce5e6559ad3b92e6ae767e52d8c5e1fdbeafd9a0c7d910be0317f4",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/llama-20261023.jsonl": "fe23592b59b55de96e623749fd6ba58ea790a13fbeff01dd578479338d4c592d",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/gemma-20261023.jsonl": "0e56e431b99963af45bae2b5f5dfaa30800786f67fb8e66436b042e4ef796a1b",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/pplx-flash-20261023.jsonl": "34a31acc8a506952a9b6595d2cd37b5a28429d004a8322abbeca44151e65a0ab",
+    "artifacts/processed.csv": "b2b21a6ff6c55cf7940269045c0fe815535d0b0c9094e37b1bb2edc6ed6fcc58",
+    "2_screening/results/openai-batch-001.jsonl": "2afc5dbe2964e029ec88652f44c0a3fd28501d4ddbccbc1a10ddc683a8c15689",
+    "2_screening/results/openai-batch-002.jsonl": "f0a37d646361c639ca04b380b8e19a8d41f3d8eac797298bfe197dc7849efb12",
+    "2_screening/results/openai-batch-003.jsonl": "e082a5c18fe3e199a83a4f85fab4b2e749ade424d159bc9c5174f0f5965b73da",
+    "2_screening/results/openai-batch-004.jsonl": "5da8c6e785cf12b947bbc66bbcb52821c6885e29792bd522c8f6ecd823b66b8d",
+    "2_screening/results/anthropic-batch-001.jsonl": "35a9a99d78cc675955ff0f81ecc2d8a51b235ea0445a63f97f167dbf93365ff0",
+    "2_screening/results/anthropic-batch-002.jsonl": "1cc113e907f35799c0ecf57abecd97cf7c3df50013439dbd213f232951218e02",
+    "2_screening/results/anthropic-batch-003.jsonl": "99b98801cd938b13f0cb9742162448443f41ebe36eedab370f78b66f82c1777a",
+    "2_screening/results/anthropic-batch-004.jsonl": "d957d92a5d7d1bcd3350c001c4fa69febbdc64bb1f632d6fdcb6cc7b00e073ab",
+    "2_screening/results/gemini-batch-001.jsonl": "889fb15a18374c0f530a875cac96bf9a5f6ac245567d4587d24cbc48ccd2e0af",
+    "2_screening/results/gemini-batch-002.jsonl": "d72321db556037af292821d7f7dfaffe13377e4917e5b3448f40014cc2641089",
+    "2_screening/results/gemini-batch-003.jsonl": "52cd536fca6b87b5ecf27df667a15371b5e022486ef9ec47c2c13f16d9ec4555",
+    "2_screening/results/gemini-batch-004.jsonl": "782bfa067728c94fec1e1422b65d3cf06ca1bf018aa62a401711ca9a44025b93"
+  },
+  "workflows": {
+    "single/historical-openai": {
+      "models": [
+        "historical-openai"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 315,
+      "records_automatically_excluded": 280,
+      "human_workload_reduction": 0.47058823529411764,
+      "known_inclusions_retained": 62,
+      "known_inclusions_missed": 0,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "inclusion_precision": 0.19682539682539682,
+      "exclusion_precision": 1.0,
+      "true_exclusions": 280,
+      "human_exclusions_to_review": 253,
+      "human_disagreements": 253,
+      "missed_record_ids": []
+    },
+    "single/historical-anthropic": {
+      "models": [
+        "historical-anthropic"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 344,
+      "records_automatically_excluded": 251,
+      "human_workload_reduction": 0.42184873949579826,
+      "known_inclusions_retained": 62,
+      "known_inclusions_missed": 0,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "inclusion_precision": 0.18023255813953487,
+      "exclusion_precision": 1.0,
+      "true_exclusions": 251,
+      "human_exclusions_to_review": 282,
+      "human_disagreements": 282,
+      "missed_record_ids": []
+    },
+    "single/historical-gemini": {
+      "models": [
+        "historical-gemini"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 329,
+      "records_automatically_excluded": 266,
+      "human_workload_reduction": 0.44705882352941173,
+      "known_inclusions_retained": 62,
+      "known_inclusions_missed": 0,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "inclusion_precision": 0.1884498480243161,
+      "exclusion_precision": 1.0,
+      "true_exclusions": 266,
+      "human_exclusions_to_review": 267,
+      "human_disagreements": 267,
+      "missed_record_ids": []
+    },
+    "closed-weight-llms/unanimous": {
+      "models": [
+        "historical-openai",
+        "historical-anthropic",
+        "historical-gemini"
+      ],
+      "model_count": 3,
+      "minimum_include_votes": 3,
+      "records_for_human_review": 293,
+      "records_automatically_excluded": 302,
+      "human_workload_reduction": 0.507563025210084,
+      "known_inclusions_retained": 62,
+      "known_inclusions_missed": 0,
+      "recall": 1.0,
+      "recall_wilson_95": [
+        0.9416559278986275,
+        0.9999999999999999
+      ],
+      "inclusion_precision": 0.21160409556313994,
+      "exclusion_precision": 1.0,
+      "true_exclusions": 302,
+      "human_exclusions_to_review": 231,
+      "human_disagreements": 231,
+      "missed_record_ids": []
+    },
+    "single/qwen": {
+      "models": [
+        "qwen"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 262,
+      "records_automatically_excluded": 333,
+      "human_workload_reduction": 0.5596638655462185,
+      "known_inclusions_retained": 58,
+      "known_inclusions_missed": 4,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "inclusion_precision": 0.22137404580152673,
+      "exclusion_precision": 0.987987987987988,
+      "true_exclusions": 329,
+      "human_exclusions_to_review": 204,
+      "human_disagreements": 208,
+      "missed_record_ids": [
+        "7",
+        "28",
+        "223",
+        "419"
+      ]
+    },
+    "single/llama": {
+      "models": [
+        "llama"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 274,
+      "records_automatically_excluded": 321,
+      "human_workload_reduction": 0.5394957983193278,
+      "known_inclusions_retained": 58,
+      "known_inclusions_missed": 4,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "inclusion_precision": 0.2116788321167883,
+      "exclusion_precision": 0.9875389408099688,
+      "true_exclusions": 317,
+      "human_exclusions_to_review": 216,
+      "human_disagreements": 220,
+      "missed_record_ids": [
+        "7",
+        "223",
+        "419",
+        "477"
+      ]
+    },
+    "single/gemma": {
+      "models": [
+        "gemma"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 296,
+      "records_automatically_excluded": 299,
+      "human_workload_reduction": 0.5025210084033613,
+      "known_inclusions_retained": 60,
+      "known_inclusions_missed": 2,
+      "recall": 0.967741935483871,
+      "recall_wilson_95": [
+        0.8897953040501456,
+        0.9911086285001833
+      ],
+      "inclusion_precision": 0.20270270270270271,
+      "exclusion_precision": 0.9933110367892977,
+      "true_exclusions": 297,
+      "human_exclusions_to_review": 236,
+      "human_disagreements": 238,
+      "missed_record_ids": [
+        "5",
+        "223"
+      ]
+    },
+    "open-weight-llms/unanimous": {
+      "models": [
+        "qwen",
+        "llama",
+        "gemma"
+      ],
+      "model_count": 3,
+      "minimum_include_votes": 3,
+      "records_for_human_review": 212,
+      "records_automatically_excluded": 383,
+      "human_workload_reduction": 0.6436974789915966,
+      "known_inclusions_retained": 56,
+      "known_inclusions_missed": 6,
+      "recall": 0.9032258064516129,
+      "recall_wilson_95": [
+        0.8045118138769257,
+        0.9548881279768061
+      ],
+      "inclusion_precision": 0.2641509433962264,
+      "exclusion_precision": 0.9843342036553525,
+      "true_exclusions": 377,
+      "human_exclusions_to_review": 156,
+      "human_disagreements": 162,
+      "missed_record_ids": [
+        "5",
+        "7",
+        "28",
+        "223",
+        "419",
+        "477"
+      ]
+    },
+    "single/jev": {
+      "models": [
+        "jev"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 218,
+      "records_automatically_excluded": 377,
+      "human_workload_reduction": 0.6336134453781512,
+      "known_inclusions_retained": 59,
+      "known_inclusions_missed": 3,
+      "recall": 0.9516129032258065,
+      "recall_wilson_95": [
+        0.8671196207267605,
+        0.9834083141494193
+      ],
+      "inclusion_precision": 0.2706422018348624,
+      "exclusion_precision": 0.9920424403183024,
+      "true_exclusions": 374,
+      "human_exclusions_to_review": 159,
+      "human_disagreements": 162,
+      "missed_record_ids": [
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    "single/decisions": {
+      "models": [
+        "decisions"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 157,
+      "records_automatically_excluded": 438,
+      "human_workload_reduction": 0.7361344537815127,
+      "known_inclusions_retained": 58,
+      "known_inclusions_missed": 4,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "inclusion_precision": 0.36942675159235666,
+      "exclusion_precision": 0.9908675799086758,
+      "true_exclusions": 434,
+      "human_exclusions_to_review": 99,
+      "human_disagreements": 103,
+      "missed_record_ids": [
+        "3",
+        "4",
+        "5",
+        "419"
+      ]
+    },
+    "closed-weight-decisions/unanimous": {
+      "models": [
+        "jev",
+        "decisions"
+      ],
+      "model_count": 2,
+      "minimum_include_votes": 2,
+      "records_for_human_review": 150,
+      "records_automatically_excluded": 445,
+      "human_workload_reduction": 0.7478991596638656,
+      "known_inclusions_retained": 58,
+      "known_inclusions_missed": 4,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "inclusion_precision": 0.38666666666666666,
+      "exclusion_precision": 0.9910112359550561,
+      "true_exclusions": 441,
+      "human_exclusions_to_review": 92,
+      "human_disagreements": 96,
+      "missed_record_ids": [
+        "3",
+        "4",
+        "5",
+        "419"
+      ]
+    },
+    "single/kev-9b": {
+      "models": [
+        "kev-9b"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 235,
+      "records_automatically_excluded": 360,
+      "human_workload_reduction": 0.6050420168067228,
+      "known_inclusions_retained": 60,
+      "known_inclusions_missed": 2,
+      "recall": 0.967741935483871,
+      "recall_wilson_95": [
+        0.8897953040501456,
+        0.9911086285001833
+      ],
+      "inclusion_precision": 0.2553191489361702,
+      "exclusion_precision": 0.9944444444444445,
+      "true_exclusions": 358,
+      "human_exclusions_to_review": 175,
+      "human_disagreements": 177,
+      "missed_record_ids": [
+        "5",
+        "419"
+      ]
+    },
+    "single/pplx-flash": {
+      "models": [
+        "pplx-flash"
+      ],
+      "model_count": 1,
+      "minimum_include_votes": 1,
+      "records_for_human_review": 284,
+      "records_automatically_excluded": 311,
+      "human_workload_reduction": 0.522689075630252,
+      "known_inclusions_retained": 61,
+      "known_inclusions_missed": 1,
+      "recall": 0.9838709677419355,
+      "recall_wilson_95": [
+        0.9141327973931,
+        0.9971471328313782
+      ],
+      "inclusion_precision": 0.2147887323943662,
+      "exclusion_precision": 0.9967845659163987,
+      "true_exclusions": 310,
+      "human_exclusions_to_review": 223,
+      "human_disagreements": 224,
+      "missed_record_ids": [
+        "5"
+      ]
+    },
+    "open-weight-decisions/unanimous": {
+      "models": [
+        "kev-9b",
+        "pplx-flash"
+      ],
+      "model_count": 2,
+      "minimum_include_votes": 2,
+      "records_for_human_review": 228,
+      "records_automatically_excluded": 367,
+      "human_workload_reduction": 0.6168067226890757,
+      "known_inclusions_retained": 60,
+      "known_inclusions_missed": 2,
+      "recall": 0.967741935483871,
+      "recall_wilson_95": [
+        0.8897953040501456,
+        0.9911086285001833
+      ],
+      "inclusion_precision": 0.2631578947368421,
+      "exclusion_precision": 0.9945504087193461,
+      "true_exclusions": 365,
+      "human_exclusions_to_review": 168,
+      "human_disagreements": 170,
+      "missed_record_ids": [
+        "5",
+        "419"
+      ]
+    }
+  }
+}

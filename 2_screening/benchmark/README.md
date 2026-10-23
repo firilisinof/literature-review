@@ -6,7 +6,7 @@ human decisions for 595 records from the published HPC review: 62 include and
 benchmark run checked execution and required no changes. Its predictions are
 reused alongside the remaining 476 records.
 
-Three additional open-weight models extend the individual comparison: Llama-3.1-8B-Instruct, Gemma 4 12B, and Perplexity Decider Flash v1.2. Their results are stored separately from the original five-model predictions. The individual figures include all eleven models.
+Three additional open-weight models extend the individual and workflow comparisons: Llama-3.1-8B-Instruct, Gemma 4 12B, and Perplexity Decider Flash v1.2. Their results are stored separately from the original five-model predictions. The individual figures include all eleven models. The workflow figure compares four fixed groups of models and their unanimous-inclusion rules.
 
 The published criteria, prompt, model revisions, request settings, output parser,
 and no-retry policy are fixed across both benchmark runs. The historical runs
@@ -27,6 +27,7 @@ Python scripts and their tests live in `scripts/`. Dataset, prompt, and dependen
 - `scripts/compare_extensions.py`: validate and score those runs, reporting missing model coverage explicitly.
 - `scripts/merge_results.py`: validates and merges response chunks.
 - `scripts/compare_results.py`, `scripts/plot_comparison.py`: score predictions and generate plots.
+- `scripts/evaluate_workflows.py`: simulate model ensembles routing records to human screening.
 - `scripts/historical_screening.py`: checks historical choices against raw batch outputs.
 - `scripts/test_historical_screening.py`: offline regression checks for the historical import.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
@@ -37,6 +38,8 @@ Python scripts and their tests live in `scripts/`. Dataset, prompt, and dependen
 - `results/*-20261023.jsonl`: separate Llama, Gemma, and Perplexity prediction chunks.
 - `results/extensions-comparison.json`: validated scores and coverage for the added models.
 - `figures/metrics.png`, `figures/disagreements.png`: full-collection figures.
+- `results/workflows.json`: metrics and fixed group definitions for fourteen workflows.
+- `figures/workflows.png`: one workflow figure with four model groups.
 
 Each dataset record has `record_id`, `title`, `abstract`, `label`, `cohort`,
 `label_source`, and `abstract_source`. Source fields point to original evidence.
@@ -201,7 +204,7 @@ Validate and score saved extension chunks without ML libraries or model requests
 python3 2_screening/benchmark/scripts/compare_extensions.py 2_screening/benchmark/results/llama-20261023.jsonl 2_screening/benchmark/results/gemma-20261023.jsonl 2_screening/benchmark/results/pplx-flash-20261023.jsonl
 ```
 
-This writes `results/extensions-comparison.json`, rejecting duplicate records, changed inputs or settings, and inconsistent decisions. A model without all 595 valid decisions receives coverage counts without accuracy metrics.
+This writes `results/extensions-comparison.json`, rejecting duplicate records, changed inputs or settings, and inconsistent decisions. A model without all 595 valid decisions receives coverage counts without accuracy metrics. The four-group workflow figure requires all three additional models to be complete.
 
 ## Merge and evaluate
 
@@ -255,6 +258,34 @@ responses with recoverable decisions. Versions, source hashes, and recoveries
 are recorded in `comparison.json`. Earlier prompts, 18 recovered benchmark
 abstracts, and selection of the later cohort through historical inclusion limit
 this descriptive comparison. Historical costs and request times are unknown.
+
+## Human screening workflows
+
+Evaluate combined-model routing using the existing predictions, without making requests:
+
+```sh
+python 2_screening/benchmark/scripts/evaluate_workflows.py --no-plots
+uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/scripts/evaluate_workflows.py
+```
+
+The first command needs only the Python standard library. The second also writes `figures/workflows.png` using the same font as the model comparison. It replaces the two earlier workflow figures. `--predictions FILE` selects the original five-model predictions and writes `workflows.json` beside that file. `--extensions FILE ...` selects the additional-model chunks. Defaults are the three dated chunks listed above. Requests, prompt hashes, model revisions, responses, and complete decision coverage are validated before any workflow is scored.
+
+Compare four fixed groups on the same 595 labeled records. Each group shows its individual models and the rule that sends a record to humans only when every model in that group includes it. This produces fourteen workflows:
+
+- Closed-weight LLMs: GPT-5.4, Sonnet 4.5, Gemini 2.5 Pro, and their three-model agreement.
+- Open-weight LLMs: Qwen3-8B, Llama-3.1-8B-Instruct, Gemma 4 12B, and their three-model agreement.
+- Closed-weight decision models: Jev, OpenAI Decisions, and their two-model agreement.
+- Open-weight decision models: Kev-9B, Perplexity Decider Flash v1.2, and their two-model agreement.
+
+The roster is fixed by model category, without ranking or searching combinations using these labels. Kev-4B remains in the original benchmark results but does not enter this grouped comparison. Unanimity sizes are explicit, since a two-model intersection and a three-model intersection impose different requirements. Comparisons across model types remain descriptive. Llama uses binary constrained decoding, while Qwen and Gemma use unconstrained greedy generation with strict response validation. These results compare the recorded inference configurations as well as their weights.
+
+Historical doubt counts as include. Verify historical choices against the raw batches and preserve their source hashes. The closed-weight LLMs retain their original inputs, as approved for this comparison. Automatically exclude records not sent to humans. No record is automatically included. Reviewed records receive their existing human label in this simulation.
+
+The static Matplotlib figure contains four sections on aligned axes. Columns show screening work saved and disagreements with human decisions. Each disagreement bar is split into false inclusions and false exclusions, with exact counts printed as `FP + FN` so small false-exclusion counts remain visible. The agreement rows are shaded and bold. Each row represents one actual policy, without averaging over subsets or range bars. Exact model identities, thresholds, confusion counts, precision, recall, and missed IDs are saved in `workflows.json`. The figure has no subtitle or footer.
+
+Workload reduction is `1 - reviewed / 595`. Human disagreements are `FP + FN` out of all 595 records. False inclusions (`FP`) are model inclusions with a human exclusion label. False exclusions (`FN`) are model exclusions with a human inclusion label. These compare model routing decisions before human review: false inclusions add human screening work, while false exclusions miss known inclusions. Saved results also retain inclusion precision `TP / (TP + FP)`, exclusion precision `TN / (TN + FN)`, recall, and its Wilson interval. Precision is undefined when no records receive the corresponding label. Workload measures records, not reviewer time, full-text assessment, or disagreement resolution. Wilson intervals do not account for selection bias or shared model errors.
+
+The later cohort already passed historical unanimous inclusion before humans screened it. Human labels are unavailable for the other search results. Thus, this analysis cannot estimate recall of the published screening process across the full search. Treat all workflow comparisons as descriptive results on the labeled collection, not validation of a policy for a new review. Estimating missed inclusions among the original model exclusions requires human screening of those records, for example through a probability sample with recorded sampling weights.
 
 ## Criteria and models
 

@@ -11,7 +11,7 @@ from typing import TextIO
 
 from screening_api import JSON, MODELS, decision_from, request_body, run_one
 
-FOLDER = Path(__file__).resolve().parent
+FOLDER = Path(__file__).resolve().parents[1]
 
 
 def request_parser() -> argparse.ArgumentParser:

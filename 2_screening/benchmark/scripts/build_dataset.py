@@ -204,7 +204,7 @@ def check_dataset(records: list[Row]) -> None:
 
 def main() -> None:
     """Rebuild and check the single dataset, e.g. python build_dataset.py."""
-    folder = Path(__file__).resolve().parent
+    folder = Path(__file__).resolve().parents[1]
     records = collect_records(folder.parents[1])
     check_dataset(records)
     rendered = "\n".join(json.dumps(row, ensure_ascii=False) for row in records)

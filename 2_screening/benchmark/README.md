@@ -13,16 +13,18 @@ the reviewed collection, not a separate held-out evaluation.
 
 ## Files
 
+Python scripts and their tests live in `scripts/`. Dataset, prompt, and dependency files stay here, with outputs in `results/` and `figures/`.
+
 - `benchmark.jsonl`: the single dataset, without an evaluation split.
-- `build_dataset.py`: rebuilds the dataset from original screening files.
+- `scripts/build_dataset.py`: rebuilds the dataset from original screening files.
 - `prompt.txt`: shared screening instructions.
-- `run_screening.py`: previews requests or runs one selected model.
-- `screening_api.py`: provider request formats and response parsing.
-- `run_local.py`, `local_server.py`: run pinned local models sequentially.
-- `merge_results.py`: validates and merges response chunks.
-- `compare_results.py`, `plot_comparison.py`: score predictions and generate plots.
-- `historical_screening.py`: checks historical choices against raw batch outputs.
-- `test_historical_screening.py`: offline regression checks for the historical import.
+- `scripts/run_screening.py`: previews requests or runs one selected model.
+- `scripts/screening_api.py`: provider request formats and response parsing.
+- `scripts/run_local.py`, `scripts/local_server.py`: run pinned local models sequentially.
+- `scripts/merge_results.py`: validates and merges response chunks.
+- `scripts/compare_results.py`, `scripts/plot_comparison.py`: score predictions and generate plots.
+- `scripts/historical_screening.py`: checks historical choices against raw batch outputs.
+- `scripts/test_historical_screening.py`: offline regression checks for the historical import.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
 - `results/predictions.jsonl`: the 2,975 benchmark requests, responses, decisions, and timings.
 - `results/local-runs.json`: local server settings and startup/run timings for both dates.
@@ -41,7 +43,7 @@ The runner never sends human labels, provenance, or historical model answers.
 Run commands from the repository root. Rebuild the dataset without model requests:
 
 ```sh
-uv run --no-project --with bibtexparser==1.4.4 python 2_screening/benchmark/build_dataset.py
+uv run --no-project --with bibtexparser==1.4.4 python 2_screening/benchmark/scripts/build_dataset.py
 ```
 
 The script checks unique IDs and titles, human decisions, recovered abstracts,
@@ -50,19 +52,19 @@ and cohort counts before writing all 595 records.
 Preview one request per model without network access:
 
 ```sh
-python 2_screening/benchmark/run_screening.py --dry-run --limit 1
+python 2_screening/benchmark/scripts/run_screening.py --dry-run --limit 1
 ```
 
 Validate and score the saved results without requests or plotting dependencies:
 
 ```sh
-python 2_screening/benchmark/compare_results.py --no-plots
+python 2_screening/benchmark/scripts/compare_results.py --no-plots
 ```
 
 Regenerate the comparison and figures:
 
 ```sh
-uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/compare_results.py
+uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/scripts/compare_results.py
 ```
 
 Plots use the comparison's scored counts and are saved in `figures/` beside the
@@ -79,7 +81,7 @@ It makes no model requests.
 Run the offline regression checks:
 
 ```sh
-python -m unittest discover -s 2_screening/benchmark -p 'test_*.py'
+python -m unittest discover -s 2_screening/benchmark/scripts -p 'test_*.py'
 ```
 
 ## Run screening
@@ -90,7 +92,7 @@ Dry-run is the default. `--model` accepts `jev`, `decisions`, `kev-4b`, `kev-9b`
 the environment. For example, a complete new hosted run uses:
 
 ```sh
-python 2_screening/benchmark/run_screening.py --model jev --execute --output jev-new.jsonl
+python 2_screening/benchmark/scripts/run_screening.py --model jev --execute --output jev-new.jsonl
 ```
 
 Use `--completed SAVED.jsonl` to send only records absent for that model.
@@ -102,7 +104,7 @@ not retry errors. `--limit N` selects the first N missing records in ID order.
 For example, preview missing records without making requests:
 
 ```sh
-python 2_screening/benchmark/run_screening.py --model jev --completed 2_screening/benchmark/results/predictions.jsonl --dry-run
+python 2_screening/benchmark/scripts/run_screening.py --model jev --completed 2_screening/benchmark/results/predictions.jsonl --dry-run
 ```
 
 The committed file is complete, so this prepares zero requests. Omit
@@ -123,12 +125,10 @@ approved schedule. The user environments, pinned Kev source, cached model
 weights, and `model-downloads.json` live under `~/hpc-screening-benchmark`.
 No system package changes or weight downloads are performed by the runner.
 
-Copy the Python modules, `prompt.txt`, and `benchmark.jsonl` into one directory
-on the approved server. Copy saved predictions too when continuing a run. From
-that directory, run:
+Copy the `scripts/` folder, `prompt.txt`, and `benchmark.jsonl` into one run directory on the approved server, preserving the folder structure. Copy saved predictions too when continuing a run. From that directory, run:
 
 ```sh
-python3 run_local.py --execute --date YYYYMMDD --completed results/predictions.jsonl
+python3 scripts/run_local.py --execute --date YYYYMMDD --completed results/predictions.jsonl
 ```
 
 Use `--server-home` for a different installation path, or `--model kev-4b`,
@@ -144,7 +144,7 @@ length 8192, maximum one sequence, GPU memory utilization 0.70, temperature 0,
 thinking disabled, and 16 output tokens. A malformed or truncated answer is a
 technical error. `CUDA_VISIBLE_DEVICES=0` selects a GPU but does not reserve it.
 
-To use an already running server, call `run_screening.py` with `--model`,
+To use an already running server, call `scripts/run_screening.py` with `--model`,
 `--execute`, `--revision`, and `--output`. Supply actual checkpoint, base, and
 server revisions. `--url` overrides a local endpoint. Defaults are
 `http://localhost:8009/v1/systemone`, `http://localhost:8010/v1/systemone`, and
@@ -157,8 +157,8 @@ Merge saved predictions and new chunks after all five models have complete
 coverage:
 
 ```sh
-python 2_screening/benchmark/merge_results.py saved.jsonl jev-new.jsonl decisions-new.jsonl kev4-new.jsonl kev9-new.jsonl qwen-new.jsonl --output merged.jsonl
-python 2_screening/benchmark/compare_results.py --predictions merged.jsonl --no-plots
+python 2_screening/benchmark/scripts/merge_results.py saved.jsonl jev-new.jsonl decisions-new.jsonl kev4-new.jsonl kev9-new.jsonl qwen-new.jsonl --output merged.jsonl
+python 2_screening/benchmark/scripts/compare_results.py --predictions merged.jsonl --no-plots
 ```
 
 The merger rejects duplicate model/record pairs, unknown IDs, changed requests,

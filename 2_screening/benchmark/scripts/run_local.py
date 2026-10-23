@@ -48,7 +48,7 @@ def runner_command(
     """Use the common request runner, e.g. runner_command(args, plan, output)."""
     command = [
         "python3",
-        str(FOLDER / "run_screening.py"),
+        str(Path(__file__).with_name("run_screening.py")),
         "--model",
         plan.name,
         "--execute",

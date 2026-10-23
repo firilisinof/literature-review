@@ -16,6 +16,7 @@ from historical_screening import (
     historical_runs,
 )
 from merge_results import collect_predictions
+from run_extensions import MODELS as EXTENSION_MODELS
 from run_screening import FOLDER
 from screening_api import JSON, MODELS
 
@@ -168,7 +169,9 @@ def prediction_maps(rows: list[dict[str, JSON]]) -> dict[str, dict[str, str]]:
 
 
 def comparison_summary(
-    rows: list[dict[str, JSON]], labels: dict[str, dict[str, str]]
+    rows: list[dict[str, JSON]],
+    labels: dict[str, dict[str, str]],
+    extension_rows: list[dict[str, JSON]] | None = None,
 ) -> dict[str, JSON]:
     """Compare current and verified historical choices, e.g. comparison_summary(rows, labels)."""
     runs = historical_runs(FOLDER.parents[1], set(labels))
@@ -176,12 +179,29 @@ def comparison_summary(
     metrics.update(
         {key: historical_model_metrics(run, labels) for key, run in runs.items()}
     )
+    if extension_rows is not None:
+        metrics.update(
+            {key: model_metrics(extension_rows, labels, key) for key in EXTENSION_MODELS}
+        )
     comparison = comparison_header(labels, metrics, runs)
-    if not all(metrics[model]["complete"] for model in MODELS):
+    if extension_rows is not None:
+        comparison["current_run_settings"]["models"].extend(EXTENSION_MODELS)
+    if not all(metric["complete"] for metric in metrics.values()):
         return comparison
     predictions = prediction_maps(rows) | {
         key: historical_binary_choices(run) for key, run in runs.items()
     }
+    if extension_rows is not None:
+        predictions.update(
+            {
+                model: {
+                    row["record_id"]: row["decision"]
+                    for row in extension_rows
+                    if row["model"] == model and row["status"] == "ok"
+                }
+                for model in EXTENSION_MODELS
+            }
+        )
     comparison.update(agreement_summary(predictions, labels))
     return comparison
 
@@ -267,6 +287,15 @@ def comparison_arguments() -> argparse.Namespace:
         "--predictions", type=Path, default=FOLDER / "results/predictions.jsonl"
     )
     parser.add_argument("--no-plots", action="store_true")
+    parser.add_argument(
+        "--extensions",
+        nargs="*",
+        type=Path,
+        default=[
+            FOLDER / f"results/{model}-20261023.jsonl" for model in EXTENSION_MODELS
+        ],
+        help="Additional prediction chunks. Pass without paths for the original eight models.",
+    )
     return parser.parse_args()
 
 
@@ -293,7 +322,7 @@ def save_comparison(comparison: dict[str, JSON], path: Path) -> None:
     (path.parent / "comparison.json").write_text(
         json.dumps(comparison, indent=2, ensure_ascii=False) + "\n"
     )
-    if not all(comparison["metrics"][model]["complete"] for model in MODELS):
+    if not all(metric["complete"] for metric in comparison["metrics"].values()):
         raise SystemExit(
             "Incomplete predictions: coverage saved to comparison.json, full comparison withheld"
         )
@@ -304,12 +333,25 @@ def main() -> None:
     args = comparison_arguments()
     labels = benchmark_labels()
     rows = collect_predictions([args.predictions])
-    comparison = comparison_summary(rows, labels)
+    names = NAMES.copy()
+    extension_rows = None
+    if args.extensions:
+        from compare_extensions import NAMES as EXTENSION_NAMES
+        from compare_extensions import collect_predictions as collect_extensions
+
+        extension_rows = collect_extensions(args.extensions)
+        names.update(EXTENSION_NAMES)
+    comparison = comparison_summary(rows, labels, extension_rows)
+    if args.extensions:
+        comparison["extensions_sha256"] = {
+            str(path): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in args.extensions
+        }
     save_comparison(comparison, args.predictions)
     if not args.no_plots:
         from plot_comparison import plot_comparison
 
-        plot_comparison(comparison, NAMES, FOLDER / "figures")
+        plot_comparison(comparison, names, FOLDER / "figures")
     print(json.dumps(comparison["metrics"], indent=2))
 
 

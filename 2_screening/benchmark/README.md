@@ -6,6 +6,8 @@ human decisions for 595 records from the published HPC review: 62 include and
 benchmark run checked execution and required no changes. Its predictions are
 reused alongside the remaining 476 records.
 
+Three additional open-weight models extend the individual comparison: Llama-3.1-8B-Instruct, Gemma 4 12B, and Perplexity Decider Flash v1.2. Their results are stored separately from the original five-model predictions. The individual figures include all eleven models.
+
 The published criteria, prompt, model revisions, request settings, output parser,
 and no-retry policy are fixed across both benchmark runs. The historical runs
 retain their original settings and choices. This is a descriptive comparison on
@@ -21,14 +23,19 @@ Python scripts and their tests live in `scripts/`. Dataset, prompt, and dependen
 - `scripts/run_screening.py`: previews requests or runs one selected model.
 - `scripts/screening_api.py`: provider request formats and response parsing.
 - `scripts/run_local.py`, `scripts/local_server.py`: run pinned local models sequentially.
+- `scripts/run_extensions.py`: native inference for the additional Llama, Gemma, and Perplexity models.
+- `scripts/compare_extensions.py`: validate and score those runs, reporting missing model coverage explicitly.
 - `scripts/merge_results.py`: validates and merges response chunks.
 - `scripts/compare_results.py`, `scripts/plot_comparison.py`: score predictions and generate plots.
 - `scripts/historical_screening.py`: checks historical choices against raw batch outputs.
 - `scripts/test_historical_screening.py`: offline regression checks for the historical import.
 - `kev-requirements.txt`, `qwen-requirements.txt`: pinned server dependencies.
+- `extensions-requirements.txt`: isolated dependencies for the additional models.
 - `results/predictions.jsonl`: the 2,975 benchmark requests, responses, decisions, and timings.
 - `results/local-runs.json`: local server settings and startup/run timings for both dates.
-- `results/comparison.json`: eight-model metrics, coverage, recall intervals, and disagreements.
+- `results/comparison.json`: eleven-model metrics, coverage, recall intervals, and disagreements.
+- `results/*-20261023.jsonl`: separate Llama, Gemma, and Perplexity prediction chunks.
+- `results/extensions-comparison.json`: validated scores and coverage for the added models.
 - `figures/metrics.png`, `figures/disagreements.png`: full-collection figures.
 
 Each dataset record has `record_id`, `title`, `abstract`, `label`, `cohort`,
@@ -70,11 +77,13 @@ uv run --no-project --with matplotlib==3.10.8 python 2_screening/benchmark/scrip
 Plots use the comparison's scored counts and are saved in `figures/` beside the
 `results/` folder. The figure directory is created automatically.
 
+Both comparison commands validate and include the three dated extension chunks by default. Use `--extensions FILE ...` to select other extension chunks, or pass `--extensions` without paths to reproduce the original eight-model comparison.
+
 Install [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed)
 as a user font before plotting. These commands check dataset construction,
 request preparation, and saved-result integrity.
 The comparison verifies record IDs, exact request bodies, prompt hashes, parsed
-responses, and complete coverage for the five benchmark models. It also checks
+responses, and complete coverage for the five benchmark models and three additions. It also checks
 historical model versions and cached choices against the raw batch outputs.
 It makes no model requests.
 
@@ -151,6 +160,49 @@ server revisions. `--url` overrides a local endpoint. Defaults are
 `http://localhost:8000/v1/chat/completions` for Kev-4B, Kev-9B, and Qwen.
 The common runner records supplied revisions. It cannot inspect server weights.
 
+### Additional open-weight models
+
+The extension runner uses a separate `extensions-env` under `~/hpc-screening-benchmark`. It leaves the Kev and Qwen environments intact. Create it with the existing `tools/bin/uv`, then install `extensions-requirements.txt` using `uv pip install --python extensions-env/bin/python --requirements extensions-requirements.txt`. The first six dependencies match Perplexity's published reference requirements. Accelerate supports Transformers device placement. These wheels include a CUDA 13.0 runtime, which requires a compatible NVIDIA driver.
+
+Download these exact snapshots before inference. Llama requires approved Hugging Face access and a terminal login with `hf auth login`. The Llama loader selects Safetensors and tokenizer/configuration files, excluding the duplicate legacy PyTorch weights. The same allowlist is applied during offline cache validation.
+
+| Runner key | Repository | Revision |
+| --- | --- | --- |
+| `llama` | `meta-llama/Llama-3.1-8B-Instruct` | `0e9e39f249a16976918f6564b8830bc894c89659` |
+| `gemma` | `google/gemma-4-12B-it` | `707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7` |
+| `pplx-flash` | `perplexity-ai/pplx-decider-flash-v1.2` | `9ff7cf9838e59df461c276b7699d56b244d2af58` |
+
+For example, from the server installation directory:
+
+```sh
+extensions-env/bin/hf download google/gemma-4-12B-it --revision 707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7
+```
+
+Copy the `scripts/` folder, `prompt.txt`, and `benchmark.jsonl` into a run directory, preserving the folder structure. Create its `results/` folder before running inference. Preview requests locally without importing ML libraries:
+
+```sh
+python3 2_screening/benchmark/scripts/run_extensions.py --model gemma --dry-run --limit 1
+```
+
+From the server run directory, check two synthetic inputs before screening the collection. Select an available GPU explicitly. Visibility selects a device without reserving it.
+
+```sh
+CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_extensions.py --model gemma --execute --smoke-test --output results/gemma-smoke.jsonl
+CUDA_VISIBLE_DEVICES=1 HF_HUB_OFFLINE=1 ../extensions-env/bin/python scripts/run_extensions.py --model gemma --execute --output results/gemma.jsonl
+```
+
+Repeat for `llama` and `pplx-flash`, one model at a time. All models use BF16, batch size 1, an 8192-token context budget, four CPU threads, no retries, and no input truncation. All selected inputs are checked for length before screening starts. The LLMs use greedy generation with 16 output tokens. Llama constrains decoding to `include`, `exclude`, and their initial-capital variants, followed by EOS. This was fixed using synthetic inputs before screening the collection, since unconstrained Llama added explanations and hit the output limit. Gemma uses the instruction-tuned checkpoint, disables thinking through its chat template, and parses responses using its published response template. Only complete EOS-terminated binary answers are accepted. Perplexity uses the checkpoint's native decision source, noncausal attention, reference path (`fast=False`), and saved calibration temperature. It does not generate text.
+
+Outputs are created exclusively and flushed per record. Each preserves the exact title/abstract request, prompt and runner hashes, fixed model revision, inference settings, raw response, decision or explicit technical error, timing, and runtime versions. Startup and input-check time are recorded separately from per-record timings. `--completed FILE` validates and skips saved attempts, including errors. Keep these additional predictions separate from the original five-model `predictions.jsonl`, whose validator remains unchanged. The combined comparison validates extension chunks separately before combining their scores and pairwise disagreements.
+
+Validate and score saved extension chunks without ML libraries or model requests:
+
+```sh
+python3 2_screening/benchmark/scripts/compare_extensions.py 2_screening/benchmark/results/llama-20261023.jsonl 2_screening/benchmark/results/gemma-20261023.jsonl 2_screening/benchmark/results/pplx-flash-20261023.jsonl
+```
+
+This writes `results/extensions-comparison.json`, rejecting duplicate records, changed inputs or settings, and inconsistent decisions. A model without all 595 valid decisions receives coverage counts without accuracy metrics.
+
 ## Merge and evaluate
 
 Merge saved predictions and new chunks after all five models have complete
@@ -221,6 +273,9 @@ this descriptive comparison. Historical costs and request times are unknown.
 | Kev-4B | `jaredpalmer/kev-4b`, `v1.0`, local |
 | Kev-9B | `jaredpalmer/kev-9b`, `v1.0`, local |
 | Qwen3-8B | `Qwen/Qwen3-8B`, thinking disabled, local |
+| Llama-3.1-8B-Instruct | `meta-llama/Llama-3.1-8B-Instruct`, local |
+| Gemma 4 12B | `google/gemma-4-12B-it`, thinking disabled, local |
+| Perplexity Decider Flash v1.2 | `perplexity-ai/pplx-decider-flash-v1.2`, native reference inference, local |
 | GPT-5.4 (historical) | `gpt-5.4-2026-03-05`, original OpenAI batch |
 | Sonnet 4.5 (historical) | `claude-sonnet-4-5-20250929`, original Anthropic batch |
 | Gemini 2.5 Pro (historical) | `gemini-2.5-pro`, original Gemini batch |

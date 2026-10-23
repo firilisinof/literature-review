@@ -305,6 +305,103 @@
       "doubt_inclusion_ids": [
         "2429"
       ]
+    },
+    "llama": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 58,
+      "false_exclusions": 4,
+      "false_inclusions": 216,
+      "true_exclusions": 317,
+      "recall": 0.9354838709677419,
+      "recall_wilson_95": [
+        0.8455248427224711,
+        0.9746270944795592
+      ],
+      "precision": 0.2116788321167883,
+      "retained": 274,
+      "retained_fraction": 0.46050420168067224,
+      "human_disagreements": 220,
+      "false_exclusion_ids": [
+        "7",
+        "223",
+        "419",
+        "477"
+      ],
+      "request_seconds": 49.758543,
+      "cost": null,
+      "mean_request_seconds": 0.08362780336134454,
+      "median_request_seconds": 0.077406,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "0e9e39f249a16976918f6564b8830bc894c89659"
+      ]
+    },
+    "gemma": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 60,
+      "false_exclusions": 2,
+      "false_inclusions": 236,
+      "true_exclusions": 297,
+      "recall": 0.967741935483871,
+      "recall_wilson_95": [
+        0.8897953040501456,
+        0.9911086285001833
+      ],
+      "precision": 0.20270270270270271,
+      "retained": 296,
+      "retained_fraction": 0.49747899159663866,
+      "human_disagreements": 238,
+      "false_exclusion_ids": [
+        "5",
+        "223"
+      ],
+      "request_seconds": 98.93638,
+      "cost": null,
+      "mean_request_seconds": 0.16627963025210085,
+      "median_request_seconds": 0.153944,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "707f0a3b8a3c7ad586ed01e27eafbad8a27dd0f7"
+      ]
+    },
+    "pplx-flash": {
+      "valid": 595,
+      "missing_binary_decisions": 0,
+      "coverage": 1.0,
+      "complete": true,
+      "true_inclusions": 61,
+      "false_exclusions": 1,
+      "false_inclusions": 223,
+      "true_exclusions": 310,
+      "recall": 0.9838709677419355,
+      "recall_wilson_95": [
+        0.9141327973931,
+        0.9971471328313782
+      ],
+      "precision": 0.2147887323943662,
+      "retained": 284,
+      "retained_fraction": 0.4773109243697479,
+      "human_disagreements": 224,
+      "false_exclusion_ids": [
+        "5"
+      ],
+      "request_seconds": 49.37691,
+      "cost": null,
+      "mean_request_seconds": 0.08298640336134454,
+      "median_request_seconds": 0.081051,
+      "attempted": 595,
+      "technical_errors": 0,
+      "revisions": [
+        "9ff7cf9838e59df461c276b7699d56b244d2af58"
+      ]
     }
   },
   "historical_baseline": {
@@ -335,7 +432,10 @@
       "decisions",
       "kev-4b",
       "kev-9b",
-      "qwen"
+      "qwen",
+      "llama",
+      "gemma",
+      "pplx-flash"
     ],
     "concurrency_per_model": 1,
     "retries": 0
@@ -348,7 +448,10 @@
     "qwen": 208,
     "historical-openai": 253,
     "historical-anthropic": 282,
-    "historical-gemini": 267
+    "historical-gemini": 267,
+    "llama": 220,
+    "gemma": 238,
+    "pplx-flash": 224
   },
   "pairwise_disagreements": {
     "jev / decisions": 75,
@@ -358,37 +461,63 @@
     "jev / historical-openai": 111,
     "jev / historical-anthropic": 126,
     "jev / historical-gemini": 115,
+    "jev / llama": 108,
+    "jev / gemma": 88,
+    "jev / pplx-flash": 78,
     "decisions / kev-4b": 163,
     "decisions / kev-9b": 98,
     "decisions / qwen": 131,
     "decisions / historical-openai": 164,
     "decisions / historical-anthropic": 189,
     "decisions / historical-gemini": 172,
+    "decisions / llama": 137,
+    "decisions / gemma": 145,
+    "decisions / pplx-flash": 131,
     "kev-4b / kev-9b": 91,
     "kev-4b / qwen": 86,
     "kev-4b / historical-openai": 117,
     "kev-4b / historical-anthropic": 78,
     "kev-4b / historical-gemini": 91,
+    "kev-4b / llama": 74,
+    "kev-4b / gemma": 72,
+    "kev-4b / pplx-flash": 56,
     "kev-9b / qwen": 87,
     "kev-9b / historical-openai": 136,
     "kev-9b / historical-anthropic": 129,
     "kev-9b / historical-gemini": 128,
+    "kev-9b / llama": 95,
+    "kev-9b / gemma": 107,
+    "kev-9b / pplx-flash": 63,
     "qwen / historical-openai": 149,
     "qwen / historical-anthropic": 122,
     "qwen / historical-gemini": 119,
+    "qwen / llama": 60,
+    "qwen / gemma": 98,
+    "qwen / pplx-flash": 74,
     "historical-openai / historical-anthropic": 65,
     "historical-openai / historical-gemini": 40,
-    "historical-anthropic / historical-gemini": 47
+    "historical-openai / llama": 149,
+    "historical-openai / gemma": 69,
+    "historical-openai / pplx-flash": 99,
+    "historical-anthropic / historical-gemini": 47,
+    "historical-anthropic / llama": 116,
+    "historical-anthropic / gemma": 74,
+    "historical-anthropic / pplx-flash": 78,
+    "historical-gemini / llama": 121,
+    "historical-gemini / gemma": 55,
+    "historical-gemini / pplx-flash": 77,
+    "llama / gemma": 94,
+    "llama / pplx-flash": 74,
+    "gemma / pplx-flash": 62
   },
   "pairwise_choice_policy": "Historical doubt is counted as include.",
-  "all_models_agree": 333,
+  "all_models_agree": 322,
   "all_models_wrong_ids": [
     "49",
     "52",
     "187",
     "237",
     "359",
-    "473",
     "474",
     "525",
     "553",
@@ -412,7 +541,6 @@
     "1223",
     "1235",
     "1270",
-    "1332",
     "1334",
     "1341",
     "1444",
@@ -428,7 +556,6 @@
     "2123",
     "2129",
     "2156",
-    "2166",
     "2192",
     "2194",
     "2197",
@@ -448,12 +575,10 @@
     "2997",
     "3036",
     "3053",
-    "3185",
     "3221",
     "3233",
     "3274",
     "3287",
-    "3322",
     "3353",
     "3355",
     "3373",
@@ -476,7 +601,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -491,7 +619,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -506,7 +637,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -521,7 +655,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -536,7 +673,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -551,7 +691,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -566,7 +709,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -581,7 +727,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -596,7 +745,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -611,7 +763,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -626,7 +781,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -641,7 +799,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -656,7 +817,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -671,7 +835,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -686,7 +853,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -701,7 +871,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -716,7 +889,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -731,7 +907,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -746,7 +925,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -761,7 +943,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -776,7 +961,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -791,7 +979,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -806,7 +997,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -821,7 +1015,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -836,7 +1033,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -851,7 +1051,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -866,7 +1069,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -881,7 +1087,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -896,7 +1105,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -911,7 +1123,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -926,7 +1141,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -941,7 +1159,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -956,7 +1177,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -971,7 +1195,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -986,7 +1213,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1001,7 +1231,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1016,7 +1249,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1031,7 +1267,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1046,7 +1285,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1061,7 +1303,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1076,7 +1321,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1091,7 +1339,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1106,7 +1357,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1121,7 +1375,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1136,7 +1393,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1151,7 +1411,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1166,7 +1429,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1181,7 +1447,28 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
+      }
+    },
+    {
+      "record_id": "268",
+      "title": "Sustainable adaptive grid supercomputing: multiscale simulation of semiconductor processing across the pacific",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1196,7 +1483,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1211,7 +1501,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1226,7 +1519,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1241,7 +1537,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1256,7 +1555,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1271,7 +1573,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1286,7 +1591,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1301,7 +1609,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1316,7 +1627,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1331,7 +1645,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1346,7 +1663,28 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
+      }
+    },
+    {
+      "record_id": "349",
+      "title": "Management of an Academic HPC \\&amp; Research Computing Facility: The ULHPC Experience 2.0",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1361,7 +1699,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1376,7 +1717,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1391,7 +1735,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1406,7 +1753,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1421,7 +1771,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1436,7 +1789,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1451,7 +1807,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1466,7 +1825,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1481,7 +1843,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1496,7 +1861,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1511,7 +1879,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1526,7 +1897,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1541,7 +1915,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1556,7 +1933,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1571,7 +1951,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1586,7 +1969,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1601,7 +1987,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1616,7 +2005,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1631,7 +2023,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1646,7 +2041,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1661,7 +2059,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1676,7 +2077,28 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
+      }
+    },
+    {
+      "record_id": "477",
+      "title": "Clustering Obsolete Computers to Reduce E-Waste",
+      "human": "include",
+      "models": {
+        "jev": "include",
+        "decisions": "include",
+        "kev-4b": "include",
+        "kev-9b": "include",
+        "qwen": "include",
+        "historical-openai": "include",
+        "historical-anthropic": "include",
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1691,7 +2113,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1706,7 +2131,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1721,7 +2149,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1736,7 +2167,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1751,7 +2185,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1766,7 +2203,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1781,7 +2221,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1796,7 +2239,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1811,7 +2257,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1826,7 +2275,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1841,7 +2293,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1856,7 +2311,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1871,7 +2329,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1886,7 +2347,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1901,7 +2365,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1916,7 +2383,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -1931,7 +2401,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1946,7 +2419,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1961,7 +2437,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1976,7 +2455,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -1991,7 +2473,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2006,7 +2491,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2021,7 +2509,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2036,7 +2527,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2051,7 +2545,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2066,7 +2563,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2081,7 +2581,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2096,7 +2599,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2111,7 +2617,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2126,7 +2635,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2141,7 +2653,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2156,7 +2671,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2171,7 +2689,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2186,7 +2707,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2201,7 +2725,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2216,7 +2743,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2231,7 +2761,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2246,7 +2779,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2261,7 +2797,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2276,7 +2815,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2291,7 +2833,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2306,7 +2851,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2321,7 +2869,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2336,7 +2887,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2351,7 +2905,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2366,7 +2923,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2381,7 +2941,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2396,7 +2959,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2411,7 +2977,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2426,7 +2995,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2441,7 +3013,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2456,7 +3031,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2471,7 +3049,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2486,7 +3067,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2501,7 +3085,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2516,7 +3103,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2531,7 +3121,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2546,7 +3139,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2561,7 +3157,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2576,7 +3175,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2591,7 +3193,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2606,7 +3211,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2621,7 +3229,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2636,7 +3247,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2651,7 +3265,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2666,7 +3283,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2681,7 +3301,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2696,7 +3319,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2711,7 +3337,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2726,7 +3355,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2741,7 +3373,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2756,7 +3391,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2771,7 +3409,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2786,7 +3427,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2801,7 +3445,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2816,7 +3463,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2831,7 +3481,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2846,7 +3499,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2861,7 +3517,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2876,7 +3535,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2891,7 +3553,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2906,7 +3571,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2921,7 +3589,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2936,7 +3607,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -2951,7 +3625,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2966,7 +3643,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2981,7 +3661,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -2996,7 +3679,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3011,7 +3697,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3026,7 +3715,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3041,7 +3733,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3056,7 +3751,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3071,7 +3769,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3086,7 +3787,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3101,7 +3805,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3116,7 +3823,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3131,7 +3841,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3146,7 +3859,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3161,7 +3877,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3176,7 +3895,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3191,7 +3913,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3206,7 +3931,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3221,7 +3949,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3236,7 +3967,28 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
+      }
+    },
+    {
+      "record_id": "1720",
+      "title": "Optimizing High-Performance Computing Systems for Biomedical Workloads",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3251,7 +4003,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3266,7 +4021,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3281,7 +4039,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3296,7 +4057,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3311,7 +4075,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3326,7 +4093,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3341,7 +4111,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3356,7 +4129,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3371,7 +4147,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3386,7 +4165,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3401,7 +4183,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3416,7 +4201,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3431,7 +4219,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3446,7 +4237,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3461,7 +4255,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3476,7 +4273,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3491,7 +4291,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3506,7 +4309,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3521,7 +4327,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3536,7 +4345,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3551,7 +4363,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3566,7 +4381,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3581,7 +4399,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3596,7 +4417,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3611,7 +4435,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3626,7 +4453,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3641,7 +4471,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3656,7 +4489,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3671,7 +4507,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3686,7 +4525,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3701,7 +4543,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3716,7 +4561,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3731,7 +4579,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3746,7 +4597,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3761,7 +4615,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3776,7 +4633,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3791,7 +4651,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3806,7 +4669,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3821,7 +4687,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3836,7 +4705,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3851,7 +4723,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3866,7 +4741,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3881,7 +4759,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3896,7 +4777,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3911,7 +4795,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3926,7 +4813,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -3941,7 +4831,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3956,7 +4849,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3971,7 +4867,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -3986,7 +4885,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4001,7 +4903,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4016,7 +4921,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4031,7 +4939,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4046,7 +4957,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4061,7 +4975,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4076,7 +4993,28 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
+      }
+    },
+    {
+      "record_id": "2361",
+      "title": "Development of New Method for Concrete Carbon Emission evaluation: The Anti-freezing durability-oriented Carbon Emission Indicator (CEI) System and its application in design of low carbon HPC with high durability",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4091,7 +5029,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4106,7 +5047,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4121,7 +5065,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4136,7 +5083,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4151,7 +5101,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4166,7 +5119,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4181,7 +5137,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4196,7 +5155,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4211,7 +5173,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4226,7 +5191,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4241,7 +5209,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4256,7 +5227,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4271,7 +5245,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4286,7 +5263,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4301,7 +5281,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4316,7 +5299,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4331,7 +5317,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4346,7 +5335,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4361,7 +5353,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4376,7 +5371,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4391,7 +5389,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4406,7 +5407,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4421,7 +5425,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4436,7 +5443,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4451,7 +5461,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4466,7 +5479,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4481,7 +5497,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4496,7 +5515,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4511,7 +5533,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4526,7 +5551,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4541,7 +5569,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4556,7 +5587,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4571,7 +5605,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4586,7 +5623,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4601,7 +5641,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4616,7 +5659,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4631,7 +5677,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4646,7 +5695,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4661,7 +5713,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4676,7 +5731,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4691,7 +5749,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4706,7 +5767,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4721,7 +5785,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4736,7 +5803,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4751,7 +5821,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4766,7 +5839,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4781,7 +5857,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4796,7 +5875,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4811,7 +5893,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4826,7 +5911,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4841,7 +5929,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4856,7 +5947,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4871,7 +5965,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4886,7 +5983,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4901,7 +6001,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4916,7 +6019,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4931,7 +6037,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -4946,7 +6055,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4961,7 +6073,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4976,7 +6091,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -4991,7 +6109,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5006,7 +6127,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5021,7 +6145,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5036,7 +6163,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5051,7 +6181,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5066,7 +6199,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5081,7 +6217,28 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
+      }
+    },
+    {
+      "record_id": "3298",
+      "title": "Rotation invariant networks for image classification for HPC and embedded systems",
+      "human": "exclude",
+      "models": {
+        "jev": "exclude",
+        "decisions": "exclude",
+        "kev-4b": "exclude",
+        "kev-9b": "exclude",
+        "qwen": "exclude",
+        "historical-openai": "exclude",
+        "historical-anthropic": "exclude",
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5096,7 +6253,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5111,7 +6271,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5126,7 +6289,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5141,7 +6307,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5156,7 +6325,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5171,7 +6343,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5186,7 +6361,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5201,7 +6379,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5216,7 +6397,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5231,7 +6415,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5246,7 +6433,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5261,7 +6451,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5276,7 +6469,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5291,7 +6487,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5306,7 +6505,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5321,7 +6523,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5336,7 +6541,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5351,7 +6559,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5366,7 +6577,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5381,7 +6595,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5396,7 +6613,10 @@
         "qwen": "exclude",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "exclude",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5411,7 +6631,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5426,7 +6649,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5441,7 +6667,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5456,7 +6685,10 @@
         "qwen": "include",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5471,7 +6703,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5486,7 +6721,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5501,7 +6739,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "include",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5516,7 +6757,10 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "exclude",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     },
     {
@@ -5531,7 +6775,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5546,7 +6793,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5561,7 +6811,10 @@
         "qwen": "include",
         "historical-openai": "include",
         "historical-anthropic": "include",
-        "historical-gemini": "include"
+        "historical-gemini": "include",
+        "llama": "include",
+        "gemma": "include",
+        "pplx-flash": "include"
       }
     },
     {
@@ -5576,10 +6829,18 @@
         "qwen": "exclude",
         "historical-openai": "exclude",
         "historical-anthropic": "include",
-        "historical-gemini": "exclude"
+        "historical-gemini": "exclude",
+        "llama": "exclude",
+        "gemma": "exclude",
+        "pplx-flash": "exclude"
       }
     }
   ],
+  "extensions_sha256": {
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/llama-20261023.jsonl": "fe23592b59b55de96e623749fd6ba58ea790a13fbeff01dd578479338d4c592d",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/gemma-20261023.jsonl": "0e56e431b99963af45bae2b5f5dfaa30800786f67fb8e66436b042e4ef796a1b",
+    "/Users/lucas/Pesquisa/literature-review/2_screening/benchmark/results/pplx-flash-20261023.jsonl": "34a31acc8a506952a9b6595d2cd37b5a28429d004a8322abbeca44151e65a0ab"
+  },
   "predictions_sha256": "7ad5fd6e3cce5e6559ad3b92e6ae767e52d8c5e1fdbeafd9a0c7d910be0317f4",
   "local_runs_sha256": "cabad5ebc6a0f1e86aba50ebc8a0e1a87c7a195a157f269788ca7b5abcd70a52"
 }
